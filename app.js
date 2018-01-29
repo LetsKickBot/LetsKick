@@ -1,4 +1,5 @@
 'use strict';
+import Data from './utils/get_data';
 
 // Imports dependencies and set up http server
 const
@@ -7,7 +8,12 @@ const
   app = express().use(bodyParser.json()); // creates express http server
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 1337, () => {
+  console.log('webhook is listening')
+  Data.get_next_game('Manchester United', (response) => {
+    console.log(response);
+  })
+});
 
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {

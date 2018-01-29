@@ -15,7 +15,7 @@ def main():
 
     chrome_options = Options()
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--window-size=%s" %window_size)
+    chrome_options.add_argument("--window-size=%s" % window_size)
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get("http://www.espn.com/espn/story/_/id/21087319/soccer-teams")
 
@@ -41,6 +41,7 @@ def main():
         print(home_team)
         print(away_team)
         print(date)
+
 
 if __name__ == '__main__':
     main()
