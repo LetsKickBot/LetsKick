@@ -6,6 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
 import sys
+import os
 
 
 def main():
@@ -14,6 +15,7 @@ def main():
     team_name = sys.argv[1]
 
     chrome_options = Options()
+    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--window-size=%s" % window_size)
     browser = webdriver.Chrome(chrome_options=chrome_options)
