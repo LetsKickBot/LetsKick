@@ -17,24 +17,24 @@ app.listen(process.env.PORT || 1337, () => {
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {  
 
-  // Parse the request body from the POST
+  // Parses the request body from the POST
   let body = req.body;
 
-  // Check the webhook event is from a Page subscription
+  // Checks if this is an event from a page subscription
   if (body.object === 'page') {
 
-    // Iterate over each entry - there may be multiple if batched
+    // Iteratex over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
-      // Get the webhook event. entry.messaging is an array, but 
-      // will only ever contain one event, so we get index 0
+      // Gets the message. entry.messaging is an array, but 
+      // will only ever contain one message, so we get index 0
       let webhook_event = entry.messaging[0];
       let user_message = webhook_event.message.text;
       
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
       
-      // Check if the event is a message or postback and
+      // Checks if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);        
@@ -44,7 +44,7 @@ app.post('/webhook', (req, res) => {
       
     });
 
-    // Return a '200 OK' response to all events
+    // Returns a '200 OK' response to all messages
     res.status(200).send('EVENT_RECEIVED');
 
   } else {
@@ -60,7 +60,7 @@ app.get('/webhook', (req, res) => {
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
 
-  // Parse the query params
+  // Parses the query params
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
