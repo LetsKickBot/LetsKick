@@ -15,7 +15,7 @@ app.listen(process.env.PORT || 1337, () => {
 });
 
 // Creates the endpoint for our webhook
-app.post('/webhook', (req, res) => {  
+app.post('/webhook', (req, res) => {
 
   // Parses the request body from the POST
   let body = req.body;
@@ -23,7 +23,7 @@ app.post('/webhook', (req, res) => {
   // Checks if this is an event from a page subscription
   if (body.object === 'page') {
 
-    // Iteratex over each entry - there may be multiple if batched
+    // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
       // Gets the message. entry.messaging is an array, but 
@@ -44,7 +44,7 @@ app.post('/webhook', (req, res) => {
       
     });
 
-    // Returns a '200 OK' response to all messages
+    // Returns a '200 OK' response to all requests
     res.status(200).send('EVENT_RECEIVED');
 
   } else {
