@@ -1,13 +1,20 @@
-'use strict';
+//'use strict';
+//import Data from './utils/get_data';
 
 // Imports dependencies and set up http server
 const
   express = require('express'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
+  Data = require('./utils/get_data')
 
 // Sets server port and logs message on success
-app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+app.listen(process.env.PORT || 1337, () => {
+  console.log('webhook is listening')
+  Data.get_next_game('Manchester United', (response) => {
+    console.log(response);
+  })
+});
 
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {
@@ -39,7 +46,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>"
+  let VERIFY_TOKEN = "hokola";
 
   // Parse the query params
   let mode = req.query['hub.mode'];
