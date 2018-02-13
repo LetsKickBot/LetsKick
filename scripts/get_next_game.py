@@ -36,13 +36,20 @@ def main():
     finally:
         html = browser.page_source
         soup = BeautifulSoup(html, "html.parser")
+
+        game_details = soup.find('div', {'class': 'game-details header'}).text
+        game_details = game_details.strip()
         next_game = soup.find('div', {'class': 'competitors sm-score'})
         home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
         away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
-        date = next_game.find('div', {'class': 'game-status'}).find_all('span')[0].get('data-date')
+        date = next_game.find('div', {'class': 'game-status'}).find('span', {'class': 'game-date'}).text
+        time = next_game.find('div', {'class': 'game-status'}).find('span', {'class': 'game-time time'}).text
+
         print(home_team)
         print(away_team)
         print(date)
+        print(time)
+        print(game_details)
 
 
 if __name__ == '__main__':
