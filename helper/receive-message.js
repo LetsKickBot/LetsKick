@@ -3,6 +3,7 @@ const
   request = require('request'),
   Data = require('../data/get_data');
 
+
 const handleMessage = (sender_psid, received_message) => {
 
   let response;
@@ -54,3 +55,9 @@ const callSendAPI = (sender_psid, response) => {
 function handlePostback (sender_psid, received_postback) {
 
 }
+
+module.exports = {
+  handleMessage,
+  callSendAPI,
+  handlePostback
+};
