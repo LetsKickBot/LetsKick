@@ -15,7 +15,7 @@ const handleMessage = (sender_psid, received_message) => {
         response = {
           "text": "Something went wrong. Please try again"
         }
-        console.log("Error with getting data: " + err);
+        console.log("Error with getting data: " + err.stack);
       } else if (received_message.text) {
         let date = reply[2];
         let time = reply[3];
