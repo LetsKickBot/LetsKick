@@ -11,8 +11,10 @@ const handleMessage = (sender_psid, received_message) => {
   // Check if the message contains text
   console.log(received_message.text);
 
-  let key = func.checkSpell(received_message.text);
-  Data.get_next_game(key, (reply) => {
+  Data.get_next_game(() => {
+      var key = func.checkSpell(received_message.text);
+      return key;
+    }, (reply) => {
       if (key) {
         let date = reply[2];
         let time = reply[3];
