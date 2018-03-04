@@ -1,21 +1,19 @@
 const
   bodyParser = require('body-parser'),
   request = require('request'),
-  Data = require('../data/get_data');
-  team = require('../scripts/team_name.py');
-
+  Data = require('../data/get_data'),
+  func = require('./function')
 
 const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
-  let team_name = team.getTeamName();
-
-  console.log(team_name);
   // Check if the message contains text
   console.log(received_message.text);
-  Data.get_next_game(received_message.text, (reply) => {
-      if (received_message.text) {
+
+  let key = func.checkSpell(received_message.text);
+  Data.get_next_game(key, (reply) => {
+      if (key) {
         let date = reply[2];
         let time = reply[3];
         let info = reply[4];

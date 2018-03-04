@@ -1,4 +1,4 @@
-def getTeamName():
+def main():
 	team_name = open("../data/team_name.txt", "r")
 	p = []
 	for i in team_name:
@@ -8,8 +8,10 @@ def getTeamName():
 		p[i] = p[i][0:len(p[i])-1]
 
 	team_name = p
-	team_name = set(p)
-	return (team_name)
+	print(p)
+
+if __name__ == '__main__':
+    main()
 
 
 

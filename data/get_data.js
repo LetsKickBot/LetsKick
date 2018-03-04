@@ -8,5 +8,11 @@ module.exports = {
       if (err) throw err;
       callback(data);
     })
+  },
+  get_team_name: function (callback) {
+    PythonShell.run('./scripts/get_team_name.py', (err, data) => {
+      if (err) throw err;
+      callback(data);
+    })
   }
 };
