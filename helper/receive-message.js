@@ -11,23 +11,29 @@ const handleMessage = (sender_psid, received_message) => {
   // Check if the message contains text
   console.log(received_message.text);
 
-  Data.get_next_game(() => {
-      var key = func.checkSpell(received_message.text);
-      return key;
-    }, (reply) => {
-      if (key) {
-        let date = reply[2];
-        let time = reply[3];
-        let info = reply[4];
-      // Create the payload for a basic text message
-      response = {
-        "text": `${reply[0]} will play against ${reply[1]} on ${date}, ${time}, for ${info}`
-      }
-    }
+  let key = func.checkSpell(received_message.text);
 
-    // Sends the response message
+  if (key == "") {
+    response = {
+      "text": `We cannot find your team, please give us another one!`
+    }
     callSendAPI(sender_psid, response);
-  })
+  } else {
+    Data.get_next_game(key, (reply) => {
+        if (key) {
+          let date = reply[2];
+          let time = reply[3];
+          let info = reply[4];
+        // Create the payload for a basic text message
+        response = {
+          "text": `${reply[0]} will play against ${reply[1]} on ${date}, ${time}, for ${info}`
+        }
+      }
+
+      // Sends the response message
+      callSendAPI(sender_psid, response);
+    })
+  }
 }
 
 const callSendAPI = (sender_psid, response) => {

@@ -6,10 +6,7 @@ let team_code = [['BOU', 1], ['ARS', 2], ['BRH', 3], ['BUR', 4], ['CHE', 5], ['C
 function checkSpell(name) {
 	var flag = false;
 	var key = name.toUpperCase();
-	var temp = Array(team_name.length);
-	// for (var i = 0; i < team_name.length; i++) {
-	// 	temp[i] = team_name[i];
-	// }
+
 	for (var i = 0; i < team_name.length; i++) {
 		if (key.valueOf() == team_name[i].toUpperCase().valueOf()) {
 			flag = true;
@@ -19,13 +16,18 @@ function checkSpell(name) {
 	}
 	if (flag == false) {
 		for (var i = 0; i < team_code.length; i++) {
-			if (key.valueOf() == team_code[i][0].valueOf()) {
+			if (key.valueOf().toUpperCase() == team_code[i][0].valueOf()) {
 				key = team_name[team_code[i][1] - 1];
+				flag = true;
 				break;
 			}
 		}
 	}
-	return key
+	if (flag == true) {
+		return key;
+	} else {
+		return "";
+	}
 }
 
 function getName() {

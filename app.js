@@ -8,11 +8,14 @@ const
   bodyParser = require('body-parser'),
   app = express()
   webhooks = require('./routes/webhooks');
+  func = require('./helper/function.js');
 // Sets server port and logs message on success
-
+let key = func.checkSpell("Masd");
 
 app.listen(process.env.PORT || 1337, () => {
+
   console.log('webhook is listening');
+  
 });
 
 app.use(bodyParser.json());
