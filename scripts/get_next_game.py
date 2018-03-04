@@ -53,5 +53,7 @@ def main():
         print(time)
         print(game_details)
 
+    sys.exit(0)
+
 if __name__ == '__main__':
     main()
