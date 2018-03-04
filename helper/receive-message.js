@@ -10,7 +10,13 @@ const handleMessage = (sender_psid, received_message) => {
 
   // Check if the message contains text
   console.log(received_message.text);
-  Data.get_next_game(received_message.text, (reply) => {
+  Data.get_next_game(received_message.text, (err, reply) => {
+      if (err) {
+        response = {
+          "text": "Something went wrong. Please try again"
+        }
+        console.log("Error with getting data: " + err);
+      }
       if (received_message.text) {
         let date = reply[2];
         let time = reply[3];
@@ -39,8 +45,7 @@ const callSendAPI = (sender_psid, response) => {
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
 
-    // Try to add the access_token to the enviromental variable instead of embedding it into the code like this.
-    "qs": { "access_token": 'EAACChvEnROQBAFZA0OZBs4tBRU8oeTVtNSl2TbmIkikmGUZAWFddfJVIRSzMui4qEzskD5VljnrpYgbCR0KULaKPXwD7vPjLQ4X3WgsH9bvjy6LIkjYY4ZBZAZCwVnZBULNAj5sqBOYT4p8A5XklNXETYLFt5cfauKgAgTgTMaSZCOjhJOmYiwca' },
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
