@@ -6,9 +6,11 @@ let team_code = [['BOU', 1], ['ARS', 2], ['BRH', 3], ['BUR', 4], ['CHE', 5], ['C
 function checkSpell(name) {
 	var flag = false;
 	var key = name.toUpperCase();
+	var len = key.length;
 
+	// Need more work to distinguish names
 	for (var i = 0; i < team_name.length; i++) {
-		if (key.valueOf() == team_name[i].toUpperCase().valueOf()) {
+		if (key.valueOf() == team_name[i].substring(0,len).toUpperCase().valueOf()) {
 			flag = true;
 			key = team_name[i];
 			break

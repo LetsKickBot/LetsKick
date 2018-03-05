@@ -8,11 +8,11 @@ const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
-  // Check if the message contains text
   console.log(received_message.text);
 
   let key = func.checkSpell(received_message.text);
 
+  // Check if the message contains text
   if (key == "") {
     response = {
       "text": `We cannot find your team, please give us another one!`
