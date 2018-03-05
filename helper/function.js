@@ -16,7 +16,7 @@ function checkSpell(name) {
 	}
 	if (flag == false) {
 		for (var i = 0; i < team_code.length; i++) {
-			if (key.valueOf().toUpperCase() == team_code[i][0].valueOf()) {
+			if (key.valueOf().toUpperCase() == team_code[i][0].toUpperCase().valueOf()) {
 				key = team_name[team_code[i][1] - 1];
 				flag = true;
 				break;
