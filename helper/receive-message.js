@@ -55,7 +55,7 @@ const callSendAPI = (sender_psid, response) => {
     "uri": "https://graph.facebook.com/v2.6/me/messages",
 
     // Try to add the access_token to the enviromental variable instead of embedding it into the code like this.
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "qs": { "access_token": 'EAACChvEnROQBAFZA0OZBs4tBRU8oeTVtNSl2TbmIkikmGUZAWFddfJVIRSzMui4qEzskD5VljnrpYgbCR0KULaKPXwD7vPjLQ4X3WgsH9bvjy6LIkjYY4ZBZAZCwVnZBULNAj5sqBOYT4p8A5XklNXETYLFt5cfauKgAgTgTMaSZCOjhJOmYiwca' },
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
