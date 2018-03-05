@@ -19,6 +19,10 @@ const handleMessage = (sender_psid, received_message) => {
     }
     callSendAPI(sender_psid, response);
   } else {
+    response = {
+      "text": `Please wait, we are retrieving information for ${key}...`
+    };
+    callSendAPI(sender_psid, response);
     Data.get_next_game(key, (reply) => {
         if (key) {
           let date = reply[2];
