@@ -35,6 +35,13 @@ function checkSpell(name) {
 function timeFormat(match) {
 	var time = new Date(match)
 	let hour = time.getHours()
+	let difZone = time.getTimezoneOffset() / 60
+	let here = new Date().getTimezoneOffset() / 60
+	console.log(hour)
+	console.log(difZone)
+	console.log(here)
+	console.log(hour - difZone)
+	console.log(hour - here)
 	let minute = time.getMinutes()
 	let date = time.getDate()
 	let month = time.getMonth() + 1
