@@ -31,11 +31,10 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
           let time = func.timeFormat(reply[2])
           let info = reply[3];
           let a = newTime.getHours()
-          let b = time.getHours()
           console.log(a)
         // Create the payload for a basic text message
         response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${newTime} or ${time} and ${a} or ${b}, for ${info}`
+          "text": `${reply[0]} will play against ${reply[1]} on ${newTime} or ${time} and ${a} or, for ${info}`
         }
       }
 
