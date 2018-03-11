@@ -8,8 +8,6 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
 
   let response;
 
-  console.log(received_message);
-
 
   let key = func.checkSpell(received_message.text);
 
@@ -32,11 +30,12 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
         if (key) {
           let time = func.timeFormat(reply[2])
           let info = reply[3];
-          let a = newTime.getTimezoneOffset()
+          let a = newTime.getHours()
+          let b = time.getHours()
           console.log(a)
         // Create the payload for a basic text message
         response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${time} and ${a}, for ${info}`
+          "text": `${reply[0]} will play against ${reply[1]} on ${newTime} or ${time} and ${a} or ${b}, for ${info}`
         }
       }
 
