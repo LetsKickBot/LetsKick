@@ -12,8 +12,8 @@ import os
 def main():
     window_size = "1920,1080"
     timeout = 20
-    # team_name = sys.argv[1]
-    team_name = "Chelsea"
+    team_name = sys.argv[1]
+    # team_name = "Chelsea"
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
