@@ -35,21 +35,21 @@ function checkSpell(name) {
 function timeFormat(match) {
 	var time = new Date(match)
 	let hour = time.getHours()
-	let difZone = time.getTimezoneOffset() / 60
-	let here = new Date().getTimezoneOffset() / 60
-	let a = hour - difZone
-	let b = hour - here
-	console.log(hour)
-	console.log(difZone)
-	console.log(here)
-	console.log(hour - difZone)
-	console.log(hour - here)
+	// let difZone = time.getTimezoneOffset() / 60
+	// let here = new Date().getTimezoneOffset() / 60
+	// let a = hour - difZone
+	// let b = hour - here
+	// console.log(hour)
+	// console.log(difZone)
+	// console.log(here)
+	// console.log(hour - difZone)
+	// console.log(hour - here)
 	let minute = time.getMinutes()
 	let date = time.getDate()
 	let month = time.getMonth() + 1
 	if (minute < 10)
 		minute = "0" + minute
-	var answer = month + "/" + date + ", at " + hour + ":" + minute + " and " + a + b
+	var answer = month + "/" + date + ", at " + hour + ":" + minute
 	return answer 
 }
 
