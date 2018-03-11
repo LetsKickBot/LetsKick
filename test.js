@@ -15,7 +15,7 @@ describe('bot test', function() {
   
   it('hi', function(){
     const theScript = new BotTester.Script('132', '20');
-    theScript.sendTextMessage('a');  //mock user sending "hi" 
+    theScript.sendTextMessage('Ars');  //mock user sending "hi" 
     theScript.expectTextResponses([   //either response is valid 
       'Hey!', 
       'Welcome',

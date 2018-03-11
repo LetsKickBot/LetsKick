@@ -26,15 +26,11 @@ const handleMessage = (sender_psid, received_message) => {
     Data.get_next_game(key, (reply) => {
         if (key) {
           console.log(reply);
-          let date = reply[2];
+          let time = func.timeFormat(reply[2])
           let info = reply[3];
-          let date1 = new Date(reply[5]);
-          var yourTime = date1.getHours();
-          console.log(date);
-          console.log(time);
         // Create the payload for a basic text message
         response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${date}, ${time}, for ${info}`
+          "text": `${reply[0]} will play against ${reply[1]} on ${time}, for ${info}`
         }
       }
 
