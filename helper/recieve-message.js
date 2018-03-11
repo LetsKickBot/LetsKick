@@ -3,10 +3,10 @@ const
   request = require('request'),
   Data = require('../data/get_data'),
   func = require('./checkSpell')
-
 const handleMessage = (sender_psid, received_message) => {
 
   let response;
+
 
   let key = func.checkSpellName(received_message.text)
 

@@ -1,12 +1,12 @@
 const
     bodyParser = require('body-parser'),
-    request = require('request'),
+    // request = require('request'),
     express = require('express');
-    recieve = require('./helper/recieve-message');
+    recieve = require('../helper/recieve-message');
 
-const routes = express.Routers()
+const router = express.Router()
 
-routes.post('/', (req, res) => {
+router.post('/', (req, res) => {
 
   // Parses the request body from the POST
   let body = req.body;
@@ -46,7 +46,7 @@ routes.post('/', (req, res) => {
 });
 
 // Adds support for GET requests to our webhook
-routes.get('/', (req, res) => {
+router.get('/', (req, res) => {
 
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
@@ -73,4 +73,4 @@ routes.get('/', (req, res) => {
   }
 });
 
-// module.exports = router;
+module.exports = router;
