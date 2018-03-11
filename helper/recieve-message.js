@@ -2,16 +2,16 @@ const
   bodyParser = require('body-parser'),
   request = require('request'),
   Data = require('../data/get_data'),
-  func = require('./function')
+  func = require('./checkSpell')
 
 const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
-  console.log(received_message.text);
-
-  let key = func.checkSpell(received_message.text);
-
+  // let key = func.checkSpell(received_message.text);
+  let key = func.checkSpellName(received_message.text)
+  console.log(key)
+  
   // Check if the message contains text
   if (key == "") {
     response = {
