@@ -37,6 +37,8 @@ function timeFormat(match) {
 	let hour = time.getHours()
 	let difZone = time.getTimezoneOffset() / 60
 	let here = new Date().getTimezoneOffset() / 60
+	let a = hour - difZone
+	let b = hour - here
 	console.log(hour)
 	console.log(difZone)
 	console.log(here)
@@ -47,7 +49,7 @@ function timeFormat(match) {
 	let month = time.getMonth() + 1
 	if (minute < 10)
 		minute = "0" + minute
-	var answer = month + "/" + date + ", at " + hour + ":" + minute
+	var answer = month + "/" + date + ", at " + hour + ":" + minute + " and " + a + b
 	return answer 
 }
 

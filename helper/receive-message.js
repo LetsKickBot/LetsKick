@@ -8,8 +8,6 @@ const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
-  console.log(received_message.text);
-
   let key = func.checkSpell(received_message.text);
 
   // Check if the message contains text
@@ -52,7 +50,7 @@ const callSendAPI = (sender_psid, response) => {
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
-    
+
     // Try to add the access_token to the enviromental variable instead of embedding it into the code like this.
     "qs": { "access_token": 'EAACChvEnROQBAFZA0OZBs4tBRU8oeTVtNSl2TbmIkikmGUZAWFddfJVIRSzMui4qEzskD5VljnrpYgbCR0KULaKPXwD7vPjLQ4X3WgsH9bvjy6LIkjYY4ZBZAZCwVnZBULNAj5sqBOYT4p8A5XklNXETYLFt5cfauKgAgTgTMaSZCOjhJOmYiwca' },
     "method": "POST",
