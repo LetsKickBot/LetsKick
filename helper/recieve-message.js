@@ -8,10 +8,8 @@ const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
-  // let key = func.checkSpell(received_message.text);
   let key = func.checkSpellName(received_message.text)
-  console.log(key)
-  
+
   // Check if the message contains text
   if (key == "") {
     response = {
