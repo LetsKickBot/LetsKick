@@ -32,10 +32,23 @@ function checkSpell(name) {
 	}
 }
 
+function timeFormat(match) {
+	var time = new Date(match)
+	let hour = time.getHours()
+	let minute = time.getMinutes()
+	let date = time.getDate()
+	let month = time.getMonth() + 1
+	if (minute < 10)
+		minute = "0" + minute
+	var answer = month + "/" + date + ", at " + hour + ":" + minute
+	return answer 
+}
+
 function getName() {
 	console.log(data);
 }
 
 module.exports = {
-	checkSpell
+	checkSpell,
+	timeFormat
 };
