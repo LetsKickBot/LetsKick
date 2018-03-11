@@ -19,7 +19,6 @@ function checkSpellName(name) {
 
 	return correctTeam
 }
-console.log(checkSpellName("Bromwich"))
 
 module.exports = {
 	checkSpellName
