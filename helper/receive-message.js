@@ -17,9 +17,11 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
 
   console.log(key)
 
-  getTimeZone(sender_psid)
+  console.log(sender_psid)
 
-  console.log("a")
+  // getTimeZone(sender_psid)
+
+  // console.log("a")
 
   // Check if the message contains text
   if (key == "") {
@@ -64,7 +66,7 @@ const callSendAPI = (sender_psid, response) => {
     // "uri": "http://localhost:3100/v2.6",
 
     // Try to add the access_token to the enviromental variable instead of embedding it into the code like this.
-    "qs": { "access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
+    "qs": { "access_token": PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
@@ -81,19 +83,17 @@ const callSendAPI = (sender_psid, response) => {
 
 const getTimeZone = (sender_psid) => {
   request( {
-    "uri": "https://graph.facebook.com/v2.6" + sender_psid,
+    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
     "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
     "method": "GET",
     "json": true,
   }, (err, res, body) => {
     // Test
-    // console.log(request)
-    // console.log(request_body)
-    console.log(body.timezone)
-    console.log(body)
+    console.log(request)
+    console.log(request_body)
     if (!err) {
-      console.log(body)
-      console.log(body.timezone)
+      // console.log(body.timezone)
+      // console.log(body)
       console.log('message sent!')
     } else {
       console.error("Unable to send message:" + err);
