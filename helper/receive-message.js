@@ -33,14 +33,14 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
           let time = func.timeFormat(reply[2])
           let info = reply[3];
           let a = newTime.getHours()
-          console.log(a)
         // Create the payload for a basic text message
         response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${newTime} or ${time} and ${a} or, for ${info}`
+          "text": `${reply[0]} will play against ${reply[1]} on ${time}, for ${info}`
         }
       }
 
       // Sends the response message
+      getTimeZone(sender_psid);
       callSendAPI(sender_psid, response);
     })
   }
@@ -62,18 +62,39 @@ const callSendAPI = (sender_psid, response) => {
     // "uri": "http://localhost:3100/v2.6",
 
     // Try to add the access_token to the enviromental variable instead of embedding it into the code like this.
-    "qs": { "access_token": PAGE_ACCESS_TOKEN},
+    "qs": { "access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
     // Test
-    console.log(body.timezone)
+    // console.log(request)
+    // console.log(request_body)
     if (!err) {
       console.log('message sent!')
     } else {
       console.error("Unable to send message:" + err);
     }
   });
+}
+
+const getTimeZone = (sender_psid) => {
+  request( {
+    "uri": "https://graph.facebook.com/v2.6" + sender_psid,
+    "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
+    "method": "GET",
+    "json": true,
+  }, (err, res, body) => {
+    // Test
+    // console.log(request)
+    // console.log(request_body)
+    if (!err) {
+      console.log(body)
+      console.log(body.timezone)
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  })
 }
 
 function handlePostback (sender_psid, received_postback) {
@@ -83,5 +104,6 @@ function handlePostback (sender_psid, received_postback) {
 module.exports = {
   handleMessage,
   callSendAPI,
-  handlePostback
+  handlePostback,
+  getTimeZone
 };

@@ -10,6 +10,8 @@ router.post('/', (req, res) => {
   // Parses the request body from the POST
   let body = req.body;
 
+  console.log(req.body)
+
   // Checks if this is an event from a page subscription
   if (body.object === 'page') {
 
