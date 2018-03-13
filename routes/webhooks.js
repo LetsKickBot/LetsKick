@@ -21,7 +21,6 @@ router.post('/', (req, res) => {
 
       let webhook_event = entry.messaging[0];
       let user_message = webhook_event.message.text;
-      let timeStamp = webhook_event.timestamp;
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
@@ -29,7 +28,7 @@ router.post('/', (req, res) => {
       // Checks if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        recieve.handleMessage(sender_psid, webhook_event.message, timeStamp);
+        recieve.handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         recieve.handlePostback(sender_psid, webhook_event.postback);
       }

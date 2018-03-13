@@ -6,22 +6,18 @@ const
 
 let PAGE_ACCESS_TOKEN = "EAACChvEnROQBAFZA0OZBs4tBRU8oeTVtNSl2TbmIkikmGUZAWFddfJVIRSzMui4qEzskD5VljnrpYgbCR0KULaKPXwD7vPjLQ4X3WgsH9bvjy6LIkjYY4ZBZAZCwVnZBULNAj5sqBOYT4p8A5XklNXETYLFt5cfauKgAgTgTMaSZCOjhJOmYiwca";
 
-const handleMessage = (sender_psid, received_message, timestamp) => {
+const handleMessage = (sender_psid, received_message) => {
 
   let response;
 
 
   let key = func.checkSpell(received_message.text);
 
-  // let newTime = new Date(timestamp)
-
-  console.log(sender_psid)
-
   console.log(key)
 
-  getTimeZone(sender_psid)
+  let timeDif = func.getTimezone(sender_psid)
 
-  // console.log("a")
+  console.log(timeDif)
 
   // Check if the message contains text
   if (key == "") {
@@ -36,16 +32,18 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
     callSendAPI(sender_psid, response);
     Data.get_next_game(key, (reply) => {
         if (key) {
-          let time = func.timeFormat(reply[2])
+          let time = new Date(reply[2])
           let info = reply[3];
-          let a = newTime.getHours()
+          time.setHours(time.getHours() + timeDif)
+          let time1 = func.timeFormat(time)
         // Create the payload for a basic text message
         response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${time}, for ${info}`
+          "text": `${reply[0]} will play against ${reply[1]} on ${time1}, for ${info}`
         }
       }
 
       // Sends the response message
+      callSendAPI(sender_psid, response);
     })
   }
 }
@@ -71,8 +69,6 @@ const callSendAPI = (sender_psid, response) => {
     "json": request_body
   }, (err, res, body) => {
     // Test
-    // console.log(request)
-    // console.log(request_body)
     if (!err) {
       console.log('message sent!')
     } else {
@@ -81,25 +77,6 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-const getTimeZone = (sender_psid) => {
-  request( {
-    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-    "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
-    "method": "GET",
-    "json": true,
-  }, (err, res, body) => {
-    // Test
-    console.log(request)
-    console.log(request_body)
-    if (!err) {
-      // console.log(body.timezone)
-      // console.log(body)
-      console.log('message sent!')
-    } else {
-      console.error("Unable to send message:" + err);
-    }
-  })
-}
 
 function handlePostback (sender_psid, received_postback) {
 
@@ -108,6 +85,5 @@ function handlePostback (sender_psid, received_postback) {
 module.exports = {
   handleMessage,
   callSendAPI,
-  handlePostback,
-  getTimeZone
+  handlePostback
 };
