@@ -52,7 +52,6 @@ const handleMessage = (sender_psid, received_message) => {
             response = {
               "text": `${reply[0]} will play against ${reply[1]} on ${time1}, for ${info}`
             }
-            console.log(response)
             callSendAPI(sender_psid, response); 
           })
       }

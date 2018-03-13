@@ -3,11 +3,13 @@
 
 // Imports dependencies and set up http server
 const
+	func = require('./helper/function.js'),
   request = require('request'),
   express = require('express'),
   bodyParser = require('body-parser'),
-  app = express()
+  app = express(),
   webhooks = require('./routes/webhooks');
+
   
 // Sets server port and logs message on success
 // process.env.PORT || 
