@@ -11,13 +11,10 @@ const handleMessage = (sender_psid, received_message) => {
   let response;
 
 
+
   let key = func.checkSpell(received_message.text);
 
   console.log(key)
-
-  let timeDif = func.getTimezone(sender_psid)
-
-  console.log(timeDif)
 
   // Check if the message contains text
   if (key == "") {
@@ -32,18 +29,33 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
     Data.get_next_game(key, (reply) => {
         if (key) {
-          let time = new Date(reply[2])
-          let info = reply[3];
-          time.setHours(time.getHours() + timeDif)
-          let time1 = func.timeFormat(time)
-        // Create the payload for a basic text message
-        response = {
-          "text": `${reply[0]} will play against ${reply[1]} on ${time1}, for ${info}`
-        }
-      }
 
-      // Sends the response message
-      callSendAPI(sender_psid, response);
+          request( {
+          "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+          "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
+          "method": "GET",
+          "json": true,
+          }, (err, res, body) => {
+          // Test
+            if (!err) {
+              // console.log(body)
+              console.log('message sent!')
+            } else {
+              console.error("Unable to send message:" + err);
+            }
+            timeDif = body.timezone
+            let time = new Date(reply[2])
+            let info = reply[3];
+            time.setHours(time.getHours() + timeDif)
+            let time1 = func.timeFormat(time)
+          // Create the payload for a basic text message
+            response = {
+              "text": `${reply[0]} will play against ${reply[1]} on ${time1}, for ${info}`
+            }
+            console.log(response)
+            callSendAPI(sender_psid, response); 
+          })
+      }
     })
   }
 }

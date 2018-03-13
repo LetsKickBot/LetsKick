@@ -1,5 +1,6 @@
 const 
 	request = require('request')
+	resolve = require('resolve')
 
 let PAGE_ACCESS_TOKEN = "EAACChvEnROQBAFZA0OZBs4tBRU8oeTVtNSl2TbmIkikmGUZAWFddfJVIRSzMui4qEzskD5VljnrpYgbCR0KULaKPXwD7vPjLQ4X3WgsH9bvjy6LIkjYY4ZBZAZCwVnZBULNAj5sqBOYT4p8A5XklNXETYLFt5cfauKgAgTgTMaSZCOjhJOmYiwca";
 
@@ -57,28 +58,29 @@ function timeFormat(time) {
 	return answer 
 }
 
-function getTimezone(sender_psid) {
-  let timeDif = 0
-  request( {
-    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-    "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
-    "method": "GET",
-    "json": true,
-  }, (err, res, body) => {
-    // Test
-    if (!err) {
-      // console.log(body)
-      console.log('message sent!')
-    } else {
-      console.error("Unable to send message:" + err);
-    }
-    timeDif = body.timezone
-  })
-  return timeDif
-}
+// function getTimezone(sender_psid, resolve) {
+//   let timeDif = 0
+//   request( {
+//     "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+//     "qs" : {"access_token": PAGE_ACCESS_TOKEN, fields: "timezone"},
+//     "method": "GET",
+//     "json": true,
+//   }, (err, res, body) => {
+//     // Test
+//     console.log(body)
+//     if (!err) {
+//       // console.log(body)
+//       console.log('message sent!')
+//     } else {
+//       console.error("Unable to send message:" + err);
+//     }
+//     timeDif = body.timezone
+//     console.log("First time dif" + timeDif)
+//     return resolve(timeDif)
+//   })
+// }
 
 module.exports = {
 	checkSpell,
-	timeFormat,
-	getTimezone
+	timeFormat
 };
