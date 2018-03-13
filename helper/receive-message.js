@@ -17,6 +17,8 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
 
   console.log(key)
 
+  getTimeZone(sender_psid)
+
   // Check if the message contains text
   if (key == "") {
     response = {
@@ -40,8 +42,6 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
       }
 
       // Sends the response message
-      getTimeZone(sender_psid);
-      callSendAPI(sender_psid, response);
     })
   }
 }
