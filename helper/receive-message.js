@@ -19,6 +19,8 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
 
   getTimeZone(sender_psid)
 
+  console.log("a")
+
   // Check if the message contains text
   if (key == "") {
     response = {
@@ -87,6 +89,8 @@ const getTimeZone = (sender_psid) => {
     // Test
     // console.log(request)
     // console.log(request_body)
+    console.log(body.timezone)
+    console.log(body)
     if (!err) {
       console.log(body)
       console.log(body.timezone)

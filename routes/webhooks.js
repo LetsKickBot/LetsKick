@@ -23,8 +23,6 @@ router.post('/', (req, res) => {
       let user_message = webhook_event.message.text;
       let timeStamp = webhook_event.timestamp;
 
-      console.log(timeStamp)
-
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
 
