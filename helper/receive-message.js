@@ -13,13 +13,13 @@ const handleMessage = (sender_psid, received_message, timestamp) => {
 
   let key = func.checkSpell(received_message.text);
 
-  let newTime = new Date(timestamp)
-
-  console.log(key)
+  // let newTime = new Date(timestamp)
 
   console.log(sender_psid)
 
-  // getTimeZone(sender_psid)
+  console.log(key)
+
+  getTimeZone(sender_psid)
 
   // console.log("a")
 
