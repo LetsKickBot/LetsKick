@@ -1,6 +1,5 @@
 const
     bodyParser = require('body-parser'),
-    request = require('request'),
     express = require('express');
     recieve = require('../helper/receive-message');
 
