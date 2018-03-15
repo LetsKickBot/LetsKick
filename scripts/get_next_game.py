@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
 import sys
@@ -28,10 +29,18 @@ def main():
     finally:
         browser.find_element_by_xpath("//a[contains(text(), '" + team_name + "')]").click()
 
+    class_name = 'game-strip pre soccer bt-sport '
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='game-strip pre soccer bt-sport ']")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
+    except TimeoutException:
+        class_name = 'game-strip pre soccer bt-sport team-a-winner'
+        try:
+            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
+        except TimeoutException:
+            class_name = 'game-strip pre soccer bt-sport team-b-winner'
+            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
     finally:
-        browser.find_element_by_xpath("//header[@class='game-strip pre soccer bt-sport ']").click()
+        browser.find_element_by_xpath("//header[@class='" + class_name + "']").click()
 
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='competitors sm-score']")))
@@ -44,11 +53,16 @@ def main():
         next_game = soup.find('div', {'class': 'competitors sm-score'})
         home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
         away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
-        date = next_game.find('div', {'class': 'game-status'}).find_all('span')[0].get('data-date')
+        date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
+
         print(home_team)
         print(away_team)
         print(date)
         print(game_details)
+
+        browser.quit()
+
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()
