@@ -23,7 +23,7 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   } else {
     response = {
-      "text": `Please wait, we are retrieving information for ${key}...`
+      "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
     };
     console.log("waiting...");
     callSendAPI(sender_psid, response);
@@ -48,9 +48,9 @@ const handleMessage = (sender_psid, received_message) => {
               let team = task.teamFormat(reply[0], reply[1], key);
             // Create the payload for a basic text message
               response = {
-                "text": `*${team[0]}* will play against *${team[1]}* on _${time}_, for ${reply[3]}.`
+                "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
               }
-              console.log("replied")
+              console.log("replied");
               callSendAPI(sender_psid, response); 
             }
         })
