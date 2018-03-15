@@ -28,8 +28,7 @@ const handleMessage = (sender_psid, received_message) => {
           response = {
             "text" : "Something went wrong. Please try again"
           }
-        }
-        if (key) {
+        } else if (key) {
           let date = reply[2];
           let time = reply[3];
           let info = reply[4];
@@ -56,7 +55,7 @@ const callSendAPI = (sender_psid, response) => {
 
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "http://localhost:3100/v2.6/me/messages",
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
 
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
