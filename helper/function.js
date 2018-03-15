@@ -13,7 +13,7 @@ function checkSpell(name) {
 		if (key.valueOf() == team_name[i].substring(0,len).toUpperCase().valueOf()) {
 			flag = true;
 			key = team_name[i];
-			break
+			break;
 		}
 	}
 	if (flag == false) {
@@ -25,41 +25,45 @@ function checkSpell(name) {
 			}
 		}
 	}
-	if (flag == true) {
+	if (flag == true)
 		return key;
-	} else {
+	else
 		return "";
-	}
 }
 
 function timeFormat(inputTime, timezone) {
-	var time = new Date(inputTime)
-	time.setHours(time.getHours() + timezone)
-	var hour = time.getHours()
-	var minute = time.getMinutes()
-	var date = time.getDate()
-	var month = time.getMonth() + 1
-	// var day = weekDays[time.getDay()]
-	var noon = " AM"
+	var time = new Date(inputTime);
+	time.setHours(time.getHours() + timezone);
+	var hour = time.getHours();
+	var minute = time.getMinutes();
+	var date = time.getDate();
+	var month = time.getMonth() + 1;
+	var noon = " AM";
 	if (hour > 12) {
-		hour -= 12
-		noon = " PM"
+		hour -= 12;
+		noon = " PM";
 	}
-	if (hour == 12) {
-		noon = " PM"
-	}
+	if (hour == 12) 
+		noon = " PM";
 
 	if (minute < 10)
-		minute = "0" + minute
-	var answer = month + "/" + date + ", at " + hour + ":" + minute + noon
-	return answer 
+		minute = "0" + minute;
+	var answer = month + "/" + date + ", " + hour + ":" + minute + noon;
+	return answer;
 }
 
-function getName() {
-	console.log(data);
+function teamFormat(team1, team2, key) {
+	var check = team1;
+	team1 = "*" + team1 + "*" + "  _(Home team)_";
+	team2 = "*" + team2 + "*" + "  _(Away team)_";
+	if (check != key) {
+		return [team2, team1];
+	}
+	return [team1, team2];
 }
 
 module.exports = {
 	checkSpell,
-	timeFormat
+	timeFormat,
+	teamFormat
 };

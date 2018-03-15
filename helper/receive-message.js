@@ -2,7 +2,7 @@ const
   bodyParser = require('body-parser'),
   request = require('request'),
   Data = require('../data/get_data'),
-  func = require('./function')
+  task = require('./function')
 
 const handleMessage = (sender_psid, received_message) => {
 
@@ -10,19 +10,24 @@ const handleMessage = (sender_psid, received_message) => {
 
   console.log(received_message.text);
 
-  let key = func.checkSpell(received_message.text);
-  console.log(key)
+  let key = task.checkSpell(received_message.text);
+
+  console.log(key);
+
   // Check if the message contains text
   if (key == "") {
     response = {
       "text": `We cannot find your team, please give us another one!`
     }
+    console.log("no teamname");
     callSendAPI(sender_psid, response);
   } else {
     response = {
       "text": `Please wait, we are retrieving information for ${key}...`
     };
+    console.log("waiting...");
     callSendAPI(sender_psid, response);
+
     Data.get_next_game(key, (err, reply) => {
         if (err) {
           response = {
@@ -39,18 +44,17 @@ const handleMessage = (sender_psid, received_message) => {
             if (err) {
               console.error("Unable to send message:" + err);
             } else {
-              let time = func.timeFormat(reply[2], body.timezone)
+              let time = task.timeFormat(reply[2], body.timezone);
+              let team = task.teamFormat(reply[0], reply[1], key);
             // Create the payload for a basic text message
               response = {
-                "text": `${reply[0]} (Home team) will play against ${reply[1]} (Away team) on ${time}, ${reply[3]}.`
+                "text": `*${team[0]}* will play against *${team[1]}* on _${time}_, for ${reply[3]}.`
               }
+              console.log("replied")
               callSendAPI(sender_psid, response); 
-              console.log('message sent!')
-          }
+            }
         })
       }
-      // Sends the response message
-      callSendAPI(sender_psid, response);
     })
   }
 }
@@ -71,9 +75,7 @@ const callSendAPI = (sender_psid, response) => {
     "method": "POST",
     "json": request_body
   }, (err, res, body) => {
-    if (!err) {
-      console.log('message sent!')
-    } else {
+    if (err) {
       console.error("Unable to send message:" + err);
     }
   });
