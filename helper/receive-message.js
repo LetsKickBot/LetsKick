@@ -42,7 +42,7 @@ const handleMessage = (sender_psid, received_message) => {
               let time = func.timeFormat(reply[2], body.timezone)
             // Create the payload for a basic text message
               response = {
-                "text": `${reply[0]} (Home team) will play against ${reply[1]} (Away team) on ${date}, ${reply[3]}.`
+                "text": `${reply[0]} (Home team) will play against ${reply[1]} (Away team) on ${time}, ${reply[3]}.`
               }
               callSendAPI(sender_psid, response); 
               console.log('message sent!')
