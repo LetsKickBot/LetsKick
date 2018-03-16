@@ -40,19 +40,25 @@ function checkSpellName(name) {
 			return identityTeam[0]
 			break;
 		default:
-			return identityTeam
+			correctTeam = ""
+			for (i = 0; i < identityTeam.length; i++) {
+				correctTeam = correctTeam + identityTeam[i] + ", "
+			}
+			correctTeam += "or " + identityTeam[identityTeam.length -1]
+			return correctTeam
 			break
 	}
 }
 
-function allTeam(key) {
-	newKey = ""
-	for (i = 0; i < key.length; i ++) {
-		newKey = newKey + key[i] + ", "
-	}
-	newKey += "or " + key[key.length-1]
-	return newKey
-}
+// // Handle multiple teams
+// function allTeam(key) {
+// 	newKey = ""
+// 	for (i = 0; i < key.length; i ++) {
+// 		newKey = newKey + key[i] + ", "
+// 	}
+// 	newKey += "or " + key[key.length-1]
+// 	return newKey
+// }
 
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);

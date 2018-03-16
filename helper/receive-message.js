@@ -11,17 +11,12 @@ const handleMessage = (sender_psid, received_message) => {
   console.log(key);
 
   //Check if the key is in an array
-  if (typeof(key) == 'object') {
-    // newKey = ""
-    // for (i = 0; i < (key.length) -1; i++) {
-    //   newKey = newKey + key[i] + ", "
-    // }
-    // newKey += "or " + key[key.length-1]
-    newKey = task.allTeam(key)
+  // if (typeof(key) == 'object') {
+    if(key.includes('or')){
+    // newKey = task.allTeam(key)
     response = {
-      "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
+      "text": `Did you mean *${key}* ? Or please retype the team you want to see!!!`
     }
-    // key = []
     callSendAPI(sender_psid, response);
   // Check if the key is empty
   }else if (key == "") {
