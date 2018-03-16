@@ -39,9 +39,9 @@ function checkSpellName(name) {
 		case 1:
 			return identityTeam[0]
 			break;
+		// Handle multiple teams
 		default:
-			correctTeam = ""
-			for (i = 0; i < identityTeam.length; i++) {
+			for (i = 0; i < identityTeam.length-1; i++) {
 				correctTeam = correctTeam + identityTeam[i] + ", "
 			}
 			correctTeam += "or " + identityTeam[identityTeam.length -1]
@@ -49,16 +49,6 @@ function checkSpellName(name) {
 			break
 	}
 }
-
-// // Handle multiple teams
-// function allTeam(key) {
-// 	newKey = ""
-// 	for (i = 0; i < key.length; i ++) {
-// 		newKey = newKey + key[i] + ", "
-// 	}
-// 	newKey += "or " + key[key.length-1]
-// 	return newKey
-// }
 
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);
