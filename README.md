@@ -2,7 +2,7 @@
 
 Let's Kick Messenger Bot
 
-# How use run it
+## How use run it
   - npm install
   - pip install -r requirements.txt
 
