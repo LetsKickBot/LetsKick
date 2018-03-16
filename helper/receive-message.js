@@ -61,14 +61,13 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 const callSendAPI = (sender_psid, response) => {
-  let key = task.checkSpellName(received_message.text);
+  // let key = task.checkSpellName(received_message.text);
   // Construct the message body
-  if (key.includes('or')) {
+  if (response.includes('or')) {
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
-    // "message": response
     "message": {
       "text": "Pick a team please?",
       "quick_replies": [
