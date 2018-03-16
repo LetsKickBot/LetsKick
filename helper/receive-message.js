@@ -62,7 +62,8 @@ const handleMessage = (sender_psid, received_message) => {
 
 const callSendAPI = (sender_psid, response) => {
   // Construct the message body
-  let request_body = {
+  if (key.includes('or')) {
+    let request_body = {
     "recipient": {
       "id": sender_psid
     },
@@ -77,8 +78,15 @@ const callSendAPI = (sender_psid, response) => {
         },
       ]
     }
+    }
+  } else {
+      let request_body = {
+      "recipient": {
+        "id": sender_psid
+      },
+      "message": response
+      }
   }
-
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
