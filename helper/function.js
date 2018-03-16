@@ -1,4 +1,5 @@
 var file = require('./teamName')
+var popular = require('./popularTeam')
 
 function checkSpellName(name) {
 	var correctTeam = ""
@@ -41,11 +42,6 @@ function checkSpellName(name) {
 			break;
 		// Handle multiple teams
 		default:
-			// for (i = 0; i < identityTeam.length-1; i++) {
-			// 	correctTeam = correctTeam + identityTeam[i] + ", "
-			// }
-			// correctTeam += "or " + identityTeam[identityTeam.length -1]
-			// return correctTeam
 			return identityTeam
 			break
 	}
@@ -81,6 +77,7 @@ function timeFormat(inputTime, timezone) {
 	return answer;
 }
 
+// Handle the UI quick replies
 function quickReplies(value){
 	var finalArr = []
 	for (i = 0; i < value.length; i++) {
@@ -93,6 +90,16 @@ function quickReplies(value){
 	return finalArr
 }
 
+//Popular teams
+function popularTeam() {
+	arr = []
+	for (var key in popular) {
+		arr.push(key)
+	}
+	return arr
+}
+
+// Team format
 function teamFormat(team1, team2, key) {
 	var check = team1;
 	team1 = "*" + team1 + "*" + "  _(Home team)_";
@@ -108,5 +115,6 @@ module.exports = {
 	timeFormat,
 	teamFormat,
 	completeName,
-	quickReplies
+	quickReplies,
+	popularTeam
 };

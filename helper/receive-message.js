@@ -10,6 +10,8 @@ const handleMessage = (sender_psid, received_message) => {
   let key = task.checkSpellName(received_message.text);
   console.log(key);
 
+  autoQuickReply(sender_psid, task.quickReplies(task.popularTeam()));
+
   //Check if the key is in an array
   if(typeof(key) == 'object'){
     newKey = task.completeName(key)
@@ -62,6 +64,7 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 const callSendAPI = (sender_psid, response) => {
+
     let request_body = {
     "recipient": {
       "id": sender_psid
@@ -72,6 +75,27 @@ const callSendAPI = (sender_psid, response) => {
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
     // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+const autoQuickReply = (sender_psid, value) => {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+    "quick_replies": value
+    }
+  }
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body

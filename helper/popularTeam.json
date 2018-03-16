@@ -1,0 +1,13 @@
+{
+	"Real Mardid": ["MAD", "Real Madrid"],
+	"Barcelona": ["FCB", "Barcelona", "Barca", "Barce"],
+	"Manchester United": ["MUN", "MANU", "MAN U", "MU", "Manchester United", "Red Devils"],
+	"Manchester City": ["MCI", "Manchester City", "MC", "ManC", "Man C"],
+	"Arsenal": ["ARS", "Arsenal"],
+	"Chelsea": ["CHE", "CHEL", "Chelsea", "Chels"],
+	"Liverpool": ["LIV", "Liverpool", "lipool"],
+	"Paris Saint Germain": ["Paris Saint Germain", "PSG", "Paris Saint", "Paris Germain", "ParisSG", "Germain"],
+	"Juventus": ["Juventus", "Juve", "Juv"],
+	"Bayern Munich": ["Bayern Munich", "Bayern M", "Munich", "BAY"],
+	"Tottenham Hotspur": ["TOT", "Tottenham Hotspur", "Tottenham", "Hotspur"]
+}
