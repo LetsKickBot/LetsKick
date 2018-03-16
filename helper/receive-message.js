@@ -61,6 +61,7 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 const callSendAPI = (sender_psid, response) => {
+  let key = task.checkSpellName(received_message.text);
   // Construct the message body
   if (key.includes('or')) {
     let request_body = {
