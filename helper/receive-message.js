@@ -11,7 +11,7 @@ const handleMessage = (sender_psid, received_message) => {
   console.log(key);
 
   //Check if the key is in an array
-  if(key.includes('or')){
+  if(typeof(key) == 'object'){
     newKey = completeName(key)
     response = {
       "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
