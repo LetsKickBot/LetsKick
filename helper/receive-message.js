@@ -12,7 +12,7 @@ const handleMessage = (sender_psid, received_message) => {
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
-    newKey = completeName(key)
+    newKey = task.completeName(key)
     response = {
       "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
     }
