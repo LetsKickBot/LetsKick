@@ -1,5 +1,6 @@
 var file = require('./teamName')
 var correctTeam = ""
+var flag = true
 
 function checkSpellName(name) {
 	var identityTeam = []
@@ -8,7 +9,7 @@ function checkSpellName(name) {
 		array = file[key]
 		team = key.replace(/\s/g,'').toUpperCase()
 		// Check to see if the specific team name has duplicate with other team name at diffrent location
-		if (team.indexOf(name) !== -1) {
+		if ((name.length >= 4) && team.indexOf(name) !== -1) {
 			identityTeam.push(key)
 		}
 		for (var i in array) {
@@ -24,10 +25,11 @@ function checkSpellName(name) {
 			}
 		}
 	}
+
+	//Final Check
+	if (identityTeam.length == 0 || correctTeam !== '')
+		return correctTeam
 	switch(identityTeam.length) {
-		case 0:
-			return correctTeam
-			break
 		case 1:
 			return identityTeam[0];
 			break;
@@ -37,7 +39,6 @@ function checkSpellName(name) {
 	}
 }
 
-// console.log(checkSpellName("Ireland"))
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);
 	time.setHours(time.getHours() + timezone);
