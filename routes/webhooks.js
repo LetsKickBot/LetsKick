@@ -1,10 +1,9 @@
 const
     bodyParser = require('body-parser'),
-    // request = require('request'),
     express = require('express');
-    recieve = require('../helper/recieve-message');
+    recieve = require('../helper/receive-message');
 
-const router = express.Router()
+const router = express.Router();
 
 router.post('/', (req, res) => {
 
@@ -17,22 +16,22 @@ router.post('/', (req, res) => {
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
-      // Gets the message. entry.messaging is an array, but 
+      // Gets the message. entry.messaging is an array, but
       // will only ever contain one message, so we get index 0
       let webhook_event = entry.messaging[0];
       let user_message = webhook_event.message.text;
-      
+
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
-      
+
       // Checks if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        recieve.handleMessage(sender_psid, webhook_event.message);        
+        recieve.handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
         recieve.handlePostback(sender_psid, webhook_event.postback);
       }
-      
+
     });
 
     // Returns a '200 OK' response to all requests
