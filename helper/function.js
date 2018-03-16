@@ -33,16 +33,16 @@ function checkSpellName(name) {
 	//Final Check		
 	switch(identityTeam.length) {
 		case 0:
-			return correctTeam
 			flag = true
+			return correctTeam
 			break
 		case 1:
-			return identityTeam[0]
 			flag = true
+			return identityTeam[0]
 			break;
 		default:
-			return identityTeam
 			flag = true
+			return identityTeam
 			break
 	}
 }
