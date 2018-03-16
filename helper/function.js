@@ -95,5 +95,5 @@ module.exports = {
 	checkSpellName,
 	timeFormat,
 	teamFormat,
-	allTeam
+	// allTeam
 };
