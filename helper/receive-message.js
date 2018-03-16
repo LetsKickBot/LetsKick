@@ -15,7 +15,7 @@ const handleMessage = (sender_psid, received_message) => {
     response = {
       "text": `Did you mean *${key}* ? Or please retype the team you want to see!!!`
     }
-    callSendAPI(sender_psid, response);
+    callSendAPI1(sender_psid, response);
   // Check if the key is empty
   }else if (key == "") {
     response = {
@@ -61,30 +61,42 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 const callSendAPI = (sender_psid, response) => {
-  // let key = task.checkSpellName(received_message.text);
-  // Construct the message body
-  // if (response.includes('or')) {
-  //   let request_body = {
-  //   "recipient": {
-  //     "id": sender_psid
-  //   },
-  //   "message": {
-  //     "text": "Pick a team please?",
-  //     "quick_replies": [
-  //       {
-  //         "content_type":"text",
-  //         "title": "Bo value vao",
-  //         "payload": "testing value"
-  //       },
-  //     ]
-  //   }
-  //   }
-  // } else {
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": response
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+const callSendAPI1 = (sender_psid, response) => {
+  // Construct the message body
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": "Pick a team please?",
+      "quick_replies": [
+        {
+          "content_type":"text",
+          "title": "Bo value vao",
+          "payload": "testing value"
+        },
+      ]
+    }
     }
   // Send the HTTP request to the Messenger Platform
   request({
@@ -107,5 +119,6 @@ function handlePostback (sender_psid, received_postback) {
 module.exports = {
   handleMessage,
   callSendAPI,
+  callSendAPI1,
   handlePostback
 };
