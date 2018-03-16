@@ -71,8 +71,8 @@ const callSendAPI = (sender_psid, response) => {
       "text": "testing",
       "quick_replies": [
         {
-          "content_type":"text",
-          "title": "Search",
+          "content_type":"quick_replies",
+          "title": "Bo value vao",
           "payload": "testing",
         },
       ]
