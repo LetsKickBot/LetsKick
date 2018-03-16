@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "jest",
+    "test": "mocha __tests__/bottest.js",
     "start": "babel-node app.js --presets es2015,stage-2"
   },
   "author": "",
@@ -19,6 +19,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
-    "jest": "^22.1.4"
+    "jest": "^22.1.4",
+    "messenger-bot-tester": "^1.3.1",
+    "mocha": "^5.0.1"
   }
 }
