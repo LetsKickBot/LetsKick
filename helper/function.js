@@ -41,23 +41,13 @@ function checkSpellName(name) {
 			break;
 		// Handle multiple teams
 		default:
-			// for (i = 0; i < identityTeam.length-1; i++) {
-			// 	correctTeam = correctTeam + identityTeam[i] + ", "
-			// }
-			// correctTeam += "or " + identityTeam[identityTeam.length -1]
-			// return correctTeam
-			return identityTeam
+			for (i = 0; i < identityTeam.length-1; i++) {
+				correctTeam = correctTeam + identityTeam[i] + ", "
+			}
+			correctTeam += "or " + identityTeam[identityTeam.length -1]
+			return correctTeam
 			break
 	}
-}
-
-function completeName(key) {
-	newKey = ""
-	for (i = 0; i < key.length - 1; i++) {
-		newKey = newKey + key[i] + ", "
-	}
-	newKey += "or " + key[key.length-1]
-	return newKey
 }
 
 function timeFormat(inputTime, timezone) {
