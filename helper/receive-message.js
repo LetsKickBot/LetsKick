@@ -23,13 +23,14 @@ const handleMessage = (sender_psid, received_message) => {
     console.log(response["text"])
     callSendAPI(sender_psid, response);
   }
-  // Check if the message contains text
+  // Check if the key is empty
   if (key == "") {
     response = {
       "text": `We cannot find your team, please give us another one!`
     }
     console.log(response["text"]);
     callSendAPI(sender_psid, response);
+  // Check if the key contain a team
   } else {
     response = {
       "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
