@@ -91,7 +91,7 @@ const callSendAPI1 = (sender_psid, response) => {
       "quick_replies": [
         {
           "content_type":"text",
-          "title": "MU",
+          "title": ["MU", "MA", "ada"],
           "payload": "testing value"
         }, {
           "content_type":"text",
