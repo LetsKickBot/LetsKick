@@ -63,30 +63,29 @@ const handleMessage = (sender_psid, received_message) => {
 const callSendAPI = (sender_psid, response) => {
   // let key = task.checkSpellName(received_message.text);
   // Construct the message body
-  if (response.includes('or')) {
+  // if (response.includes('or')) {
+  //   let request_body = {
+  //   "recipient": {
+  //     "id": sender_psid
+  //   },
+  //   "message": {
+  //     "text": "Pick a team please?",
+  //     "quick_replies": [
+  //       {
+  //         "content_type":"text",
+  //         "title": "Bo value vao",
+  //         "payload": "testing value"
+  //       },
+  //     ]
+  //   }
+  //   }
+  // } else {
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
-    "message": {
-      "text": "Pick a team please?",
-      "quick_replies": [
-        {
-          "content_type":"text",
-          "title": "Bo value vao",
-          "payload": "testing value"
-        },
-      ]
+    "message": response
     }
-    }
-  } else {
-      let request_body = {
-      "recipient": {
-        "id": sender_psid
-      },
-      "message": response
-      }
-  }
   // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
