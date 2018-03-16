@@ -34,12 +34,24 @@ function checkSpellName(name) {
 	//Final Check		
 	switch(identityTeam.length) {
 		case 0:
+<<<<<<< HEAD
 			return correctTeam
 			break
 		case 1:
 			return identityTeam[0]
 			break;
 		default:
+=======
+			// flag = true
+			return correctTeam
+			break
+		case 1:
+			// flag = true
+			return identityTeam[0]
+			break;
+		default:
+			// flag = true
+>>>>>>> 0c12b02bbab886af9f6f05d32cd7ecac9a0669d6
 			return identityTeam
 			break
 	}
