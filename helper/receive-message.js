@@ -73,7 +73,7 @@ const callSendAPI = (sender_psid, response) => {
         {
           "content_type":"text",
           "title": "Bo value vao",
-          "payload": response
+          "payload": "testing value"
         },
       ]
     }
