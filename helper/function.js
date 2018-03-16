@@ -68,9 +68,3 @@ function teamFormat(team1, team2, key) {
 	}
 	return [team1, team2];
 }
-
-module.exports = {
-	checkSpellName,
-	timeFormat,
-	teamFormat
-};
