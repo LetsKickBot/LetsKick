@@ -45,6 +45,15 @@ function checkSpellName(name) {
 	}
 }
 
+function allTeam(key) {
+	newKey = ""
+	for (i = 0; i < key.length; i ++) {
+		newKey = newKey + key[i] + ", "
+	}
+	newKey += "or " + key[key.length-1]
+	return newKey
+}
+
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);
 	time.setHours(time.getHours() + timezone);
@@ -79,5 +88,6 @@ function teamFormat(team1, team2, key) {
 module.exports = {
 	checkSpellName,
 	timeFormat,
-	teamFormat
+	teamFormat,
+	allTeam
 };
