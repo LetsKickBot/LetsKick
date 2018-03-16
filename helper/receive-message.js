@@ -66,7 +66,17 @@ const callSendAPI = (sender_psid, response) => {
     "recipient": {
       "id": sender_psid
     },
-    "message": response
+    // "message": response
+    "message": {
+      "text": "testing",
+      "quick_replies": [
+        {
+          "content_type":"text",
+          "title": "Search",
+          "payload": "testing",
+        },
+      ]
+    }
   }
 
   // Send the HTTP request to the Messenger Platform
