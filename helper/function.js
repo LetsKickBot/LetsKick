@@ -1,8 +1,8 @@
 var file = require('./teamName')
 var correctTeam = ""
-var identityTeam = []
 
 function checkSpellName(name) {
+	var identityTeam = []
 	name = name.replace(/\s/g,'').toUpperCase();
 	for (var key in file) {
 		array = file[key]
