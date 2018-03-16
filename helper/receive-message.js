@@ -21,8 +21,8 @@ const handleMessage = (sender_psid, received_message) => {
       "text": `Did you mean ${newKey} ? Or please retype the team you want to see!!!`
     }
     console.log(response["text"])
+    key = []
     callSendAPI(sender_psid, response);
-    break;
   // Check if the key is empty
   }else if (key == "") {
     response = {
