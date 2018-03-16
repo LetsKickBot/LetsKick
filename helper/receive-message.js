@@ -12,8 +12,9 @@ const handleMessage = (sender_psid, received_message) => {
 
   //Check if the key is in an array
   if(key.includes('or')){
+    newKey = completeName(key)
     response = {
-      "text": `Did you mean *${key}* ? Or please retype the team you want to see!!!`
+      "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
     }
     callSendAPI1(sender_psid, response, key);
   // Check if the key is empty
