@@ -88,11 +88,12 @@ const callSendAPI1 = (sender_psid, response) => {
       "id": sender_psid
     },
     "message": {
-      "text": "Pick a team please?",
+      "text": `${response}`,
       "quick_replies": [
         {
           "content_type":"text",
           "title": "Bo value vao",
+          "title": "MU",
           "payload": "testing value"
         },
       ]
