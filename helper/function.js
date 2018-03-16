@@ -1,9 +1,10 @@
 var file = require('./teamName')
-var correctTeam = ""
-var flag = true
 
 function checkSpellName(name) {
+	var correctTeam = ""
+	var flag = true
 	var identityTeam = []
+
 	name = name.replace(/\s/g,'').toUpperCase();
 	for (var key in file) {
 		if (flag) {
@@ -33,15 +34,12 @@ function checkSpellName(name) {
 	//Final Check		
 	switch(identityTeam.length) {
 		case 0:
-			flag = true
-			return ""
+			return correctTeam
 			break
 		case 1:
-			flag = true
 			return identityTeam[0]
 			break;
 		default:
-			flag = true
 			return identityTeam
 			break
 	}

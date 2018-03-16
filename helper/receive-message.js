@@ -18,9 +18,8 @@ const handleMessage = (sender_psid, received_message) => {
     }
     newKey += "or " + key[key.length-1]
     response = {
-      "text": `Did you mean ${newKey} ? Or please retype the team you want to see!!!`
+      "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
     }
-    console.log(response["text"])
     key = []
     callSendAPI(sender_psid, response);
   // Check if the key is empty
@@ -28,8 +27,6 @@ const handleMessage = (sender_psid, received_message) => {
     response = {
       "text": `We cannot find your team, please give us another one!`
     }
-    console.log(response["text"]);
-    key = []
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
@@ -60,9 +57,7 @@ const handleMessage = (sender_psid, received_message) => {
               response = {
                 "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
               }
-              console.log(response["text"]);
               console.log("replied");
-              key = []
               callSendAPI(sender_psid, response); 
             }
         })
