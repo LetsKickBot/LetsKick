@@ -7,7 +7,7 @@ const
   request = require('request'),
   express = require('express'),
   bodyParser = require('body-parser'),
-  app = express(),
+  app = express()
   webhooks = require('./routes/webhooks');
 
   
