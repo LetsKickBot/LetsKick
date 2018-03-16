@@ -34,7 +34,7 @@ function checkSpellName(name) {
 	switch(identityTeam.length) {
 		case 0:
 			flag = true
-			return correctTeam
+			return ""
 			break
 		case 1:
 			flag = true
