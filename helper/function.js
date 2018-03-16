@@ -1,4 +1,3 @@
-var fs = require('fs')
 var file = require('./teamName')
 var correctTeam = ""
 var identityTeam = []
