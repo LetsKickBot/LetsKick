@@ -29,6 +29,7 @@ const handleMessage = (sender_psid, received_message) => {
       "text": `We cannot find your team, please give us another one!`
     }
     console.log(response["text"]);
+    key = []
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
@@ -61,6 +62,7 @@ const handleMessage = (sender_psid, received_message) => {
               }
               console.log(response["text"]);
               console.log("replied");
+              key = []
               callSendAPI(sender_psid, response); 
             }
         })
