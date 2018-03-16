@@ -89,9 +89,7 @@ const callSendAPI1 = (sender_psid, response, value) => {
     },
     "message": {
       "text": response["text"],
-    },
-    "message": {
-        "quick_replies": [
+      "quick_replies": [
         {
           "content_type":"text",
           "title": value[0],
@@ -99,14 +97,6 @@ const callSendAPI1 = (sender_psid, response, value) => {
         }, {
           "content_type":"text",
           "title": value[1],
-          "payload": "value"
-        }, {
-          "content_type":"text",
-          "title": value[2],
-          "payload": "value"
-        }, {
-          "content_type":"text",
-          "title": value[3],
           "payload": "value"
         }
       ]
