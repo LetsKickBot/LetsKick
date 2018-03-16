@@ -34,12 +34,15 @@ function checkSpellName(name) {
 	switch(identityTeam.length) {
 		case 0:
 			return correctTeam
+			flag = true
 			break
 		case 1:
-			return identityTeam[0];
+			return identityTeam[0]
+			flag = true
 			break;
 		default:
 			return identityTeam
+			flag = true
 			break
 	}
 }
