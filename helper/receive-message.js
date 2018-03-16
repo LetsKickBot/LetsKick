@@ -83,13 +83,13 @@ const callSendAPI = (sender_psid, response) => {
 
 const callSendAPI1 = (sender_psid, response) => {
   // Construct the message body
-  let string = response + ""
+  // let string = response + ""
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": {
-      "text": string,
+      "text": response["text"],
       "quick_replies": [
         {
           "content_type":"text",
