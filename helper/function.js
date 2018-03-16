@@ -37,7 +37,7 @@ function checkSpellName(name) {
 	}
 }
 
-console.log(checkSpellName("Ireland"))
+// console.log(checkSpellName("Ireland"))
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);
 	time.setHours(time.getHours() + timezone);
