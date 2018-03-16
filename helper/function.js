@@ -81,6 +81,18 @@ function timeFormat(inputTime, timezone) {
 	return answer;
 }
 
+function quickReplies(value){
+	var finalArr = []
+	for (i = 0; i < value.length; i++) {
+		map = {}
+		map["content_type"] = "text"
+		map["title"] = value[i]
+		map["payload"] = "value"
+		finalArr.push(map)
+	}
+	return finalArr
+}
+
 function teamFormat(team1, team2, key) {
 	var check = team1;
 	team1 = "*" + team1 + "*" + "  _(Home team)_";
@@ -95,6 +107,6 @@ module.exports = {
 	checkSpellName,
 	timeFormat,
 	teamFormat,
-	completeName
-	// allTeam
+	completeName,
+	quickReplies
 };

@@ -83,23 +83,14 @@ const callSendAPI = (sender_psid, response) => {
 }
 
 const callSendAPI1 = (sender_psid, response, value) => {
+  jsonFile = task.quickReplies(value)
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": {
       "text": response["text"],
-      "quick_replies": [
-        {
-          "content_type":"text",
-          "title": value[0],
-          "payload": "value"
-        }, {
-          "content_type":"text",
-          "title": value[1],
-          "payload": "value"
-        }
-      ]
+      "quick_replies": jsonFile
     }
     }
   // Send the HTTP request to the Messenger Platform
