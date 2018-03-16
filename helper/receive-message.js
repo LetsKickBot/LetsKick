@@ -15,7 +15,7 @@ const handleMessage = (sender_psid, received_message) => {
     response = {
       "text": `Did you mean *${key}* ? Or please retype the team you want to see!!!`
     }
-    callSendAPI1(sender_psid, response);
+    callSendAPI1(sender_psid, response, key);
   // Check if the key is empty
   }else if (key == "") {
     response = {
@@ -81,7 +81,7 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-const callSendAPI1 = (sender_psid, response) => {
+const callSendAPI1 = (sender_psid, response, value) => {
     let request_body = {
     "recipient": {
       "id": sender_psid
@@ -91,11 +91,19 @@ const callSendAPI1 = (sender_psid, response) => {
       "quick_replies": [
         {
           "content_type":"text",
-          "title": ["MU", "MA", "ada"],
+          "title": value[0],
           "payload": "testing value"
         }, {
           "content_type":"text",
-          "title": "Manchester United",
+          "title": value[1],
+          "payload": "testing value"
+        }, {
+          "content_type":"text",
+          "title": value[2],
+          "payload": "testing value"
+        }, {
+          "content_type":"text",
+          "title": value[3],
           "payload": "testing value"
         }
       ]
