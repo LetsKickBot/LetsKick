@@ -180,6 +180,7 @@ function handlePostback (sender_psid, received_postback) {
 
 module.exports = {
   handleMessage,
+  handleButtonCall,
   callSendAPI,
   quickReply,
   handlePostback,
