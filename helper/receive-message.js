@@ -18,7 +18,7 @@ const handleMessage = (sender_psid, received_message) => {
     response = {
       "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
     }
-    callSendAPI1(sender_psid, response, key);
+    quickReply(sender_psid, response, key);
   // Check if the key is empty
   }else if (key == "") {
     response = {
@@ -55,7 +55,8 @@ const handleMessage = (sender_psid, received_message) => {
                 "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
               }
               console.log("replied");
-              callSendAPI(sender_psid, response); 
+              callSendAPI(sender_psid, response);
+              buttonSet(sender_psid);
             }
         })
       }
@@ -85,71 +86,32 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-// const callSendAPI = (sender_psid, response) => {
+const buttonSet = (sender_psid) => {
 
-//     let request_body = {
-//     "recipient": {
-//       "id": sender_psid
-//     },
-//     "message": {
-//       "attachment":{
-//         "payload":{
-//           "template_type":"generic",
-//           "elements":[
-//           {
-//             "title":"Welcome!",
-//             "image_url":"https://petersfancybrownhats.com/company_image.png",
-//             "subtitle":"We have the right hat for everyone.",
-//             "default_action": {
-//               "type": "web_url",
-//               "url": "https://petersfancybrownhats.com/view?item=103",
-//               "messenger_extensions": false,
-//               "webview_height_ratio": "tall",
-//               "fallback_url": "https://petersfancybrownhats.com/"
-//             },
-//             "buttons":[
-//               {
-//                 "type":"web_url",
-//                 "url":"https://petersfancybrownhats.com",
-//                 "title":"View Website"
-//               },{
-//                 "type":"postback",
-//                 "title":"Start Chatting",
-//                 "payload":"DEVELOPER_DEFINED_PAYLOAD"
-//               }
-//             ]
-//           }
-//           ]
-//         }
-//       }
-//     }
-//     }
-//   // Send the HTTP request to the Messenger Platform
-//   request({
-//     "uri": "https://graph.facebook.com/v2.6/me/messages",
-//     // "uri": "http://localhost:3100/v2.6",
-//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-//     "method": "POST",
-//     "json": request_body
-//   }, (err, res, body) => {
-//     if (err) {
-//       console.error("Unable to send message:" + err);
-//     }
-//   });
-// }
-
-
-const autoQuickReply = (sender_psid, value) => {
-  let request_body = {
+    let request_body = {
     "recipient": {
       "id": sender_psid
     },
-    "message": {
-    "quick_replies": value
+    "message":{
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"button",
+          "text":"Do you want to set for reminder?",
+          "buttons":[
+            {
+              "type":"game_play",
+              "title":"Click to set"
+            }
+          ]
+        }
+      }
     }
-  }
+    }
+  // Send the HTTP request to the Messenger Platform
   request({
     "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -160,7 +122,28 @@ const autoQuickReply = (sender_psid, value) => {
   });
 }
 
-const callSendAPI1 = (sender_psid, response, value) => {
+// const autoQuickReply = (sender_psid, value) => {
+//   let request_body = {
+//     "recipient": {
+//       "id": sender_psid
+//     },
+//     "message": {
+//     "quick_replies": value
+//     }
+//   }
+//   request({
+//     "uri": "https://graph.facebook.com/v2.6/me/messages",
+//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+//     "method": "POST",
+//     "json": request_body
+//   }, (err, res, body) => {
+//     if (err) {
+//       console.error("Unable to send message:" + err);
+//     }
+//   });
+// }
+
+const quickReply = (sender_psid, response, value) => {
   jsonFile = task.quickReplies(value)
     let request_body = {
     "recipient": {
@@ -192,7 +175,8 @@ function handlePostback (sender_psid, received_postback) {
 module.exports = {
   handleMessage,
   callSendAPI,
-  callSendAPI1,
+  quickReply,
   handlePostback,
-  autoQuickReply
+  autoQuickReply,
+  buttonSet
 };
