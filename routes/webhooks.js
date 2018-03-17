@@ -25,7 +25,7 @@ router.post('/', (req, res) => {
       let sender_psid = webhook_event.sender.id;
 
       // Get the postback value
-      let postBackValue = messaging_postbacks;
+      let postBackValue = webhook_event.messaging_postbacks;
       recieve.handleButtonCall(sender_psid, postBackValue);
 
       // Checks if the event is a message or postback and
