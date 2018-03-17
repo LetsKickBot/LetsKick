@@ -105,9 +105,10 @@ const buttonSet = (sender_psid, time) => {
           "text":"Do you want to set the time above to reminder?",
           "buttons":[
             {
-              "type":"postback",
-              "title":"Click to set",
-              "payload":time
+              "type":"web_url",
+              "url":"https://www.google.com",
+              "title":"Click to set"
+              // "payload":time
             }
           ]
         }
