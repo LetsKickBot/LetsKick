@@ -2,16 +2,15 @@ const
   bodyParser = require('body-parser'),
   request = require('request'),
   Data = require('../data/get_data'),
-  task = require('./function'),
-  // userID = require('../routes/webhooks')
-
-// autoQuickReply(userID.sender_psid, task.quickReplies(task.popularTeam()));
+  task = require('./function')
 
 const handleMessage = (sender_psid, received_message) => {
   let response;
   console.log(received_message.text);
   let key = task.checkSpellName(received_message.text);
   console.log(key);
+
+  // autoQuickReply(sender_psid, task.quickReplies(task.popularTeam()));
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
