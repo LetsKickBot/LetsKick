@@ -4,10 +4,10 @@ const
   Data = require('../data/get_data'),
   task = require('./function')
 
-const handleButtonCall= (sender_psid, postBackMessage) => {
-  let oldData;
-  console.log(postBackMessage.text);
-}
+// const handleButtonCall= (sender_psid, postBackMessage) => {
+//   let oldData;
+//   console.log(postBackMessage.text);
+// }
 
 const handleMessage = (sender_psid, received_message) => {
   let response;
@@ -180,7 +180,7 @@ function handlePostback (sender_psid, received_postback) {
 
 module.exports = {
   handleMessage,
-  handleButtonCall,
+  // handleButtonCall,
   callSendAPI,
   quickReply,
   handlePostback,
