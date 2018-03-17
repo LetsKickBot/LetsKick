@@ -4,6 +4,11 @@ const
   Data = require('../data/get_data'),
   task = require('./function')
 
+const handleButtonCall= (sender_psid, postBackMessage) => {
+  let oldData;
+  console.log(postBackMessage);
+}
+
 const handleMessage = (sender_psid, received_message) => {
   let response;
   console.log(received_message.text);
@@ -97,12 +102,12 @@ const buttonSet = (sender_psid, time) => {
         "type":"template",
         "payload":{
           "template_type":"button",
-          "text":"Do you want to set for reminder?",
+          "text":"Do you want to set the time above to reminder?",
           "buttons":[
             {
-              "type":"web_url",
-              "url":"https://www.messenger.com",
-              "title":"Click to set"
+              "type":"postback",
+              "title":"Click to set",
+              "payload":time
             }
           ]
         }
