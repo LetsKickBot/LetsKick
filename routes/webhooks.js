@@ -46,7 +46,6 @@ router.post('/', (req, res) => {
 
 // Adds support for GET requests to our webhook
 router.get('/', (req, res) => {
-  res.send('Hello user, I am Let Kick chat bot. Please give us your favorite team!!!')
 
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
