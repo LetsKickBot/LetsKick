@@ -6,7 +6,7 @@ const
 
 const handleButtonCall= (sender_psid, postBackMessage) => {
   let oldData;
-  console.log(postBackMessage);
+  console.log(postBackMessage.text);
 }
 
 const handleMessage = (sender_psid, received_message) => {
