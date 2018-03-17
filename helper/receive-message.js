@@ -177,6 +177,6 @@ module.exports = {
   callSendAPI,
   quickReply,
   handlePostback,
-  autoQuickReply,
+  // autoQuickReply,
   buttonSet
 };
