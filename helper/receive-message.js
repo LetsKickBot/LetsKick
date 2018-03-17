@@ -56,7 +56,7 @@ const handleMessage = (sender_psid, received_message) => {
               }
               console.log("replied");
               callSendAPI(sender_psid, response);
-              buttonSet(sender_psid);
+              buttonSet(sender_psid, time);
             }
         })
       }
@@ -86,7 +86,7 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-const buttonSet = (sender_psid) => {
+const buttonSet = (sender_psid, time) => {
 
     let request_body = {
     "recipient": {
@@ -100,7 +100,8 @@ const buttonSet = (sender_psid) => {
           "text":"Do you want to set for reminder?",
           "buttons":[
             {
-              "type":"game_play",
+              "type":"web_url",
+              "url":"https://www.messenger.com",
               "title":"Click to set"
             }
           ]
