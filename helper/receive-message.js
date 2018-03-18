@@ -8,7 +8,6 @@ const
 //   let oldData;
 //   console.log(postBackMessage.text);
 // }
-
 const handleMessage = (sender_psid, received_message) => {
   let response;
   console.log(received_message.text);
@@ -60,8 +59,10 @@ const handleMessage = (sender_psid, received_message) => {
                 "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
               }
               console.log("replied");
+              let news = reply[4];
               callSendAPI(sender_psid, response);
-              buttonSet(sender_psid, time);
+              // buttonSet(sender_psid, time);
+              shareNews(sender_psid,news);
             }
         })
       }
@@ -175,6 +176,55 @@ const quickReply = (sender_psid, response, value) => {
   });
 }
 
+const shareNews = (sender_psid, newsLink) => {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message":{
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"generic",
+        "elements":[
+           {
+            "title":"Welcome!",
+            "image_url":"https://petersfancybrownhats.com/company_image.png",
+            "subtitle":"View more details of this game.",
+            "default_action": {
+              "type": "web_url",
+              "url": "https://petersfancybrownhats.com/view?item=103",
+              "messenger_extensions": false,
+              "webview_height_ratio": "tall",
+              "fallback_url": "https://petersfancybrownhats.com/"
+            },
+            "buttons":[
+              {
+                "type":"web_url",
+                "url":newsLink,
+                "title":"View Website"
+              }            
+            ]      
+          }
+        ]
+      }
+    }
+    }
+  }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
 function handlePostback (sender_psid, received_postback) {
 
 }
@@ -186,5 +236,6 @@ module.exports = {
   quickReply,
   handlePostback,
   // autoQuickReply,
-  buttonSet
+  buttonSet,
+  shareNews
 };

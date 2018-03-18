@@ -54,11 +54,13 @@ def main():
         home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
         away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
         date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
+        currentURL = browser.current_url
 
         print(home_team)
         print(away_team)
         print(date)
         print(game_details)
+        print(currentURL)
 
         browser.quit()
 
