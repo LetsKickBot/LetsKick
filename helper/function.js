@@ -78,7 +78,7 @@ function timeFormat(inputTime, timezone) {
 }
 
 // Handle the UI quick replies
-function quickReplies(value){
+function quickReplies(value) {
 	var finalArr = []
 	for (i = 0; i < value.length; i++) {
 		map = {}
@@ -89,6 +89,30 @@ function quickReplies(value){
 	}
 	return finalArr
 }
+
+function quickOptions() {
+	optionTypes = [{
+		"content_type": "text",
+		"title": "Next Match",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Team News",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Team Squad",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Team Schedules",
+		"payload": "value"
+	}
+	]
+	return optionTypes
+}
+
+// console.log(quickOptions('Manchester United'))
 
 //Popular teams
 function popularTeam() {
@@ -116,5 +140,6 @@ module.exports = {
 	teamFormat,
 	completeName,
 	quickReplies,
-	popularTeam
+	popularTeam,
+	quickOptions
 };

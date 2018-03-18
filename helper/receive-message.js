@@ -14,13 +14,11 @@ const handleMessage = (sender_psid, received_message) => {
   let key = task.checkSpellName(received_message.text);
   console.log(key);
 
-  // autoQuickReply(sender_psid, task.quickReplies(task.popularTeam()));
-
   //Check if the key is in an array
   if(typeof(key) == 'object'){
     newKey = task.completeName(key)
     response = {
-      "text": `Did you mean *${newKey}* ? Or please retype the team you want to see!!!`
+      "text": `Did you mean *${newKey}* ?`
     }
     quickReply(sender_psid, response, key);
   // Check if the key is empty
@@ -31,43 +29,47 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    response = {
-      "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-    };
-    console.log("waiting...");
-    callSendAPI(sender_psid, response);
-    Data.get_next_game(key, (err, reply) => {
-        if (err) {
-          response = {
-            "text" : "Something went wrong. Please try again"
-          }
-        } else if (key) {
-          request( {
-            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-            "method": "GET",
-            "json": true,
-          }, (err, res, body) => {
-          // Test
+    quickOption(sender_psid, response);
+    if (key == 'Next Match') {
+
+        response = {
+          "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
+        };
+        console.log("waiting...");
+        callSendAPI(sender_psid, response);
+        Data.get_next_game(key, (err, reply) => {
             if (err) {
-              console.error("Unable to send message:" + err);
-            } else {
-              let time = task.timeFormat(reply[2], body.timezone);
-              let team = task.teamFormat(reply[0], reply[1], key);
-            // Create the payload for a basic text message
               response = {
-                "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+                "text" : "Something went wrong. Please try again"
               }
-              console.log("replied");
-              let news = reply[4];
-              callSendAPI(sender_psid, response);
-              // buttonSet(sender_psid, time);
-              shareNews(sender_psid,news);
-            }
+            } else if (key) {
+              request( {
+                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                "method": "GET",
+                "json": true,
+              }, (err, res, body) => {
+              // Test
+                if (err) {
+                  console.error("Unable to send message:" + err);
+                } else {
+                  let time = task.timeFormat(reply[2], body.timezone);
+                  let team = task.teamFormat(reply[0], reply[1], key);
+                // Create the payload for a basic text message
+                  response = {
+                    "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+                  }
+                  console.log("replied");
+                  let news = reply[4];
+                  callSendAPI(sender_psid, response);
+                  // buttonSet(sender_psid, time);
+                  shareNews(sender_psid,news);
+                }
+            })
+          }
         })
       }
-    })
-  }
+    }
 }
 
 const callSendAPI = (sender_psid, response) => {
@@ -92,43 +94,43 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-const buttonSet = (sender_psid, time) => {
+// const buttonSet = (sender_psid, time) => {
 
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message":{
-      "attachment":{
-        "type":"template",
-        "payload":{
-          "template_type":"button",
-          "text":"Do you want to set the time above to reminder?",
-          "buttons":[
-            {
-              "type":"web_url",
-              "url":"https://www.google.com",
-              "title":"Click to set"
-              // "payload":time
-            }
-          ]
-        }
-      }
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
+//     let request_body = {
+//     "recipient": {
+//       "id": sender_psid
+//     },
+//     "message":{
+//       "attachment":{
+//         "type":"template",
+//         "payload":{
+//           "template_type":"button",
+//           "text":"Do you want to set the time above to reminder?",
+//           "buttons":[
+//             {
+//               "type":"web_url",
+//               "url":"https://www.google.com",
+//               "title":"Click to set"
+//               // "payload":time
+//             }
+//           ]
+//         }
+//       }
+//     }
+//     }
+//   // Send the HTTP request to the Messenger Platform
+//   request({
+//     "uri": "https://graph.facebook.com/v2.6/me/messages",
+//     // "uri": "http://localhost:3100/v2.6",
+//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+//     "method": "POST",
+//     "json": request_body
+//   }, (err, res, body) => {
+//     if (err) {
+//       console.error("Unable to send message:" + err);
+//     }
+//   });
+// }
 
 // const autoQuickReply = (sender_psid, value) => {
 //   let request_body = {
@@ -176,6 +178,31 @@ const quickReply = (sender_psid, response, value) => {
   });
 }
 
+const quickOption = (sender_psid, response) => {
+  jsonFile = task.quickOptions()
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
 const shareNews = (sender_psid, newsLink) => {
   let request_body = {
     "recipient": {
@@ -189,14 +216,14 @@ const shareNews = (sender_psid, newsLink) => {
         "elements":[
            {
             "title":"Welcome!",
-            "image_url":"https://petersfancybrownhats.com/company_image.png",
+            "image_url":"http://a1.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
             "subtitle":"View more details of this game.",
             "default_action": {
               "type": "web_url",
-              "url": "https://petersfancybrownhats.com/view?item=103",
+              "url": newsLink,
               "messenger_extensions": false,
               "webview_height_ratio": "tall",
-              "fallback_url": "https://petersfancybrownhats.com/"
+              "fallback_url": newsLink
             },
             "buttons":[
               {
@@ -204,7 +231,7 @@ const shareNews = (sender_psid, newsLink) => {
                 "url":newsLink,
                 "title":"View Website"
               }            
-            ]      
+            ]    
           }
         ]
       }
@@ -236,6 +263,6 @@ module.exports = {
   quickReply,
   handlePostback,
   // autoQuickReply,
-  buttonSet,
-  shareNews
+  shareNews,
+  quickOption
 };
