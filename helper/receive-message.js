@@ -189,14 +189,14 @@ const shareNews = (sender_psid, newsLink) => {
         "elements":[
            {
             "title":"Welcome!",
-            "image_url":"https://petersfancybrownhats.com/company_image.png",
+            "image_url":"http://a1.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
             "subtitle":"View more details of this game.",
             "default_action": {
               "type": "web_url",
-              "url": "https://petersfancybrownhats.com/view?item=103",
+              "url": newsLink,
               "messenger_extensions": false,
               "webview_height_ratio": "tall",
-              "fallback_url": "https://petersfancybrownhats.com/"
+              "fallback_url": newsLink
             },
             "buttons":[
               {
@@ -204,7 +204,7 @@ const shareNews = (sender_psid, newsLink) => {
                 "url":newsLink,
                 "title":"View Website"
               }            
-            ]      
+            ]    
           }
         ]
       }
