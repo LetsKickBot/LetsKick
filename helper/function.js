@@ -48,19 +48,12 @@ function checkSpellName(name) {
 			break
 	}
 }
-
+// Check the option that user pick
 function optionChoose(name) {
-	// First check
 	switch (name) {
 		case 'Next Match':
-			return name
-			break
 		case 'Team News':
-			return name
-			break
 		case 'Team Squad':
-			return name
-			break
 		case 'Team Schedules':
 			return name
 			break
@@ -70,6 +63,7 @@ function optionChoose(name) {
 	}
 }
 
+// Fix the name of the team
 function completeName(key) {
 	newKey = ""
 	for (i = 0; i < key.length - 1; i++) {
@@ -79,6 +73,7 @@ function completeName(key) {
 	return newKey
 }
 
+// Format the time
 function timeFormat(inputTime, timezone) {
 	var time = new Date(inputTime);
 	time.setHours(time.getHours() + timezone);

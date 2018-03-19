@@ -17,8 +17,7 @@ const handleMessage = (sender_psid, received_message) => {
   }
   console.log(key);
   let pick = task.optionChoose(received_message.text);
-  console.log(pick); // Fix string here
-  console.log(typeof(pick));
+  console.log(pick);
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
@@ -73,8 +72,13 @@ const handleMessage = (sender_psid, received_message) => {
             })
           }
         })
-      }
-      if (pick == "") {
+      } else if (pick == "Team News") {
+
+      } else if (pick == "Team Squad") {
+
+      } else if (pick == "Team Schedules") {
+
+      } else {
         quickOption(sender_psid, key);
       }
     }
