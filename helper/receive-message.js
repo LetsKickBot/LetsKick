@@ -7,9 +7,12 @@ const
 const handleMessage = (sender_psid, received_message) => {
   let response;
   console.log(received_message.text);
-  let key = task.checkSpellName(received_message.text);
-  let string = task.optionChoose(received_message.text);
+  let userMessage = received_message.text
+  if((userMessage !== 'Next Match') || (userMessage !== 'Team News') || (userMessage !== 'Team Squad') || (userMessage !== 'Team Schedules')) {
+    let key = task.checkSpellName(received_message.text);
+  }
   console.log(key);
+  let string = task.optionChoose(received_message.text);
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
@@ -176,7 +179,7 @@ const quickReply = (sender_psid, response, value) => {
 }
 
 const quickOption = (sender_psid, team) => {
-  jsonFile = task.quickOptions()
+  jsonFile = task.quickOptions(team)
     let request_body = {
     "recipient": {
       "id": sender_psid
