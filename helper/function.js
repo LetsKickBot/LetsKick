@@ -52,7 +52,16 @@ function checkSpellName(name) {
 function optionChoose(name) {
 	// First check
 	switch (name) {
-		case 'Next Match', 'Team News', 'Team Squad','Team Schedules':
+		case 'Next Match':
+			return name
+			break
+		case 'Team News':
+			return name
+			break
+		case 'Team Squad':
+			return name
+			break
+		case 'Team Schedules':
 			return name
 			break
 		default:

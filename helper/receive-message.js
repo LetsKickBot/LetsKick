@@ -7,7 +7,7 @@ const
 const handleMessage = (sender_psid, received_message) => {
   let response;
   let key;
-  console.log(received_message.text);
+  console.log("message:" + received_message.text);
   userMessage = received_message.text
   if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
@@ -16,8 +16,8 @@ const handleMessage = (sender_psid, received_message) => {
     key = defaultTeam
   }
   console.log(key);
-  let string = task.optionChoose(received_message.text);
-  console.log(string);
+  let pick = task.optionChoose(received_message.text);
+  console.log(string); // Fix string here
   console.log(typeof(string));
 
   //Check if the key is in an array
@@ -35,7 +35,7 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    if (string == "Next Match") {
+    if (pick == "Next Match") {
 
         response = {
           "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
@@ -74,7 +74,9 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       }
-      quickOption(sender_psid, key);
+      if (pick == "") {
+        quickOption(sender_psid, key);
+      }
     }
 }
 
