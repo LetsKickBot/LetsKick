@@ -15,7 +15,8 @@ const handleMessage = (sender_psid, received_message) => {
     let key = task.checkSpellName(received_message.text);
     const defaultTeam = key
   } else {
-    let key = defaultTeam
+    // key = defaultTeam
+    key = received_message.text
   }
   console.log("key: " + key);
   let pick = task.optionChoose(received_message.text);
