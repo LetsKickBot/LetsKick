@@ -11,6 +11,9 @@ const handleMessage = (sender_psid, received_message) => {
   userMessage = received_message.text
   if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
+    defaultTeam = key
+  } else {
+    key = defaultTeam
   }
   console.log(key);
   let string = task.optionChoose(received_message.text);
