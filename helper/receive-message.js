@@ -9,7 +9,7 @@ const handleMessage = (sender_psid, received_message) => {
   let key;
   console.log(received_message.text);
   userMessage = received_message.text
-  if((userMessage !== 'Next Match') || (userMessage !== 'Team News') || (userMessage !== 'Team Squad') || (userMessage !== 'Team Schedules')) {
+  if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
   }
   console.log(key);
