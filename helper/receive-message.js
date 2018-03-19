@@ -11,15 +11,14 @@ const handleMessage = (sender_psid, received_message) => {
   // const defaultTeam;
   console.log("message: " + received_message.text);
   userMessage = received_message.text
-  if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
+  if((userMessage != 'Next Match') || (userMessage != 'Team News')|| (userMessage != 'Team Squad') || (userMessage != 'Team Schedules')) {
     let key = task.checkSpellName(received_message.text);
     const defaultTeam = key
   } else {
-    // key = defaultTeam
-    key = received_message.text
+    key = defaultTeam
+    let pick = task.optionChoose(received_message.text);
   }
   console.log("key: " + key);
-  let pick = task.optionChoose(received_message.text);
   console.log("Pick: " + pick);
 
   //Check if the key is in an array
