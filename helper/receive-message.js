@@ -4,9 +4,10 @@ const
   Data = require('../data/get_data'),
   task = require('./function')
 
+
 const handleMessage = (sender_psid, received_message) => {
   let response;
-  // let key;
+  let key;
   // let defaultTeam;
   console.log("message: " + received_message.text);
   userMessage = received_message.text
