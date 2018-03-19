@@ -73,11 +73,11 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       } else if (pick == "Team News") {
-
+        shareNews(sender_psid, news);
       } else if (pick == "Team Squad") {
-
+        //TODO
       } else if (pick == "Team Schedules") {
-
+        //TODO
       } else {
         quickOption(sender_psid, key);
       }
@@ -215,54 +215,45 @@ const quickOption = (sender_psid, team) => {
   });
 }
 
-// const shareNews = (sender_psid, newsLink) => {
-//   let request_body = {
-//     "recipient": {
-//       "id": sender_psid
-//     },
-//     "message":{
-//     "attachment":{
-//       "type":"template",
-//       "payload":{
-//         "template_type":"generic",
-//         "elements":[
-//            {
-//             "title":"Welcome!",
-//             "image_url":"http://a1.espncdn.com/combiner/i?img=%2Fi%2Fespn%2Fespn_logos%2Fespn_red.png",
-//             "subtitle":"View more details of this game.",
-//             "default_action": {
-//               "type": "web_url",
-//               "url": newsLink,
-//               "messenger_extensions": false,
-//               "webview_height_ratio": "tall",
-//               "fallback_url": newsLink
-//             },
-//             "buttons":[
-//               {
-//                 "type":"web_url",
-//                 "url":newsLink,
-//                 "title":"View Website"
-//               }            
-//             ]    
-//           }
-//         ]
-//       }
-//     }
-//     }
-//   }
-//   // Send the HTTP request to the Messenger Platform
-//   request({
-//     "uri": "https://graph.facebook.com/v2.6/me/messages",
-//     // "uri": "http://localhost:3100/v2.6",
-//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-//     "method": "POST",
-//     "json": request_body
-//   }, (err, res, body) => {
-//     if (err) {
-//       console.error("Unable to send message:" + err);
-//     }
-//   });
-// }
+const shareNews = (sender_psid, newsLink) => {
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message":{
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"generic",
+        "elements":[{
+            "title":"Here is the news",
+            "subtitle":"View more details of this game.",
+            "image_url":"https://media.xiph.org/BBB/BBB-360-png/big_buck_bunny_01542.png",
+            "buttons":[{
+                "type":"web_url",
+                "url":newsLink,
+                "title":"View Website"
+              }, {
+                "type":"element_share"
+              }]    
+          }]
+      }
+    }
+    }
+  }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
 
 function handlePostback (sender_psid, received_postback) {
 
@@ -275,6 +266,6 @@ module.exports = {
   quickReply,
   handlePostback,
   // autoQuickReply,
-  // shareNews,
+  shareNews,
   quickOption
 };
