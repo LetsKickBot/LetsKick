@@ -30,6 +30,7 @@ const handleMessage = (sender_psid, received_message) => {
   // Check if the key contain a team
   } else {
     quickOption(sender_psid, response);
+    console.log('passed here')
     if (key == 'Next Match') {
 
         response = {
@@ -178,14 +179,14 @@ const quickReply = (sender_psid, response, value) => {
   });
 }
 
-const quickOption = (sender_psid, response) => {
+const quickOption = (sender_psid) => {
   jsonFile = task.quickOptions()
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": {
-      // "text": response["text"],
+      "text": "testing",
       "quick_replies": jsonFile
     }
     }
