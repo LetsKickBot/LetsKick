@@ -72,6 +72,7 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       } else if (pick == "Team News") {
+        console.log("team name here: " + key)
         Data.get_next_game(key, (err, reply) => {
             if (err) {
               response = {
