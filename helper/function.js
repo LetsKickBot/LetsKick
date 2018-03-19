@@ -31,7 +31,8 @@ function checkSpellName(name) {
 		} else {
 			break
 		}
-	}
+	}	
+
 	//Final Check		
 	switch(identityTeam.length) {
 		case 0:
@@ -43,6 +44,14 @@ function checkSpellName(name) {
 		// Handle multiple teams
 		default:
 			return identityTeam
+			break
+	}
+}
+
+function optionChoose(name) {
+	switch(name) {
+		case 'Next Match', 'Team News', 'Team Squad','Team Schedules':
+			return name
 			break
 	}
 }
@@ -141,5 +150,6 @@ module.exports = {
 	completeName,
 	quickReplies,
 	popularTeam,
-	quickOptions
+	quickOptions,
+	optionChoose
 };

@@ -4,14 +4,11 @@ const
   Data = require('../data/get_data'),
   task = require('./function')
 
-// const handleButtonCall= (sender_psid, postBackMessage) => {
-//   let oldData;
-//   console.log(postBackMessage.text);
-// }
 const handleMessage = (sender_psid, received_message) => {
   let response;
   console.log(received_message.text);
   let key = task.checkSpellName(received_message.text);
+  let string = task.optionChoose(received_message.text);
   console.log(key);
 
   //Check if the key is in an array
@@ -29,7 +26,7 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    if (key == 'Next Match') {
+    if (string == 'Next Match') {
 
         response = {
           "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
@@ -68,7 +65,7 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       }
-      quickOption(sender_psid);
+      quickOption(sender_psidm, key);
     }
 }
 
@@ -178,14 +175,14 @@ const quickReply = (sender_psid, response, value) => {
   });
 }
 
-const quickOption = (sender_psid) => {
+const quickOption = (sender_psid, team) => {
   jsonFile = task.quickOptions()
     let request_body = {
     "recipient": {
       "id": sender_psid
     },
     "message": {
-      "text": "Please select the option you want!!!",
+      "text": "You choose " + team + ". Please select the option you want!!!",
       "quick_replies": jsonFile
     }
     }
