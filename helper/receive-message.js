@@ -7,7 +7,9 @@ const
 const handleMessage = (sender_psid, received_message) => {
   let response;
   let key;
-  console.log("message:" + received_message.text);
+  let news;
+  console.log("message: " + received_message.text);
+  console.log("news: " + news)
   userMessage = received_message.text
   if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
@@ -73,7 +75,7 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       } else if (pick == "Team News") {
-        shareNews(sender_psid, news);
+          shareNews(sender_psid, news);
       } else if (pick == "Team Squad") {
         //TODO
       } else if (pick == "Team Schedules") {
