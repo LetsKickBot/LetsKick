@@ -51,13 +51,12 @@ function checkSpellName(name) {
 
 function optionChoose(name) {
 	// First check
-	value = ""
 	switch (name) {
 		case 'Next Match', 'Team News', 'Team Squad','Team Schedules':
-			return (value = name)
+			return name
 			break
 		default:
-			return value
+			return ""
 			break
 	}
 }

@@ -17,6 +17,8 @@ const handleMessage = (sender_psid, received_message) => {
   }
   console.log(key);
   let string = task.optionChoose(received_message.text);
+  console.log(string);
+  console.log(typeof(string));
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
@@ -33,7 +35,7 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    if (string == 'Next Match') {
+    if (string == "Next Match") {
 
         response = {
           "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
