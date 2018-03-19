@@ -10,7 +10,6 @@ const handleMessage = (sender_psid, received_message) => {
   let news;
   let defaultTeam;
   console.log("message: " + received_message.text);
-  console.log("news: " + news)
   userMessage = received_message.text
   if((userMessage != 'Next Match') && (userMessage != 'Team News') && (userMessage != 'Team Squad') && (userMessage != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
@@ -20,7 +19,7 @@ const handleMessage = (sender_psid, received_message) => {
   }
   console.log(key);
   let pick = task.optionChoose(received_message.text);
-  console.log(pick);
+  console.log("Pick: " + pick);
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
@@ -67,15 +66,14 @@ const handleMessage = (sender_psid, received_message) => {
                     "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
                   }
                   console.log("replied");
-                  let news = reply[4];
+                  news = reply[4];
                   callSendAPI(sender_psid, response);
-                  // buttonSet(sender_psid, time);
-                  // shareNews(sender_psid,news);
                 }
             })
           }
         })
       } else if (pick == "Team News") {
+          console.log("news: " + news)
           shareNews(sender_psid, news);
       } else if (pick == "Team Squad") {
         //TODO
