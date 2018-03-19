@@ -29,7 +29,7 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    quickOption(sender_psid, response);
+    quickOption(sender_psid);
     console.log('passed here')
     if (key == 'Next Match') {
 
