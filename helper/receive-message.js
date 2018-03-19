@@ -65,7 +65,7 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       }
-      quickOption(sender_psidm, key);
+      quickOption(sender_psid, key);
     }
 }
 
