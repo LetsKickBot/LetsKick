@@ -2,6 +2,7 @@ var file = require('./teamName')
 var popular = require('./popularTeam')
 
 function checkSpellName(name) {
+
 	var correctTeam = ""
 	var flag = true
 	var identityTeam = []
@@ -49,9 +50,14 @@ function checkSpellName(name) {
 }
 
 function optionChoose(name) {
-	switch(name) {
+	// First check
+	value = ""
+	switch (name) {
 		case 'Next Match', 'Team News', 'Team Squad','Team Schedules':
-			return name
+			return (value = name)
+			break
+		default:
+			return value
 			break
 	}
 }
