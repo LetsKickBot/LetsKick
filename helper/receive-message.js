@@ -7,7 +7,6 @@ const
 const handleMessage = (sender_psid, received_message) => {
   let response;
   let key;
-  let news;
   let defaultTeam;
   console.log("message: " + received_message.text);
   userMessage = received_message.text
@@ -73,8 +72,36 @@ const handleMessage = (sender_psid, received_message) => {
           }
         })
       } else if (pick == "Team News") {
-          console.log("news: " + news)
-          shareNews(sender_psid, news);
+        Data.get_next_game(key, (err, reply) => {
+            if (err) {
+              response = {
+                "text" : "Something went wrong. Please try again"
+              }
+              callSendAPI(sender_psid, response);
+            } else if (key) {
+              request( {
+                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                "method": "GET",
+                "json": true,
+              }, (err, res, body) => {
+              // Test
+                if (err) {
+                  console.error("Unable to send message:" + err);
+                } else {
+                  // let time = task.timeFormat(reply[2], body.timezone);
+                  // let team = task.teamFormat(reply[0], reply[1], key);
+                // Create the payload for a basic text message
+                  // response = {
+                    // "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+                  // }
+                  news = reply[4];
+                  console.log("news " + news);
+                  shareNews(sender_psid, news);
+                }
+            })
+          }
+        })
       } else if (pick == "Team Squad") {
         //TODO
       } else if (pick == "Team Schedules") {
