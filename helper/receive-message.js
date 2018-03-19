@@ -8,6 +8,7 @@ const handleMessage = (sender_psid, received_message) => {
   let response;
   let key;
   let news;
+  let defaultTeam;
   console.log("message: " + received_message.text);
   console.log("news: " + news)
   userMessage = received_message.text
