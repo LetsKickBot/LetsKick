@@ -17,8 +17,8 @@ const handleMessage = (sender_psid, received_message) => {
   }
   console.log(key);
   let pick = task.optionChoose(received_message.text);
-  console.log(string); // Fix string here
-  console.log(typeof(string));
+  console.log(pick); // Fix string here
+  console.log(typeof(pick));
 
   //Check if the key is in an array
   if(typeof(key) == 'object'){
