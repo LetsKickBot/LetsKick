@@ -29,7 +29,6 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
-    console.log('passed here')
     if (key == 'Next Match') {
 
         response = {
@@ -186,7 +185,7 @@ const quickOption = (sender_psid) => {
       "id": sender_psid
     },
     "message": {
-      "text": "testing",
+      "text": "Please select the option you want!!!",
       "quick_replies": jsonFile
     }
     }
