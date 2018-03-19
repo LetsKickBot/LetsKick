@@ -185,7 +185,7 @@ const quickOption = (sender_psid, response) => {
       "id": sender_psid
     },
     "message": {
-      "text": response["text"],
+      // "text": response["text"],
       "quick_replies": jsonFile
     }
     }
