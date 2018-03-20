@@ -28,7 +28,7 @@ const handleMessage = (sender_psid, received_message) => {
     }
     quickReply(sender_psid, response, key);
   // Check if the key is empty
-  }else if (key == "" && string == "") {
+  }else if (key == "" && pick == "") {
     response = {
       "text": `We cannot find your team, please give us another one!`
     }
