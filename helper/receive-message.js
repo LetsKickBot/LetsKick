@@ -12,11 +12,17 @@ const handleMessage = (sender_psid, received_message) => {
   console.log("message: " + received_message.text);
   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
-    if (key != "") {
-      message.push(key)
+    if (key != "" && typeof(key) != 'object') {
+      if (message.length >= 1) {
+        message = []
+      } else {
+        message.push(key)
+      }
     }
   } else {
     pick = task.optionChoose(received_message.text);
+    key = message[0]
+    message.shift()
   }
   console.log("array: " + message);
   console.log("key: " + key);
