@@ -73,7 +73,9 @@ const handleMessage = (sender_psid, received_message) => {
             })
           }
         })
-      }
+      } else {
+      quickOption(sender_psid, key);
+    }
       // } else if (pick == "Team News") {
       //   console.log("team name here: " + key)
       //   Data.get_next_game(key, (err, reply) => {
