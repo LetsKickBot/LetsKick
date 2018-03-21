@@ -43,6 +43,10 @@ const handleMessage = (sender_psid, received_message) => {
     callSendAPI(sender_psid, response);
   // Check if the key contain a team
   } else {
+    if (typeof(pick) == 'undefined') {
+      quickOption(sender_psid, key);
+    }
+
     if (pick == "Next Match") {
 
         response = {
@@ -82,48 +86,10 @@ const handleMessage = (sender_psid, received_message) => {
             })
           }
         })
-      } else {
-      quickOption(sender_psid, key);
-    }
-      // } else if (pick == "Team News") {
-      //   console.log("team name here: " + key)
-      //   Data.get_next_game(key, (err, reply) => {
-      //       if (err) {
-      //         response = {
-      //           "text" : "Something went wrong. Please try again"
-      //         }
-      //         callSendAPI(sender_psid, response);
-      //       } else if (key) {
-      //         request( {
-      //           "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-      //           "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-      //           "method": "GET",
-      //           "json": true,
-      //         }, (err, res, body) => {
-      //         // Test
-      //           if (err) {
-      //             console.error("Unable to send message:" + err);
-      //           } else {
-      //             // let time = task.timeFormat(reply[2], body.timezone);
-      //             // let team = task.teamFormat(reply[0], reply[1], key);
-      //           // Create the payload for a basic text message
-      //             // response = {
-      //               // "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-      //             // }
-      //             news = reply[4];
-      //             console.log("news " + news);
-      //             shareNews(sender_psid, news);
-      //           }
-      //       })
-      //     }
-      //   })
-      // } else if (pick == "Team Squad") {
-      //   //TODO
-      // } else if (pick == "Team Schedules") {
-      //   //TODO
+      }
       // } else {
-      //   quickOption(sender_psid, key);
-      // }
+      // quickOption(sender_psid, key);
+    // }
     }
 }
 
@@ -177,27 +143,6 @@ const callSendAPI = (sender_psid, response) => {
 //   request({
 //     "uri": "https://graph.facebook.com/v2.6/me/messages",
 //     // "uri": "http://localhost:3100/v2.6",
-//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-//     "method": "POST",
-//     "json": request_body
-//   }, (err, res, body) => {
-//     if (err) {
-//       console.error("Unable to send message:" + err);
-//     }
-//   });
-// }
-
-// const autoQuickReply = (sender_psid, value) => {
-//   let request_body = {
-//     "recipient": {
-//       "id": sender_psid
-//     },
-//     "message": {
-//     "quick_replies": value
-//     }
-//   }
-//   request({
-//     "uri": "https://graph.facebook.com/v2.6/me/messages",
 //     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
 //     "method": "POST",
 //     "json": request_body
