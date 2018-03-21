@@ -9,6 +9,7 @@ const handleMessage = (sender_psid, received_message) => {
   let response;
   let key;
   let pick;
+  let news;
   console.log("message: " + received_message.text);
   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
@@ -86,10 +87,42 @@ const handleMessage = (sender_psid, received_message) => {
             })
           }
         })
+      } else if(pick == 'Team News') {
+        Data.get_next_game(key, (err, reply) => {
+          // console.log("step1")
+            if (err) {
+              response = {
+                "text" : "Something went wrong. Please try again"
+              }
+            } else if (key) {
+              // console.log("step2")
+              request( {
+                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                "method": "GET",
+                "json": true,
+              }, (err, res, body) => {
+              // Test
+                if (err) {
+                  console.error("Unable to send message:" + err);
+                } else {
+                  // console.log("step3")
+                  let time = task.timeFormat(reply[2], body.timezone);
+                  let team = task.teamFormat(reply[0], reply[1], key);
+                // Create the payload for a basic text message
+                  // response = {
+                  //   "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+                  // }
+                  // console.log("replied");
+                  news = reply[4];
+                  console.log(news)
+                  callSendAPI(sender_psid, response);
+                  shareNews(sender_psid, news)
+                }
+            })
+          }
+        })
       }
-      // } else {
-      // quickOption(sender_psid, key);
-    // }
     }
 }
 
@@ -209,24 +242,21 @@ const shareNews = (sender_psid, newsLink) => {
       "id": sender_psid
     },
     "message":{
-    "attachment":{
-      "type":"template",
-      "payload":{
-        "template_type":"generic",
-        "elements":[{
-            "title":"Here is the news",
-            "subtitle":"View more details of this game.",
-            "image_url":"https://media.xiph.org/BBB/BBB-360-png/big_buck_bunny_01542.png",
-            "buttons":[{
-                "type":"web_url",
-                "url":newsLink,
-                "title":"View Website"
-              }, {
-                "type":"element_share"
-              }]    
-          }]
+      "text": "Testing",
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"generic",
+          "elements":[{
+              "title":"Here is the news",
+              "subtitle":"View more details of this game.",
+              "image_url":"https://media.xiph.org/BBB/BBB-360-png/big_buck_bunny_01542.png",
+              "buttons":[{
+                type: 'element_share'
+                }]  
+            }]
+        }
       }
-    }
     }
   }
   // Send the HTTP request to the Messenger Platform
