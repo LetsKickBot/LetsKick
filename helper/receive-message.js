@@ -51,11 +51,13 @@ const handleMessage = (sender_psid, received_message) => {
         console.log("waiting...");
         callSendAPI(sender_psid, response);
         Data.get_next_game(key, (err, reply) => {
+          console.log("step1")
             if (err) {
               response = {
                 "text" : "Something went wrong. Please try again"
               }
             } else if (key) {
+              console.log("step2")
               request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -66,6 +68,7 @@ const handleMessage = (sender_psid, received_message) => {
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
+                  console.log("step3")
                   let time = task.timeFormat(reply[2], body.timezone);
                   let team = task.teamFormat(reply[0], reply[1], key);
                 // Create the payload for a basic text message
@@ -73,7 +76,7 @@ const handleMessage = (sender_psid, received_message) => {
                     "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
                   }
                   console.log("replied");
-                  news = reply[4];
+                  // news = reply[4];
                   callSendAPI(sender_psid, response);
                 }
             })
