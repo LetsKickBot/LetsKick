@@ -6,10 +6,11 @@ const
   message = []
 
 const handleMessage = (sender_psid, received_message) => {
+  let news;
   let response;
   let key;
   let pick;
-  let news;
+  // let pick = "Team News"
   console.log("message: " + received_message.text);
   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
     key = task.checkSpellName(received_message.text);
@@ -81,7 +82,7 @@ const handleMessage = (sender_psid, received_message) => {
                     "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
                   }
                   console.log("replied");
-                  // news = reply[4];
+                  news = reply[4];
                   callSendAPI(sender_psid, response);
                 }
             })
@@ -89,35 +90,26 @@ const handleMessage = (sender_psid, received_message) => {
         })
       } else if(pick == 'Team News') {
         Data.get_next_game(key, (err, reply) => {
-          // console.log("step1")
             if (err) {
               response = {
                 "text" : "Something went wrong. Please try again"
               }
             } else if (key) {
-              // console.log("step2")
               request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
-              // Test
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
-                  // console.log("step3")
-                  let time = task.timeFormat(reply[2], body.timezone);
-                  let team = task.teamFormat(reply[0], reply[1], key);
-                // Create the payload for a basic text message
-                  // response = {
-                  //   "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-                  // }
-                  // console.log("replied");
                   news = reply[4];
                   console.log(news)
-                  callSendAPI(sender_psid, response);
                   shareNews(sender_psid, news)
+                  if (typeof(response) != 'undefined') {
+                    callSendAPI(sender_psid, response);
+                  }
                 }
             })
           }
@@ -126,6 +118,7 @@ const handleMessage = (sender_psid, received_message) => {
     }
 }
 
+// Send the message back for users
 const callSendAPI = (sender_psid, response) => {
 
     let request_body = {
@@ -148,44 +141,7 @@ const callSendAPI = (sender_psid, response) => {
   });
 }
 
-// const buttonSet = (sender_psid, time) => {
-
-//     let request_body = {
-//     "recipient": {
-//       "id": sender_psid
-//     },
-//     "message":{
-//       "attachment":{
-//         "type":"template",
-//         "payload":{
-//           "template_type":"button",
-//           "text":"Do you want to set the time above to reminder?",
-//           "buttons":[
-//             {
-//               "type":"web_url",
-//               "url":"https://www.google.com",
-//               "title":"Click to set"
-//               // "payload":time
-//             }
-//           ]
-//         }
-//       }
-//     }
-//     }
-//   // Send the HTTP request to the Messenger Platform
-//   request({
-//     "uri": "https://graph.facebook.com/v2.6/me/messages",
-//     // "uri": "http://localhost:3100/v2.6",
-//     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-//     "method": "POST",
-//     "json": request_body
-//   }, (err, res, body) => {
-//     if (err) {
-//       console.error("Unable to send message:" + err);
-//     }
-//   });
-// }
-
+// The QuickReply function
 const quickReply = (sender_psid, response, value) => {
   jsonFile = task.quickReplies(value)
     let request_body = {
@@ -211,6 +167,7 @@ const quickReply = (sender_psid, response, value) => {
   });
 }
 
+// The quickOption choose for users
 const quickOption = (sender_psid, team) => {
   jsonFile = task.quickOptions(team)
     let request_body = {
@@ -236,6 +193,7 @@ const quickOption = (sender_psid, team) => {
   });
 }
 
+// Share the news template generic for users
 const shareNews = (sender_psid, newsLink) => {
   let request_body = {
     "recipient": {

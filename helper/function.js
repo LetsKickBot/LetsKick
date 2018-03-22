@@ -1,5 +1,6 @@
 var file = require('./teamName')
 var popular = require('./popularTeam')
+var getData = require('../data/get_data')
 
 function checkSpellName(name) {
 
