@@ -7,7 +7,7 @@ function checkSpellName(name) {
 	var correctTeam = ""
 	var flag = true
 	var identityTeam = []
-
+	var oldName = name;
 	name = name.replace(/\s/g,'').toUpperCase();
 	for (var key in file) {
 		if (flag) {
@@ -36,19 +36,26 @@ function checkSpellName(name) {
 	}	
 
 	//Final Check		
-	switch(identityTeam.length) {
-		case 0:
-			return correctTeam
-			break
-		case 1:
+	switch(true) {
+		case (identityTeam.length == 0):
+			switch (true) {
+				case (correctTeam == ''):
+					return oldName
+					break
+				case (correctTeam != ''):
+					return correctTeam
+					break
+			}
+		case (identityTeam.length == 1):
 			return identityTeam[0]
 			break;
 		// Handle multiple teams
-		default:
+		case (identityTeam.length > 1):
 			return identityTeam
 			break
 	}
 }
+
 // Check the option that user pick
 function optionChoose(name) {
 	switch (name) {
