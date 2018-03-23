@@ -12,15 +12,14 @@ import os
 
 
 def main():
-    window_size = "1920,1080"
+    window_size = "1200,800"
     timeout = 20
     player_name = sys.argv[1]
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
 
-    chrome_options.add_argument("--headless")
-
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument("--window-size=%s" % window_size)
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get("http://www.espn.com/soccer/")
@@ -42,7 +41,6 @@ def main():
     except TimeoutException:
         print("Cannot find player")
         browser.quit()
-        call(["killall", "-9", "chromedriver"])
         sys.exit(1)
     else:
         browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Player')]").click()
@@ -54,12 +52,19 @@ def main():
         soup = BeautifulSoup(html, "html.parser")
 
         spec = soup.find('div', {'class': 'player-spec'})
-        for col in spec.find_all('dl'):
-            for element in col.find_all('dd'):
-                print(element.text)
+        cols = spec.find_all('dl')
+        col1dd = cols[0].find_all('dd')
+        col2dd = cols[1].find_all('dd')
+        col1dt = cols[0].find_all('dt')
+        col2dt = cols[1].find_all('dt')
+
+        for i in range(0, len(col1dd)):
+            print(col1dt[i].text + col1dd[i].text)
+
+        for i in range(0, len(col2dd)):
+            print(col2dt[i].text + col2dd[i].text)
 
     browser.quit()
-    call(["killall", "-9", "chromedriver"])
     sys.exit(0)
 
 if __name__ == '__main__':

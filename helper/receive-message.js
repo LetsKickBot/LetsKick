@@ -28,7 +28,9 @@ const handleMessage = (sender_psid, received_message) => {
           response = {
             "text" : "Something went wrong. Please try again"
           }
+          console.log(err);
         } else if (key) {
+          console.log(reply);
           let date = reply[2];
           let time = reply[3];
           let info = reply[4];
