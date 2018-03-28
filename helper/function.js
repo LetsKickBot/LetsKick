@@ -40,11 +40,11 @@ function checkSpellName(name) {
 		case (identityTeam.length == 0):
 			switch (true) {
 				case (correctTeam == ''):
-					return oldName
+					return ""
 					break
-				case (correctTeam != ''):
-					return correctTeam
-					break
+				// case (correctTeam != ''):
+				// 	return correctTeam
+				// 	break
 			}
 		case (identityTeam.length == 1):
 			return identityTeam[0]
@@ -55,6 +55,11 @@ function checkSpellName(name) {
 			break
 	}
 }
+function checkPlayerName(message) {
+	return message;
+}
+
+console.log(checkSpellName("dasdasdasd"))
 
 // Check the option that user pick
 function optionChoose(name) {
@@ -217,5 +222,6 @@ module.exports = {
 	quickReplies,
 	popularTeam,
 	quickOptions,
-	optionChoose
+	optionChoose,
+	checkPlayerName
 };
