@@ -16,7 +16,6 @@ const handleMessage = (sender_psid, received_message) => {
     response = {
       "text": `Please select the options you want!!!`
     }
-    message = []
     console.log('GetStarted')
     getStarted(sender_psid, response);
 
