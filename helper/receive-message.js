@@ -19,72 +19,72 @@ const handleMessage = (sender_psid, received_message) => {
     getStarted(sender_psid, response);
   }
 
-  // if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
-  //   key = task.checkSpellName(received_message.text);
-  //   console.log(key)
-  //   if (key != "" && typeof(key) != 'object') {
-  //     if (message.length >= 1) {
-  //       message = []
-  //     } else {
-  //       message.push(key)
-  //     }
-  //   }
-  //   // Check if the key is an array
-  //   if (typeof(key) == 'object') {
-  //     newKey = task.completeName(key)
-  //     response = {
-  //     "text": `Did you mean *${newKey}* ?`
-  //     }
-  //     quickReply(sender_psid, response, key);
-  //     } else {
-  //     response = {
-  //         "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-  //     };
-  //     console.log(response)
-  //     callSendAPI(sender_psid, response);
-  //             Data.get_next_game(key, (err, reply) => {
-  //           if (err) {
-  //             response = {
-  //               "text" : "Something went wrong. Please try again"
-  //             }
-  //           } else if (key) {
-  //             request( {
-  //               "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-  //               "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-  //               "method": "GET",
-  //               "json": true,
-  //             }, (err, res, body) => {
-  //             // Test
-  //               if (err) {
-  //                 console.error("Unable to send message:" + err);
-  //               } else {
-  //                 let time = task.timeFormat(reply[2], body.timezone);
-  //                 let team = task.teamFormat(reply[0], reply[1], key);
-  //                 let news = reply[4];
-  //               // Create the payload for a basic text message
-  //                 // response = {
-  //                 //   "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-  //                 // }
-  //                 // callSendAPI(sender_psid, response);
-  //                 console.log(body.timezone)
-  //                 console.log("replied");
-  //                 console.log("time: " + time)
-  //                 console.log("team: " + team)
-  //                 console.log("news: " + news)
-  //                 console.log("key: " + key)
+//   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
+//     key = task.checkSpellName(received_message.text);
+//     console.log(key)
+//     if (key != "" && typeof(key) != 'object') {
+//       if (message.length >= 1) {
+//         message = []
+//       } else {
+//         message.push(key)
+//       }
+//     }
+//     // Check if the key is an array
+//     if (typeof(key) == 'object') {
+//       newKey = task.completeName(key)
+//       response = {
+//       "text": `Did you mean *${newKey}* ?`
+//       }
+//       quickReply(sender_psid, response, key);
+//       } else {
+//       response = {
+//           "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
+//       };
+//       console.log(response)
+//       callSendAPI(sender_psid, response);
+//               Data.get_next_game(key, (err, reply) => {
+//             if (err) {
+//               response = {
+//                 "text" : "Something went wrong. Please try again"
+//               }
+//             } else if (key) {
+//               request( {
+//                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+//                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+//                 "method": "GET",
+//                 "json": true,
+//               }, (err, res, body) => {
+//               // Test
+//                 if (err) {
+//                   console.error("Unable to send message:" + err);
+//                 } else {
+//                   let time = task.timeFormat(reply[2], body.timezone);
+//                   let team = task.teamFormat(reply[0], reply[1], key);
+//                   let news = reply[4];
+//                 // Create the payload for a basic text message
+//                   // response = {
+//                   //   "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+//                   // }
+//                   // callSendAPI(sender_psid, response);
+//                   console.log(body.timezone)
+//                   console.log("replied");
+//                   console.log("time: " + time)
+//                   console.log("team: " + team)
+//                   console.log("news: " + news)
+//                   console.log("key: " + key)
 
                   
-  //               }
-  //           })
-  //         }
-  //       })
-  //   }
-  // } else {
-  //   pick = task.optionChoose(received_message.text);
-  //   key = message[0]
-  //   message.shift();
-  // }
-}
+//                 }
+//             })
+//           }
+//         })
+//     }
+//   } else {
+//     pick = task.optionChoose(received_message.text);
+//     key = message[0]
+//     message.shift();
+//   }
+// }
   // } else {
   //   pick = task.optionChoose(received_message.text);
   //   key = message[0]
@@ -179,8 +179,8 @@ const callSendAPI = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    // "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "uri": "http://localhost:3100/v2.6",
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -205,8 +205,8 @@ const quickReply = (sender_psid, response, value) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    // "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "uri": "http://localhost:3100/v2.6",
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -238,8 +238,8 @@ const getStarted = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    // "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "uri": "http://localhost:3100/v2.6",
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -265,8 +265,8 @@ const quickOption = (sender_psid, team) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    // "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "uri": "http://localhost:3100/v2.6",
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
