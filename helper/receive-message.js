@@ -12,12 +12,26 @@ const handleMessage = (sender_psid, received_message) => {
   let pick;
   console.log("message: " + received_message.text);
 
+  // Handle Get Started text message
   if (received_message.text == 'Get Started') {
     response = {
       "text": `Please select the options you want!!!`
     }
     getStarted(sender_psid, response);
+    // Handle Teams message
+  } else if (received_message.text == 'Teams') {
+    response = {
+      "text": `Please enter the team you want or choose some quick option below!!!`
+    }
+    quickTeams(sender_psid, response);
+    // Handle the Players message
+  } else if (received_message.text == 'Players') {
+    response = {
+      "text": `Please enter the player you want or choose some quick option below!!!`
+    }
+    quickPlayers(sender_psid, response);
   }
+
 
 //   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
 //     key = task.checkSpellName(received_message.text);
@@ -277,6 +291,58 @@ const quickOption = (sender_psid, team) => {
   });
 }
 
+// The quickTeams choose for users
+const quickTeams = (sender_psid, response) => {
+  jsonFile = task.popularTeam();
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+// The quickTeams choose for users
+const quickPlayers = (sender_psid, response) => {
+  jsonFile = task.popularPlayers();
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
 // Share the news template generic for users
 // const shareNews = (sender_psid, newsLink) => {
 //   let request_body = {
@@ -325,6 +391,8 @@ module.exports = {
   quickReply,
   handlePostback,
   // shareNews,
+  quickTeams,
   getStarted,
+  quickPlayers,
   quickOption
 };

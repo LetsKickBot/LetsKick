@@ -138,15 +138,64 @@ function quickOptions() {
 	return optionTypes
 }
 
-// console.log(quickOptions('Manchester United'))
-
 //Popular teams
 function popularTeam() {
-	arr = []
-	for (var key in popular) {
-		arr.push(key)
-	}
-	return arr
+	optionTypes = [{
+		"content_type": "text",
+		"title": "Manchester United",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Real Madrid",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Barcelona",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Chelsea",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Manchester City",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Arsenal",
+		"payload": "value"
+	}]
+	return optionTypes
+}
+
+//Popular teams
+function popularPlayers() {
+	optionTypes = [{
+		"content_type": "text",
+		"title": "Ronaldo",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Messi",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Harzard",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Ozil",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Neymar",
+		"payload": "value"
+	}, {
+		"content_type": "text",
+		"title": "Bale",
+		"payload": "value"
+	}]
+	return optionTypes
 }
 
 // Team format
