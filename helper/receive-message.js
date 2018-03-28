@@ -325,5 +325,6 @@ module.exports = {
   quickReply,
   handlePostback,
   // shareNews,
+  getStarted,
   quickOption
 };
