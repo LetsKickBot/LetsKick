@@ -2,8 +2,9 @@ const
   bodyParser = require('body-parser'),
   request = require('request'),
   Data = require('../data/get_data'),
-  task = require('./function'),
-  message = []
+  task = require('./function')
+  
+let message = []
 
 const handleMessage = (sender_psid, received_message) => {
   let news;
@@ -34,7 +35,7 @@ const handleMessage = (sender_psid, received_message) => {
         response = {
         "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
         }
-        console.log(response)
+        callSendAPI(sender_psid, response)
         Data.get_next_game(key, (err, reply) => {
           console.log("step1")
             if (err) {
@@ -71,8 +72,6 @@ const handleMessage = (sender_psid, received_message) => {
     } else {
       if (message.length <= 1) {
       message.push(received_message.text)
-      } else if (message.length > 1) {
-        message = []
       }
       response = {
       "text": `Please enter the team you want or choose some quick option below!!!`
@@ -88,8 +87,6 @@ const handleMessage = (sender_psid, received_message) => {
     } else {
         if (message.length <= 1) {
           message.push(received_message.text)
-        } else if (message.length > 1) {
-          message = []
         }
         response = {
           "text": `Please enter the player you want or choose some quick option below!!!`
