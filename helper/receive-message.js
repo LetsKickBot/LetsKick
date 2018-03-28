@@ -84,7 +84,7 @@ const handleMessage = (sender_psid, received_message) => {
 //     key = message[0]
 //     message.shift();
 //   }
-// }
+}
   // } else {
   //   pick = task.optionChoose(received_message.text);
   //   key = message[0]
