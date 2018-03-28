@@ -12,12 +12,12 @@ const handleMessage = (sender_psid, received_message) => {
   let pick;
   console.log("message: " + received_message.text);
 
-  // if (received_message.text == 'Get Started') {
-  //   response = {
-  //     "text": `Please select the options you want!!!`
-  //   }
-  //   getStarted(sender_psid, response);
-  // }
+  if (received_message.text == 'Get Started') {
+    response = {
+      "text": `Please select the options you want!!!`
+    }
+    getStarted(sender_psid, response);
+  }
 
   // if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
   //   key = task.checkSpellName(received_message.text);
