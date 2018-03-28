@@ -84,6 +84,10 @@ const handleMessage = (sender_psid, received_message) => {
     if (received_message.text != 'Players') {
       const player = received_message.text
       message.push(player)
+      response = {
+        "text": "Comming soon"
+      }
+      callSendAPI(sender_psid, response)
     } else {
         if (message.length <= 1) {
           message.push(received_message.text)
