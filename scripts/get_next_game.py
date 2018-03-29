@@ -38,7 +38,7 @@ def main():
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-results")))
     except TimeoutException:
-        print("Cannot find team")
+        print("Cannot find your team")
         browser.quit()
         sys.exit(1)
     else:

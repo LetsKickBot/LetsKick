@@ -2,30 +2,35 @@ const
   bodyParser = require('body-parser'),
   request = require('request'),
   Data = require('../data/get_data'),
+  Player = require('../data/get_player'),
   task = require('./function')
   
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
-  let news;
-  let response;
-  let holdValue;
   console.log("message: " + received_message.text);
+  console.log('array', message)
+  if (received_message.text == 'Teams') {
+    message.push('Teams')
+  } else {
+    message.push('Players')
+  }
 
   // Handle Get Started text message
   if (received_message.text == 'Get Started') {
+    message = []
     response = {
       "text": `Please select the options you want!!!`
     }
-    console.log('GetStarted')
+    console.log('Get Started')
     getStarted(sender_psid, response);
 
     // Handle Teams message
-  // } else if ((received_message.text == 'Teams') || (task.checkSpellName(received_message.text) != "") || (typeof(task.checkSpellName(received_message.text)) == 'object')) {
-  } else if ((received_message.text == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
+  } else if ((message[0] == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
+    console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
-      message.push(key)
+      // message.push(key)
       if (typeof(key) == 'object') {
         newKey = task.completeName(key)
         response = {
@@ -36,13 +41,14 @@ const handleMessage = (sender_psid, received_message) => {
         response = {
         "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
         }
-        callSendAPI(sender_psid, response)
+        // callSendAPI(sender_psid, response)
         Data.get_next_game(key, (err, reply) => {
           console.log("step1")
             if (err) {
               response = {
-                "text" : "Something went wrong. Please try again"
+                "text" : `Cannot find your team: ${key}`
               }
+              console.log(response)
             } else if (key) {
               console.log("step2")
               request( {
@@ -64,16 +70,14 @@ const handleMessage = (sender_psid, received_message) => {
                   }
                   console.log(response)
                   console.log("replied");
-                  callSendAPI(sender_psid, response);
+                  
                 }
             })
           }
+          callSendAPI(sender_psid, response);
         })
       }
     } else {
-      if (message.length <= 1) {
-      message.push(received_message.text)
-      }
       response = {
       "text": `Please enter the team you want or choose some quick option below!!!`
       }
@@ -81,19 +85,59 @@ const handleMessage = (sender_psid, received_message) => {
     }
 
     // Handle the Players message
-  } else if ((received_message.text == 'Players') || (task.checkPlayerName(received_message.text) != "")) {
+  } else if ((message[0] == 'Players') || (task.checkPlayerName(received_message.text) != "")) {
+    console.log('holdValue:', message[0])
     if (received_message.text != 'Players') {
       const player = received_message.text
-      message.push(player)
       response = {
-        "text": "Comming soon"
+        "text": `\`\`\`\nPlease wait, we are retrieving information for ${player}...\n\`\`\``
       }
       console.log(response)
       callSendAPI(sender_psid, response)
-    } else {
-        if (message.length <= 1) {
-          message.push(received_message.text)
+      Player.get_player_infor(player, (err, reply) => {
+        console.log("step1")
+          if (err) {
+            response = {
+              "text" : `Cannot find your player: ${player}`
+            }
+            console.log(response)
+          } else if (player) {
+            console.log("step2")
+            request( {
+              "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+              "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+              "method": "GET",
+              "json": true,
+            }, (err, res, body) => {
+            // Test
+              if (err) {
+                console.error("Unable to send message:" + err);
+              } else {
+                var graph = ['- Name: ,- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
+                var index = 1
+                var playerInfor = ""
+                playerInfor += player
+                reply.forEach((val) => {
+                  if (index != 0) {
+                    playerInfor += "\n" + graph[index] + val
+                  } else {
+                    playerInfor += graph[index] + val
+                  }
+                  index += 1;
+                })
+              // Create the payload for a basic text message
+                response = {
+                  "text": playerInfor
+                }
+                console.log(response)
+                console.log("replied");
+                
+              }
+          })
         }
+        callSendAPI(sender_psid, response);
+      })      
+    } else {
         response = {
           "text": `Please enter the player you want or choose some quick option below!!!`
         }
@@ -101,154 +145,6 @@ const handleMessage = (sender_psid, received_message) => {
       }
   }
 }
-
-//   if((received_message.text != 'Next Match') && (received_message.text != 'Team News') && (received_message.text != 'Team Squad') && (received_message.text != 'Team Schedules')) {
-//     key = task.checkSpellName(received_message.text);
-//     console.log(key)
-//     if (key != "" && typeof(key) != 'object') {
-//       if (message.length >= 1) {
-//         message = []
-//       } else {
-//         message.push(key)
-//       }
-//     }
-//     // Check if the key is an array
-//     if (typeof(key) == 'object') {
-//       newKey = task.completeName(key)
-//       response = {
-//       "text": `Did you mean *${newKey}* ?`
-//       }
-//       quickReply(sender_psid, response, key);
-//       } else {
-//       response = {
-//           "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-//       };
-//       console.log(response)
-//       callSendAPI(sender_psid, response);
-//               Data.get_next_game(key, (err, reply) => {
-//             if (err) {
-//               response = {
-//                 "text" : "Something went wrong. Please try again"
-//               }
-//             } else if (key) {
-//               request( {
-//                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-//                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-//                 "method": "GET",
-//                 "json": true,
-//               }, (err, res, body) => {
-//               // Test
-//                 if (err) {
-//                   console.error("Unable to send message:" + err);
-//                 } else {
-//                   let time = task.timeFormat(reply[2], body.timezone);
-//                   let team = task.teamFormat(reply[0], reply[1], key);
-//                   let news = reply[4];
-//                 // Create the payload for a basic text message
-//                   // response = {
-//                   //   "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-//                   // }
-//                   // callSendAPI(sender_psid, response);
-//                   console.log(body.timezone)
-//                   console.log("replied");
-//                   console.log("time: " + time)
-//                   console.log("team: " + team)
-//                   console.log("news: " + news)
-//                   console.log("key: " + key)
-
-                  
-//                 }
-//             })
-//           }
-//         })
-//     }
-//   } else {
-//     pick = task.optionChoose(received_message.text);
-//     key = message[0]
-//     message.shift();
-//   }
-//   } else {
-//     pick = task.optionChoose(received_message.text);
-//     key = message[0]
-//     message.shift()
-//   }
-//   console.log("array: " + message);
-//   console.log("key: " + key);
-//   console.log("Pick: " + pick);
-
-//   } else {
-//     if (typeof(pick) == 'undefined') {
-//       quickOption(sender_psid, key);
-//     }
-
-    // if (pick == "Next Match") {
-
-    //     response = {
-    //       "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-    //     };
-    //     console.log("waiting...");
-    //     callSendAPI(sender_psid, response);
-    //     Data.get_next_game(key, (err, reply) => {
-    //       console.log("step1")
-    //         if (err) {
-    //           response = {
-    //             "text" : "Something went wrong. Please try again"
-    //           }
-    //         } else if (key) {
-    //           console.log("step2")
-    //           request( {
-    //             "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-    //             "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-    //             "method": "GET",
-    //             "json": true,
-    //           }, (err, res, body) => {
-    //           // Test
-    //             if (err) {
-    //               console.error("Unable to send message:" + err);
-    //             } else {
-    //               console.log("step3")
-    //               let time = task.timeFormat(reply[2], body.timezone);
-    //               let team = task.teamFormat(reply[0], reply[1], key);
-    //             // Create the payload for a basic text message
-    //               response = {
-    //                 "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-    //               }
-    //               console.log("replied");
-    //               news = reply[4];
-    //               callSendAPI(sender_psid, response);
-    //             }
-    //         })
-    //       }
-    //     })
-    //   } else if(pick == 'Team News') {
-    //     Data.get_next_game(key, (err, reply) => {
-    //         if (err) {
-//               response = {
-//                 "text" : "Something went wrong. Please try again"
-//               }
-//             } else if (key) {
-//               request( {
-//                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-//                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-//                 "method": "GET",
-//                 "json": true,
-//               }, (err, res, body) => {
-//                 if (err) {
-//                   console.error("Unable to send message:" + err);
-//                 } else {
-//                   news = reply[4];
-//                   console.log(news)
-//                   shareNews(sender_psid, news)
-//                   if (typeof(response) != 'undefined') {
-//                     callSendAPI(sender_psid, response);
-//                   }
-//                 }
-//             })
-//           }
-//         })
-//       }
-//     }
-// }
 
 // Send the message back for users
 const callSendAPI = (sender_psid, response) => {

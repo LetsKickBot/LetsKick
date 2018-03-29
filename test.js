@@ -15,7 +15,10 @@ describe('bot test', function() {
   
   it('hi', function(){
     const theScript = new BotTester.Script('132', '20');
-    theScript.sendTextMessage('Ronaldo');  //mock user sending "hi" 
+    theScript.sendTextMessage('Players');  //mock user sending "hi" 
+    theScript.sendTextMessage('Bale');
+    theScript.sendTextMessage('Neymar');
+    theScript.sendTextMessage('Baledasdas');
     theScript.expectTextResponses([   //either response is valid 
       'Hey!', 
       'Welcome',
