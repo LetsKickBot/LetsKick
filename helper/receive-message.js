@@ -8,8 +8,7 @@ const
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
-  let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options'];
-  let wordChoice = ['Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back']
+  let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
   if (received_message.text == 'Teams') {
     message.push('Teams')
@@ -25,14 +24,6 @@ const handleMessage = (sender_psid, received_message) => {
     }
     console.log('Get Started')
     task.getStarted(sender_psid, response);
-
-  } else if ((wordChoice.includes(received_message.text))) {
-    response = {
-      "text": `Please select the options you want!!!`
-    }
-    console.log('Back')
-    task.getStarted(sender_psid, response);
-
   } else if ((message[0] == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
