@@ -9,7 +9,6 @@ let message = []
 
 const handleMessage = (sender_psid, received_message) => {
   console.log("message: " + received_message.text);
-  console.log('array', message)
   if (received_message.text == 'Teams') {
     message.push('Teams')
   } else {
@@ -17,7 +16,7 @@ const handleMessage = (sender_psid, received_message) => {
   }
 
   // Handle Get Started text message
-  if (received_message.text == 'Get Started') {
+  if ((received_message.text == 'Get Started') || (received_message.text == 'Begin') || (received_message.text == 'Start') || (received_message.text == 'Hello')) {
     message = []
     response = {
       "text": `Please select the options you want!!!`
@@ -48,6 +47,7 @@ const handleMessage = (sender_psid, received_message) => {
               response = {
                 "text" : `Cannot find your team: ${key}`
               }
+              callSendAPI(sender_psid, response);
               console.log(response)
             } else if (key) {
               console.log("step2")
@@ -70,11 +70,10 @@ const handleMessage = (sender_psid, received_message) => {
                   }
                   console.log(response)
                   console.log("replied");
-                  
+                  callSendAPI(sender_psid, response);
                 }
             })
           }
-          callSendAPI(sender_psid, response);
         })
       }
     } else {
@@ -100,6 +99,7 @@ const handleMessage = (sender_psid, received_message) => {
             response = {
               "text" : `Cannot find your player: ${player}`
             }
+            callSendAPI(sender_psid, response);
             console.log(response)
           } else if (player) {
             console.log("step2")
@@ -131,11 +131,10 @@ const handleMessage = (sender_psid, received_message) => {
                 }
                 console.log(response)
                 console.log("replied");
-                
+                callSendAPI(sender_psid, response);
               }
           })
         }
-        callSendAPI(sender_psid, response);
       })      
     } else {
         response = {
