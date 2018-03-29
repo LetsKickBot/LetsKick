@@ -7,7 +7,8 @@ const
   
 let message = []
 
-const handleMessage = (sender_psid, received_message) => {
+const handleMessage = (sender_psid, received_message, sender_name) => {
+  console.log(sender_name)
   let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
   if (received_message.text == 'Teams') {
@@ -20,9 +21,10 @@ const handleMessage = (sender_psid, received_message) => {
   if ((wordGraph.includes(received_message.text))) {
     message = []
     response = {
-      "text": `Please select the options you want!!!`
+      "text": `Hi ${sender_name}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
     }
     console.log('Get Started')
+    console.log(response)
     task.getStarted(sender_psid, response);
   // } else if ((message[0] == 'Teams') && (task.checkSpellName(received_message.text) != "")) {
   } else if ((message[0] == 'Teams')) {
@@ -36,27 +38,20 @@ const handleMessage = (sender_psid, received_message) => {
         }
         task.quickReply(sender_psid, response, key);
       } else {
-        if (key != "") {
-          response = {
-          "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-          }
-        } else {
-          response = {
-          "text": `\`\`\`\nPlease wait, we are retrieving information for ${received_message.text}...\n\`\`\``
-          }
+        response = {
+          "text" : `\`\`\`\nPlease wait, we are retrieving information for *${key}*...\n\`\`\``
         }
         console.log(response)
         task.callSendAPI(sender_psid, response)
         Data.get_next_game(key, (err, reply) => {
-          console.log("step1")
+          console.log("In Team section")
             if (err) {
               response = {
-                "text" : `Cannot find your team: ${received_message.text}`
+                "text" : `Cannot find your team: *${key}*`
               }
               task.callSendAPI(sender_psid, response);
               console.log(response)
             } else if (key) {
-              console.log("step2")
               request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -67,12 +62,11 @@ const handleMessage = (sender_psid, received_message) => {
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
-                  console.log("step3")
                   let time = task.timeFormat(reply[2], body.timezone);
                   let team = task.teamFormat(reply[0], reply[1], key);
                 // Create the payload for a basic text message
                   response = {
-                    "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
+                    "text": `*${team[0]}* will play against *${team[1]}* on *${time}*, for *${reply[3]}*.`
                   }
                   console.log(response)
                   console.log("replied");
@@ -96,20 +90,19 @@ const handleMessage = (sender_psid, received_message) => {
     if (received_message.text != 'Players') {
       const player = received_message.text
       response = {
-        "text": `\`\`\`\nPlease wait, we are retrieving information for ${player}...\n\`\`\``
+        "text": `\`\`\`\nPlease wait, we are retrieving information for *${player}*...\n\`\`\``
       }
       console.log(response)
       task.callSendAPI(sender_psid, response)
       Player.get_player_infor(player, (err, reply) => {
-        console.log("step1")
+        console.log("In Player section")
           if (err) {
             response = {
-              "text" : `Cannot find your player: ${player}`
+              "text" : `Cannot find your player: *${player}*`
             }
             task.callSendAPI(sender_psid, response);
             console.log(response)
           } else if (player) {
-            console.log("step2")
             request( {
               "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
               "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -190,7 +183,7 @@ const handleMessage = (sender_psid, received_message) => {
 //   });
 // }
 
-function handlePostback (sender_psid, received_postback) {
+function handlePostback (sender_psid, received_postback, sender_name) {
 
 }
 

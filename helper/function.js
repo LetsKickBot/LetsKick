@@ -42,7 +42,10 @@ function checkSpellName(name) {
 		case (identityTeam.length == 0):
 			switch (true) {
 				case (correctTeam == ''):
-					return ""
+					return oldName
+					break
+				default:
+					return correctTeam
 					break
 			}
 		case (identityTeam.length == 1):
@@ -54,6 +57,7 @@ function checkSpellName(name) {
 			break
 	}
 }
+// console.log(checkSpellName("psg"))
 
 // Check the Player Spell name
 function checkPlayerName(message) {
