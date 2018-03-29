@@ -60,7 +60,7 @@ function checkPlayerName(message) {
 }
 
 console.log(checkSpellName("dasdasdasd"))
-
+console.log(checkPlayerName("dasdasdasd"))
 // Check the option that user pick
 function optionChoose(name) {
 	switch (name) {
@@ -223,5 +223,6 @@ module.exports = {
 	popularTeam,
 	quickOptions,
 	optionChoose,
-	checkPlayerName
+	checkPlayerName,
+	popularPlayers
 };

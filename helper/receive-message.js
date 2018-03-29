@@ -21,7 +21,8 @@ const handleMessage = (sender_psid, received_message) => {
     getStarted(sender_psid, response);
 
     // Handle Teams message
-  } else if ((received_message.text == 'Teams') || (task.checkSpellName(received_message.text) != "") || (typeof(checkSpellName(received_message.text)) == 'object')) {
+  // } else if ((received_message.text == 'Teams') || (task.checkSpellName(received_message.text) != "") || (typeof(task.checkSpellName(received_message.text)) == 'object')) {
+  } else if ((received_message.text == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
       message.push(key)
@@ -87,6 +88,7 @@ const handleMessage = (sender_psid, received_message) => {
       response = {
         "text": "Comming soon"
       }
+      console.log(response)
       callSendAPI(sender_psid, response)
     } else {
         if (message.length <= 1) {
@@ -259,8 +261,8 @@ const callSendAPI = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -285,8 +287,8 @@ const quickReply = (sender_psid, response, value) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -318,8 +320,8 @@ const getStarted = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -345,8 +347,8 @@ const quickOption = (sender_psid, team) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -371,8 +373,8 @@ const quickTeams = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -397,8 +399,8 @@ const quickPlayers = (sender_psid, response) => {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
