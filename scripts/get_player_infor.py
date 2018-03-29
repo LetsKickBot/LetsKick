@@ -15,14 +15,6 @@ def main():
     window_size = "1200,800"
     timeout = 20
     player_name = sys.argv[1]
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> f23b82cb280c384d08d792a1c672c6c03e7b2235
->>>>>>> 8946deed033422a34f580166419d4418a12316c6
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
 
@@ -47,15 +39,7 @@ def main():
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Soccer Player')]")))
     except TimeoutException:
-<<<<<<< HEAD
         print("Cannot find your player")
-=======
-<<<<<<< HEAD
-        print("Cannot find your player")
-=======
-        print("Cannot find player")
->>>>>>> f23b82cb280c384d08d792a1c672c6c03e7b2235
->>>>>>> 8946deed033422a34f580166419d4418a12316c6
         browser.quit()
         sys.exit(1)
     else:
