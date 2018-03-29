@@ -6,41 +6,57 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
 
+from subprocess import call
 import sys
 import os
 
-
 def main():
-    window_size = "1920,1080"
+    window_size = "1200,800"
     timeout = 20
     team_name = sys.argv[1]
 
     chrome_options = Options()
-    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
-
+    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--headless")
-
     chrome_options.add_argument("--window-size=%s" % window_size)
+
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get("http://www.espn.com/espn/story/_/id/21087319/soccer-teams")
 
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//a[contains(text(), '" + team_name + "')]")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//a[@id='global-search-trigger']")))
     finally:
-        browser.find_element_by_xpath("//a[contains(text(), '" + team_name + "')]").click()
+        browser.find_element_by_xpath("//a[@id='global-search-trigger']").click()
 
-    class_name = 'game-strip pre soccer bt-sport '
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
-    except TimeoutException:
-        class_name = 'game-strip pre soccer bt-sport team-a-winner'
-        try:
-            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
-        except TimeoutException:
-            class_name = 'game-strip pre soccer bt-sport team-b-winner'
-            WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//header[@class='" + class_name + "']")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-box")))
     finally:
-        browser.find_element_by_xpath("//header[@class='" + class_name + "']").click()
+        browser.find_element_by_class_name('search-box').send_keys(team_name)
+
+    browser.implicitly_wait(2)
+
+    try:
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-results")))
+    except TimeoutException:
+        print("Cannot find team")
+        browser.quit()
+        sys.exit(1)
+    else:
+        browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Club')]").click()
+
+
+    try:
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
+    finally:
+        browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
+
+    browser.switch_to_window(browser.window_handles[1])
+    browser.implicitly_wait(1)
+
+    try:
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'next-match')))
+    finally:
+        browser.find_element_by_class_name('next-match').find_element_by_xpath(".//*[contains(text(), 'Game Details')]").click()
 
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='competitors sm-score']")))
@@ -62,8 +78,7 @@ def main():
         print(game_details)
         print(currentURL)
 
-        browser.quit()
-
+    browser.quit()
     sys.exit(0)
 
 if __name__ == '__main__':
