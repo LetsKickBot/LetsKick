@@ -1,9 +1,11 @@
 var file = require('./teamName')
 var popular = require('./popularTeam')
 var getData = require('../data/get_data')
+const Player = require('../data/get_player')
+const request = require('request');
 
+// Check the Team Spell name
 function checkSpellName(name) {
-
 	var correctTeam = ""
 	var flag = true
 	var identityTeam = []
@@ -42,9 +44,6 @@ function checkSpellName(name) {
 				case (correctTeam == ''):
 					return ""
 					break
-				// case (correctTeam != ''):
-				// 	return correctTeam
-				// 	break
 			}
 		case (identityTeam.length == 1):
 			return identityTeam[0]
@@ -55,12 +54,12 @@ function checkSpellName(name) {
 			break
 	}
 }
+
+// Check the Player Spell name
 function checkPlayerName(message) {
 	return message;
 }
 
-console.log(checkSpellName("dasdasdasd"))
-console.log(checkPlayerName("dasdasdasd"))
 // Check the option that user pick
 function optionChoose(name) {
 	switch (name) {
@@ -121,6 +120,7 @@ function quickReplies(value) {
 	return finalArr
 }
 
+// Handle the UI quick Options for Teams
 function quickOptions() {
 	optionTypes = [{
 		"content_type": "text",
@@ -143,7 +143,7 @@ function quickOptions() {
 	return optionTypes
 }
 
-//Popular teams
+// Handle the UI quick replies for teams
 function popularTeam() {
 	optionTypes = [{
 		"content_type": "text",
@@ -173,7 +173,7 @@ function popularTeam() {
 	return optionTypes
 }
 
-//Popular teams
+// Handle the UI quick replies for players
 function popularPlayers() {
 	optionTypes = [{
 		"content_type": "text",
@@ -214,6 +214,167 @@ function teamFormat(team1, team2, key) {
 	return [team1, team2];
 }
 
+// Send the message back for users
+function callSendAPI(sender_psid, response) {
+
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": response
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+// The QuickReply function
+function quickReply(sender_psid, response, value) {
+  jsonFile = quickReplies(value)
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+
+// The getStarted reply function
+function getStarted(sender_psid, response) {
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": [{
+        "content_type" : "text",
+        "title": "Teams",
+        "payload": "value"
+      },{
+        "content_type" : "text",
+        "title": "Players",
+        "payload": "value"
+      }]
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+// The quickOption choose for users
+function quickOption(sender_psid, team) {
+  jsonFile = quickOptions(team)
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": "You choose " + team + ". Please select the option you want!!!",
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+// The quickTeams choose for users
+function quickTeams(sender_psid, response) {
+  jsonFile = popularTeam();
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
+// The quickTeams choose for users
+function quickPlayers(sender_psid, response) {
+  jsonFile = popularPlayers();
+    let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message": {
+      "text": response["text"],
+      "quick_replies": jsonFile
+    }
+    }
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    // "uri": "http://localhost:3100/v2.6",
+    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+    "method": "POST",
+    "json": request_body
+  }, (err, res, body) => {
+    if (err) {
+      console.error("Unable to send message:" + err);
+    }
+  });
+}
+
 module.exports = {
 	checkSpellName,
 	timeFormat,
@@ -224,5 +385,11 @@ module.exports = {
 	quickOptions,
 	optionChoose,
 	checkPlayerName,
-	popularPlayers
+	popularPlayers,
+	quickTeams,
+	quickReply,
+	callSendAPI,
+	getStarted,
+	quickPlayers,
+	quickOption
 };

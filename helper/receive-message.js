@@ -8,6 +8,8 @@ const
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
+  let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options'];
+  let wordChoice = ['Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back']
   console.log("message: " + received_message.text);
   if (received_message.text == 'Teams') {
     message.push('Teams')
@@ -16,38 +18,50 @@ const handleMessage = (sender_psid, received_message) => {
   }
 
   // Handle Get Started text message
-  if ((received_message.text == 'Get Started') || (received_message.text == 'Begin') || (received_message.text == 'Start') || (received_message.text == 'Hello')) {
+  if ((wordGraph.includes(received_message.text))) {
     message = []
     response = {
       "text": `Please select the options you want!!!`
     }
     console.log('Get Started')
-    getStarted(sender_psid, response);
+    task.getStarted(sender_psid, response);
 
-    // Handle Teams message
+  } else if ((wordChoice.includes(received_message.text))) {
+    response = {
+      "text": `Please select the options you want!!!`
+    }
+    console.log('Back')
+    task.getStarted(sender_psid, response);
+
   } else if ((message[0] == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
-      // message.push(key)
       if (typeof(key) == 'object') {
         newKey = task.completeName(key)
         response = {
           "text": `Did you mean *${newKey}* ?`
         }
-        quickReply(sender_psid, response, key);
+        task.quickReply(sender_psid, response, key);
       } else {
-        response = {
-        "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
+        if (key != "") {
+          response = {
+          "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
+          }
+        } else {
+          response = {
+          "text": `\`\`\`\nPlease wait, we are retrieving information for ${received_message.text}...\n\`\`\``
+          }
         }
-        // callSendAPI(sender_psid, response)
+        console.log(response)
+        task.callSendAPI(sender_psid, response)
         Data.get_next_game(key, (err, reply) => {
           console.log("step1")
             if (err) {
               response = {
-                "text" : `Cannot find your team: ${key}`
+                "text" : `Cannot find your team: ${received_message.text}`
               }
-              callSendAPI(sender_psid, response);
+              task.callSendAPI(sender_psid, response);
               console.log(response)
             } else if (key) {
               console.log("step2")
@@ -70,7 +84,7 @@ const handleMessage = (sender_psid, received_message) => {
                   }
                   console.log(response)
                   console.log("replied");
-                  callSendAPI(sender_psid, response);
+                  task.callSendAPI(sender_psid, response);
                 }
             })
           }
@@ -80,7 +94,7 @@ const handleMessage = (sender_psid, received_message) => {
       response = {
       "text": `Please enter the team you want or choose some quick option below!!!`
       }
-      quickTeams(sender_psid, response);
+      task.quickTeams(sender_psid, response);
     }
 
     // Handle the Players message
@@ -92,14 +106,14 @@ const handleMessage = (sender_psid, received_message) => {
         "text": `\`\`\`\nPlease wait, we are retrieving information for ${player}...\n\`\`\``
       }
       console.log(response)
-      callSendAPI(sender_psid, response)
+      task.callSendAPI(sender_psid, response)
       Player.get_player_infor(player, (err, reply) => {
         console.log("step1")
           if (err) {
             response = {
               "text" : `Cannot find your player: ${player}`
             }
-            callSendAPI(sender_psid, response);
+            task.callSendAPI(sender_psid, response);
             console.log(response)
           } else if (player) {
             console.log("step2")
@@ -113,10 +127,10 @@ const handleMessage = (sender_psid, received_message) => {
               if (err) {
                 console.error("Unable to send message:" + err);
               } else {
-                var graph = ['- Name: ,- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
-                var index = 1
+                var graph = ['- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
+                var index = 0
                 var playerInfor = ""
-                playerInfor += player
+                playerInfor += '- Name: ' +  player.toUpperCase() + '\n'
                 reply.forEach((val) => {
                   if (index != 0) {
                     playerInfor += "\n" + graph[index] + val
@@ -131,7 +145,7 @@ const handleMessage = (sender_psid, received_message) => {
                 }
                 console.log(response)
                 console.log("replied");
-                callSendAPI(sender_psid, response);
+                task.callSendAPI(sender_psid, response);
               }
           })
         }
@@ -140,170 +154,9 @@ const handleMessage = (sender_psid, received_message) => {
         response = {
           "text": `Please enter the player you want or choose some quick option below!!!`
         }
-        quickPlayers(sender_psid, response);
+        task.quickPlayers(sender_psid, response);
       }
   }
-}
-
-// Send the message back for users
-const callSendAPI = (sender_psid, response) => {
-
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": response
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
-
-// The QuickReply function
-const quickReply = (sender_psid, response, value) => {
-  jsonFile = task.quickReplies(value)
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": {
-      "text": response["text"],
-      "quick_replies": jsonFile
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
-
-// The getStarted reply function
-const getStarted = (sender_psid, response) => {
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": {
-      "text": response["text"],
-      "quick_replies": [{
-        "content_type" : "text",
-        "title": "Teams",
-        "payload": "value"
-      },{
-        "content_type" : "text",
-        "title": "Players",
-        "payload": "value"
-      }]
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
-
-
-// The quickOption choose for users
-const quickOption = (sender_psid, team) => {
-  jsonFile = task.quickOptions(team)
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": {
-      "text": "You choose " + team + ". Please select the option you want!!!",
-      "quick_replies": jsonFile
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
-
-// The quickTeams choose for users
-const quickTeams = (sender_psid, response) => {
-  jsonFile = task.popularTeam();
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": {
-      "text": response["text"],
-      "quick_replies": jsonFile
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
-}
-
-// The quickTeams choose for users
-const quickPlayers = (sender_psid, response) => {
-  jsonFile = task.popularPlayers();
-    let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": {
-      "text": response["text"],
-      "quick_replies": jsonFile
-    }
-    }
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
-    }
-  });
 }
 
 // Share the news template generic for users
@@ -350,12 +203,6 @@ function handlePostback (sender_psid, received_postback) {
 
 module.exports = {
   handleMessage,
-  callSendAPI,
-  quickReply,
-  handlePostback,
+  handlePostback
   // shareNews,
-  quickTeams,
-  getStarted,
-  quickPlayers,
-  quickOption
 };
