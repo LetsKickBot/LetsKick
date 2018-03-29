@@ -24,7 +24,8 @@ const handleMessage = (sender_psid, received_message) => {
     }
     console.log('Get Started')
     task.getStarted(sender_psid, response);
-  } else if ((message[0] == 'Teams') || (task.checkSpellName(received_message.text) != "")) {
+  // } else if ((message[0] == 'Teams') && (task.checkSpellName(received_message.text) != "")) {
+  } else if ((message[0] == 'Teams')) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
@@ -89,7 +90,8 @@ const handleMessage = (sender_psid, received_message) => {
     }
 
     // Handle the Players message
-  } else if ((message[0] == 'Players') || (task.checkPlayerName(received_message.text) != "")) {
+  // } else if ((message[0] == 'Players') && (task.checkPlayerName(received_message.text) != "")) {
+  } else if ((message[0] == 'Players')) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Players') {
       const player = received_message.text
