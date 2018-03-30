@@ -25,14 +25,13 @@ const handleMessage = (sender_psid, received_message) => {
     request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "last_name"},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
-                  let userName = body.first_name + body.last_name;
+                  let userName = body.first_name;
                 // Create the payload for a basic text message
                   response = {
                     "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
