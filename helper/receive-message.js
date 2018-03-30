@@ -15,7 +15,7 @@ const handleMessage = (sender_psid, received_message) => {
   // Append value to array
   if (received_message.text == 'Teams') {
     message.push('Teams')
-  } else {
+  } else if (received_message.text == 'Players') {
     message.push('Players')
   }
 
