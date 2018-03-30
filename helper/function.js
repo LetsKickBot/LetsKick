@@ -5,14 +5,38 @@ const Data = require('../data/get_data.js');
 const
     request = require('request');
 
-function shortenName(name) {
-    name = name.replace(/\s/g,'');
-    var curIndex = 0;
-    while (name[curIndex] != ":") {
-        curIndex += 1;
-    }
-    curIndex += 1;
-    return name.slice(curIndex);
+function getStart(sender_psid) {
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": {
+            "text": `Please tell us what you want to look for!`,
+            "quick_replies": [
+                {
+                    'content_type': 'text',
+                    'title': 'Player',
+                    'payload': 'START_PLAYER'
+                },
+                {
+                    'content_type': 'text',
+                    'title': 'Team',
+                    'payload': 'START_TEAM'
+                }
+            ]
+        }
+    };
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+        }
+    });
 }
 
 function checkSpellName(name) {
@@ -20,7 +44,7 @@ function checkSpellName(name) {
     var flag = true;
     var identityTeam = [];
     var savedName = name;
-    name = shortenName(name).toUpperCase();
+    var name = name.replace(/\s/g,'').toUpperCase();
 
     for (var key in file) {
         if (flag) {
@@ -47,8 +71,7 @@ function checkSpellName(name) {
             break;
         }
     }
-    //Final Check
-    // if (identityTeam.length)
+
     switch(identityTeam.length) {
         case 0:
             return savedName;
@@ -125,10 +148,9 @@ function callSendAPI(sender_psid, response) {
         },
         "message": response
     };
-  // Send the HTTP request to the Messenger Platform
+    // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        // "uri": "http://localhost:3100/v2.6",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
         "method": "POST",
         "json": request_body
@@ -153,7 +175,6 @@ function quickReply (sender_psid, response, value) {
     // Send the HTTP request to the Messenger Platform
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
-        // "uri": "http://localhost:3100/v2.6",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
         "method": "POST",
         "json": request_body
@@ -165,6 +186,8 @@ function quickReply (sender_psid, response, value) {
 }
 
 function matchLookup(sender_psid, key) {
+    key = checkSpellName(key);
+    console.log(key);
     if(typeof(key) == 'object') {
         newKey = completeName(key);
         response = {
@@ -181,12 +204,12 @@ function matchLookup(sender_psid, key) {
         Data.get_next_game(key, (err, reply) => {
             if (err) {
                 response = {
-                    "text" : `Cannot find team: ${key}`
+                    "text" : `Cannot find the Team: ${key}`
                 }
-
-                    // console.log(response);
-                    
                 callSendAPI(sender_psid, response);
+                setTimeout(() => {
+                    getStart(sender_psid)
+                }, 1500);
             } 
             else if (key) {
                 request({
@@ -213,9 +236,6 @@ function matchLookup(sender_psid, key) {
                                 `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${info}`
                             };
                             console.log("replied");
-
-                                        // console.log(response)
-
                             callSendAPI(sender_psid, response);
                         })
                     }
@@ -226,6 +246,7 @@ function matchLookup(sender_psid, key) {
 }
 
 function playerLookup(sender_psid, key) {
+    console.log(key);
     response = {
         "text": `Please wait, we are retrieving information for ${key}...`
     };
@@ -236,50 +257,36 @@ function playerLookup(sender_psid, key) {
             response = {
                 "text" : `Cannot find player: ${key}`
             };
-
-                // console.log(response);
-
             callSendAPI(sender_psid, response);
+            setTimeout(() => {
+                getStart(sender_psid)
+            }, 1500);
         } 
         else if (key) {
-            request({
-                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                "method": "GET",
-                "json": true,
-            }, (err, res, body) => {
-                if (err) {
-                    console.error("Unable to send message:" + err);
-                } 
-                else {
-                    var basicInfo = ['- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
-                    var information = "";
-                    var index = 0;
-                    reply.forEach((val) => {
-                        if (index != 0) {
-                            information += "\n" + basicInfo[index] + val;
-                        }
-                        else {
-                            information += basicInfo[index] + val;
-                        }
-                        index += 1;
-                    })
-                    response = {
-                        "text" : information
-                    }
-                    console.log("replied");
-
-                                // console.log(response);
-
-                    callSendAPI(sender_psid, response);
+            var basicInfo = ['- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
+            var information = "";
+            var index = 0;
+            reply.forEach((val) => {
+                if (index != 0) {
+                    information += "\n" + basicInfo[index] + val;
                 }
+                else {
+                    information += basicInfo[index] + val;
+                }
+                index += 1;
             })
+            response = {
+                "text" : information
+            }
+            console.log("replied");
+            callSendAPI(sender_psid, response);
         }
     })
 }
 
+
 module.exports = {
-    shortenName,
+    getStart,
     checkSpellName,
     timeFormat,
     teamFormat,

@@ -3,26 +3,28 @@ const
     request = require('request'),
     task = require('./function')
 
+let handleChoice = {};
 
 const handleMessage = (sender_psid, received_message) => {
+    console.log(handleChoice);
     let response;
     console.log(received_message.text);
     let key = received_message.text;
-    if (key.toUpperCase().includes("PLAYER")) {
-        key = task.shortenName(key);
-        console.log(key);
+    if (key.toUpperCase().includes("START")) {
+        task.getStart(sender_psid);
+    }
+    else if (handleChoice[sender_psid] == 'PLAYER') {
+        delete handleChoice[sender_psid];
         task.playerLookup(sender_psid, key);
     }
-    else if ((key.toUpperCase().includes("MATCH")) || (key.toUpperCase().includes("TEAM"))) {
-        key = task.checkSpellName(key);
-        console.log(key);
+    else if (handleChoice[sender_psid] == 'TEAM') {
+        delete handleChoice[sender_psid];
         task.matchLookup(sender_psid, key);
     }
     else {
         response = {
-            "text": `Invalid command`
+            "text": `Please begin by typing in 'Start'`,
         };
-        console.log(response);
         task.callSendAPI(sender_psid, response);
     }
 }
@@ -30,16 +32,20 @@ const handleMessage = (sender_psid, received_message) => {
 const handleQuickReply = (sender_psid, received_message) => {
     let response;
     let key = received_message.quick_reply.payload;
-    console.log(key);
-    if (key.toUpperCase().includes("PLAYER")) {
-        key = task.shortenName(key);
-        console.log(key);
-        task.playerLookup(sender_psid, key);
-    }
-    else if ((key.toUpperCase().includes("MATCH")) || (key.toUpperCase().includes("TEAM"))) {
-        key = task.checkSpellName(key);
-        console.log(key);
-        task.matchLookup(sender_psid, key);
+    if (key.includes('START_')) {
+        if (key.includes('TEAM')) {
+            handleChoice[sender_psid] = 'TEAM';
+            response = {
+                'text': 'Please give us the Team Name.'
+            }
+        }
+        else {
+            handleChoice[sender_psid] = 'PLAYER';
+            response = {
+                'text': 'Please give us the Player Name.'
+            }
+        }
+        task.callSendAPI(sender_psid, response);
     }
     else {
         response = {

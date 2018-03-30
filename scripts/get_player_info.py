@@ -59,7 +59,7 @@ def main():
                 print(element.text)
 
     browser.quit()
-    call(["killall", "-9", "chromedriver"])
+    # call(["killall", "-9", "chromedriver"])
     sys.exit(0)
 
 if __name__ == '__main__':

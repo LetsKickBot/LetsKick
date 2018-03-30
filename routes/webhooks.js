@@ -2,7 +2,6 @@ const
     bodyParser = require('body-parser'),
     express = require('express');
     receive = require('../helper/receive-message');
-    fs = require('fs');
 
 const router = express.Router();
 
@@ -19,17 +18,7 @@ router.post('/', (req, res) => {
 
       // Gets the message. entry.messaging is an array, but
       // will only ever contain one message, so we get index 0
-
-          // fs.writeFile("./TestData/entry.json", JSON.stringify(entry, null, 4));
-
       let webhook_event = entry.messaging[0];
-
-          // console.log(webhook_event);
-          // fs.writeFile("./TestData/webhook_event.json", JSON.stringify(webhook_event, null, 4));
-
-      let user_message = webhook_event.message.text;
-
-          // fs.writeFile("./TestData/user_message.json", JSON.stringify(user_message, null, 4));
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;

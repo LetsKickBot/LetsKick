@@ -1,6 +1,4 @@
 //'use strict';
-//import Data from './utils/get_data';
-
 // Imports dependencies and set up http server
 const
 
