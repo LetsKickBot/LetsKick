@@ -8,7 +8,7 @@ const
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
-  
+
   let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
 
@@ -24,7 +24,8 @@ const handleMessage = (sender_psid, received_message) => {
     message = []
     request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: ["first_name", 'last_name']},
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "last_name"},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
