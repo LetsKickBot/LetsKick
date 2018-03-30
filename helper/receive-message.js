@@ -6,6 +6,7 @@ const
   task = require('./function')
   
 let message = []
+let choice = []
 
 const handleMessage = (sender_psid, received_message) => {
 
@@ -42,7 +43,7 @@ const handleMessage = (sender_psid, received_message) => {
                 console.log(response)
                 task.getStarted(sender_psid, response);
     })
-    
+
   // Handle Teams message
   } else if ((message[0] == 'Teams')) {
     console.log('holdValue:', message[0])
@@ -69,6 +70,7 @@ const handleMessage = (sender_psid, received_message) => {
               task.callSendAPI(sender_psid, response);
               console.log(response)
             } else if (key) {
+              task.quickOption(sender_psid)
               request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -87,7 +89,11 @@ const handleMessage = (sender_psid, received_message) => {
                   }
                   console.log(response)
                   console.log("replied");
-                  task.callSendAPI(sender_psid, response);
+                  if(received_message.text == "Next Match") {
+                    task.callSendAPI(sender_psid, response);
+                  } else if (received_message.text == "Team News") {
+                    console.log('Testing news')
+                  }
                 }
             })
           }

@@ -64,6 +64,29 @@ function checkPlayerName(message) {
 	return message;
 }
 
+// let dictionary = {}
+
+// function diction(sender_psid, keyword) {
+// 	if (keyword == "Get Started") {
+// 		if (sender_psid in dict) {
+// 			dictionary[sender_psid] = ""
+// 		} else {
+// 			dictionary[sender_psid] = ""
+// 		}
+// 	} else if (keyword == "Teams" || keyword == "Players") {
+// 		dictionary[sender_psid] = keyword
+// 	}
+// 	return dictionary
+// }
+
+
+// console.log(diction("5678", "Players"))
+// console.log(diction("1234", "messi"))
+// console.log(diction("1234", "Get Started"))
+// console.log(diction("1234", "Teams"))
+// console.log(diction("1234", "Get Started"))
+// console.log(diction("5678", "Teams"))
+
 // Check the option that user pick
 function optionChoose(name) {
 	switch (name) {
@@ -302,7 +325,7 @@ function getStarted(sender_psid, response) {
 }
 
 // The quickOption choose for users
-function quickOption(sender_psid, team) {
+function quickOption(sender_psid) {
   jsonFile = quickOptions(team)
     let request_body = {
     "recipient": {
