@@ -50,7 +50,7 @@ const handleMessage = (sender_psid, received_message) => {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
-      if (key != "Next Match" || key != "Team News" }} key != "Team Squad") {
+      if (key != "Next Match" && key != "Team News" && key != "Team Squad") {
         teamChoose = []
         teamChoose.push(key)
       }
