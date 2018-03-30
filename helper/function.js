@@ -38,54 +38,148 @@ function checkSpellName(name) {
 	}	
 
 	//Final Check		
-	switch(true) {
-		case (identityTeam.length == 0):
-			switch (true) {
-				case (correctTeam == ''):
-					return oldName
-					break
-				default:
-					return correctTeam
-					break
-			}
-		case (identityTeam.length == 1):
-			return identityTeam[0]
-			break;
-		// Handle multiple teams
-		case (identityTeam.length > 1):
-			return identityTeam
-			break
-	}
-}
-// console.log(checkSpellName("psg"))
-
-// Check the Player Spell name
-function checkPlayerName(message) {
-	return message;
+	switch(identityTeam.length) {
+        case 0:
+            return oldName;
+            break;
+        case 1:
+            return identityTeam[0];
+            break;
+        // Handle multiple teams
+        default:
+            return identityTeam;
+            break;
+    }
 }
 
-// let dictionary = {}
+function getStart(sender_psid) {
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": {
+            "text": `Please tell us what you want to look for!`,
+            "quick_replies": [
+                {
+                    'content_type': 'text',
+                    'title': 'Player',
+                    'payload': 'START_PLAYER'
+                },
+                {
+                    'content_type': 'text',
+                    'title': 'Team',
+                    'payload': 'START_TEAM'
+                }
+            ]
+        }
+    };
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
 
-// function diction(sender_psid, keyword) {
-// 	if (keyword == "Get Started") {
-// 		if (sender_psid in dict) {
-// 			dictionary[sender_psid] = ""
-// 		} else {
-// 			dictionary[sender_psid] = ""
-// 		}
-// 	} else if (keyword == "Teams" || keyword == "Players") {
-// 		dictionary[sender_psid] = keyword
-// 	}
-// 	return dictionary
-// }
+function matchLookup(sender_psid, key) {
+    key = checkSpellName(key);
+    console.log(key);
+    if(typeof(key) == 'object') {
+        newKey = completeName(key);
+        response = {
+          "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
+        }
+        quickReply(sender_psid, response, key);
+    }
+    else {
+        response = {
+            "text": `Please wait, we are retrieving information for ${key}...`
+        };
+        console.log("waiting...");
+        callSendAPI(sender_psid, response);
+        Data.get_next_game(key, (err, reply) => {
+            if (err) {
+                response = {
+                    "text" : `Cannot find the Team: ${key}`
+                }
+                callSendAPI(sender_psid, response);
+                getStart(sender_psid);
+            } 
+            else if (key) {
+                request({
+                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                    "method": "GET",
+                    "json": true,
+                }, (err, res, body) => {
+                    if (err) {
+                        console.error("Unable to send message:" + err);
+                    } 
+                    else {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            let time = timeFormat(reply[2], body.timezone);
+                            let team = teamFormat(reply[0], reply[1], key);
+                            info = reply[3];
+                            response = {
+                                "text": 
+                                `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${info}`
+                            };
+                            console.log("replied");
+                            callSendAPI(sender_psid, response);
+                        })
+                    }
+                })
+            }
+        })
+    }
+}
 
-
-// console.log(diction("5678", "Players"))
-// console.log(diction("1234", "messi"))
-// console.log(diction("1234", "Get Started"))
-// console.log(diction("1234", "Teams"))
-// console.log(diction("1234", "Get Started"))
-// console.log(diction("5678", "Teams"))
+function playerLookup(sender_psid, key) {
+    console.log(key);
+    response = {
+        "text": `Please wait, we are retrieving information for ${key}...`
+    };
+    console.log("waiting...");
+    callSendAPI(sender_psid, response);
+    Player.get_player_info(key, (err, reply) => {
+        if (err) {
+            response = {
+                "text" : `Cannot find player: ${key}`
+            };
+            callSendAPI(sender_psid, response);
+            getStart(sender_psid);
+        } 
+        else if (key) {
+            var basicInfo = ['- Position: ', '- Height: ', '- Weight: ', '- Age: ', '- Date of Birth: ', '- Place of Birth: '];
+            var information = "";
+            var index = 0;
+            reply.forEach((val) => {
+                if (index != 0) {
+                    information += "\n" + basicInfo[index] + val;
+                }
+                else {
+                    information += basicInfo[index] + val;
+                }
+                index += 1;
+            })
+            response = {
+                "text" : information
+            }
+            console.log("replied");
+            callSendAPI(sender_psid, response);
+        }
+    })
+}
 
 // Check the option that user pick
 function optionChoose(name) {
@@ -252,8 +346,8 @@ function callSendAPI(sender_psid, response) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -278,8 +372,8 @@ function quickReply(sender_psid, response, value) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -312,8 +406,8 @@ function getStarted(sender_psid, response) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -338,8 +432,8 @@ function quickOption(sender_psid, team) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -364,8 +458,8 @@ function quickTeams(sender_psid, response) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -390,8 +484,8 @@ function quickPlayers(sender_psid, response) {
     }
   // Send the HTTP request to the Messenger Platform
   request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    // "uri": "http://localhost:3100/v2.6",
+    // "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "uri": "http://localhost:3100/v2.6",
     "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
     "method": "POST",
     "json": request_body
@@ -411,12 +505,14 @@ module.exports = {
 	popularTeam,
 	quickOptions,
 	optionChoose,
-	checkPlayerName,
 	popularPlayers,
 	quickTeams,
 	quickReply,
 	callSendAPI,
 	getStarted,
 	quickPlayers,
-	quickOption
+	quickOption,
+	playerLookup,
+	matchLookup,
+	getStart
 };
