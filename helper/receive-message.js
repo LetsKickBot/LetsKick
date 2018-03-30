@@ -7,7 +7,7 @@ const
   
 let message = []
 
-const handleMessage = (sender_psid, received_message, sender_name) => {
+const handleMessage = (sender_psid, received_message) => {
   console.log(sender_name)
   let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
@@ -20,12 +20,31 @@ const handleMessage = (sender_psid, received_message, sender_name) => {
   // Handle Get Started text message
   if ((wordGraph.includes(received_message.text))) {
     message = []
-    response = {
-      "text": `Hi ${sender_name}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
-    }
-    console.log('Get Started')
-    console.log(response)
-    task.getStarted(sender_psid, response);
+    request( {
+                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
+                "method": "GET",
+                "json": true,
+              }, (err, res, body) => {
+                if (err) {
+                  console.error("Unable to send message:" + err);
+                } else {
+                  // let time = task.timeFormat(reply[2], body.timezone);
+                  // let team = task.teamFormat(reply[0], reply[1], key);
+                  let userName = body.first_name;
+                // Create the payload for a basic text message
+                  response = {
+                    "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
+                  }
+                  // task.callSendAPI(sender_psid, response);
+                }
+                console.log('Get Started')
+                console.log(response)
+                task.getStarted(sender_psid, response);
+            })
+    // response = {
+    //   "text": `Hi ${sender_name}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
+    // }
   // } else if ((message[0] == 'Teams') && (task.checkSpellName(received_message.text) != "")) {
   } else if ((message[0] == 'Teams')) {
     console.log('holdValue:', message[0])
@@ -183,7 +202,7 @@ const handleMessage = (sender_psid, received_message, sender_name) => {
 //   });
 // }
 
-function handlePostback (sender_psid, received_postback, sender_name) {
+function handlePostback (sender_psid, received_postback) {
 
 }
 
