@@ -8,8 +8,11 @@ const
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
+  
   let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
+
+  // Append value to array
   if (received_message.text == 'Teams') {
     message.push('Teams')
   } else {
@@ -21,30 +24,23 @@ const handleMessage = (sender_psid, received_message) => {
     message = []
     request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name", "last_name"},
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: ["first_name", 'last_name']},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
-                  // let time = task.timeFormat(reply[2], body.timezone);
-                  // let team = task.teamFormat(reply[0], reply[1], key);
                   let userName = body.first_name + body.last_name;
                 // Create the payload for a basic text message
                   response = {
                     "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
                   }
-                  // task.callSendAPI(sender_psid, response);
                 }
-                console.log('Get Started')
                 console.log(response)
                 task.getStarted(sender_psid, response);
             })
-    // response = {
-    //   "text": `Hi ${sender_name}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
-    // }
-  // } else if ((message[0] == 'Teams') && (task.checkSpellName(received_message.text) != "")) {
+  // Handle Teams message
   } else if ((message[0] == 'Teams')) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
@@ -102,7 +98,6 @@ const handleMessage = (sender_psid, received_message) => {
     }
 
     // Handle the Players message
-  // } else if ((message[0] == 'Players') && (task.checkPlayerName(received_message.text) != "")) {
   } else if ((message[0] == 'Players')) {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Players') {
