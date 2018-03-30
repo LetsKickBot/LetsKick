@@ -325,7 +325,7 @@ function getStarted(sender_psid, response) {
 }
 
 // The quickOption choose for users
-function quickOption(sender_psid) {
+function quickOption(sender_psid, team) {
   jsonFile = quickOptions(team)
     let request_body = {
     "recipient": {

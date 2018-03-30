@@ -6,7 +6,8 @@ const
   task = require('./function')
   
 let message = []
-let choice = []
+let responeText = []
+let teamChoose = []
 
 const handleMessage = (sender_psid, received_message) => {
 
@@ -49,28 +50,32 @@ const handleMessage = (sender_psid, received_message) => {
     console.log('holdValue:', message[0])
     if (received_message.text != 'Teams') {
       const key = task.checkSpellName(received_message.text)
-      if (typeof(key) == 'object') {
-        newKey = task.completeName(key)
+      if (key != "Next Match" || key != "Team News" }} key != "Team Squad") {
+        teamChoose = []
+        teamChoose.push(key)
+      }
+      if (typeof(teamChoose[0]) == 'object') {
+        newKey = task.completeName(teamChoose[0])
         response = {
           "text": `Did you mean *${newKey}* ?`
         }
-        task.quickReply(sender_psid, response, key);
+        task.quickReply(sender_psid, response, teamChoose[0]);
       } else {
-        response = {
-          "text" : `\`\`\`\nPlease wait, we are retrieving information for *${key}*...\n\`\`\``
-        }
-        console.log(response)
-        task.callSendAPI(sender_psid, response)
-        Data.get_next_game(key, (err, reply) => {
+        // // response = {
+        // //   "text" : `\`\`\`\nPlease wait, we are retrieving information for *${key}*...\n\`\`\``
+        // // }
+        // console.log(response)
+        // task.callSendAPI(sender_psid, response)
+        Data.get_next_game(teamChoose[0], (err, reply) => {
           console.log("In Team section")
             if (err) {
               response = {
-                "text" : `Cannot find your team: *${key}*`
+                "text" : `Cannot find your team: *${teamChoose[0]}*`
               }
               task.callSendAPI(sender_psid, response);
               console.log(response)
-            } else if (key) {
-              task.quickOption(sender_psid)
+            } else if (teamChoose[0]) {
+              task.quickOption(sender_psid, teamChoose[0])
               request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -82,15 +87,17 @@ const handleMessage = (sender_psid, received_message) => {
                   console.error("Unable to send message:" + err);
                 } else {
                   let time = task.timeFormat(reply[2], body.timezone);
-                  let team = task.teamFormat(reply[0], reply[1], key);
+                  let team = task.teamFormat(reply[0], reply[1], teamChoose[0]);
                 // Create the payload for a basic text message
                   response = {
                     "text": `*${team[0]}* will play against *${team[1]}* on *${time}*, for *${reply[3]}*.`
                   }
+                  responeText.push(response)
                   console.log(response)
-                  console.log("replied");
+                  // console.log("replied");
                   if(received_message.text == "Next Match") {
-                    task.callSendAPI(sender_psid, response);
+                    task.callSendAPI(sender_psid, responeText[0]);
+                    responseText = []
                   } else if (received_message.text == "Team News") {
                     console.log('Testing news')
                   }
