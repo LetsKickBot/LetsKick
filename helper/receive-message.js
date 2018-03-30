@@ -21,7 +21,7 @@ const handleMessage = (sender_psid, received_message) => {
     message = []
     request( {
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name", "last_name"},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
@@ -30,7 +30,7 @@ const handleMessage = (sender_psid, received_message) => {
                 } else {
                   // let time = task.timeFormat(reply[2], body.timezone);
                   // let team = task.teamFormat(reply[0], reply[1], key);
-                  let userName = body.first_name;
+                  let userName = body.first_name + body.last_name;
                 // Create the payload for a basic text message
                   response = {
                     "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today? Please select the options you want below!!!`
