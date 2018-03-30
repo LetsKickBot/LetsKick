@@ -19,10 +19,12 @@ const handleMessage = (sender_psid, received_message) => {
     message.push('Players')
   }
 
+  console.log(message)
+
   // Handle Get Started text message
   if ((wordGraph.includes(received_message.text))) {
     message = []
-    request( {
+    request({
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                 "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
                 "method": "GET",
@@ -39,7 +41,8 @@ const handleMessage = (sender_psid, received_message) => {
                 }
                 console.log(response)
                 task.getStarted(sender_psid, response);
-            })
+    })
+    
   // Handle Teams message
   } else if ((message[0] == 'Teams')) {
     console.log('holdValue:', message[0])
