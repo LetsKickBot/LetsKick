@@ -8,7 +8,6 @@ const
 let message = []
 
 const handleMessage = (sender_psid, received_message) => {
-  console.log(sender_name)
   let wordGraph = ['get started', 'begin', 'start', 'hello', 'options', 'Get Started', 'Begin', 'Start', 'Hello', 'Options', 'Back', 'Go Back', 'back', 'go back', 'take me back', 'Take me back'];
   console.log("message: " + received_message.text);
   if (received_message.text == 'Teams') {
