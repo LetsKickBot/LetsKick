@@ -6,4 +6,5 @@ if ('5412' in dict) {
 	console.log("RIGHT!")
 }
 delete dict['1234'];
+delete dict['This is not even in the dict'];
 console.log(dict);
