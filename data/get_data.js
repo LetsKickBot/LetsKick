@@ -1,3 +1,4 @@
+const spawn = require('child_process').spawn;
 let PythonShell = require('python-shell');
 
 module.exports = {
