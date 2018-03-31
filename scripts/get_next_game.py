@@ -19,6 +19,8 @@ def main():
 
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("no-sandbox")
 
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get("http://www.espn.com/espn/story/_/id/21087319/soccer-teams")
