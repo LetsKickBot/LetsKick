@@ -22,6 +22,7 @@ const handleMessage = (sender_psid, received_message) => {
     // Look for the Player
     else if (handleChoice[sender_psid] == 'PLAYER') {
         console.log("In Player section");
+        console.log(handleChoice);
         delete handleChoice[sender_psid];
         info.playerLookup(sender_psid, key);
     }
@@ -30,7 +31,7 @@ const handleMessage = (sender_psid, received_message) => {
     else if (handleChoice[sender_psid] == 'TEAM') {
         console.log("In Team section");
         key = dataFormat.checkDuplicate(key);
-        teamHold.push[key];
+        // teamHold.push[key];
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
@@ -39,9 +40,9 @@ const handleMessage = (sender_psid, received_message) => {
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
             console.log(handleChoice);
-            // delete handleChoice[sender_psid];
-            // info.matchLookup(sender_psid, key);
-            handleCases.teamOptions(sender_psid, key);
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, key);
+            // handleCases.teamOptions(sender_psid, key);
         }
     }
 
@@ -63,17 +64,17 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('START_')) {
         if (key.includes('TEAM')) {
             handleChoice[sender_psid] = 'TEAM';
-            // response = {
-            //     'text': 'Please give us the Team Name.'
-            // }
-            handleCases.popularTeam(sender_psid);
+            response = {
+                'text': 'Please give us the Team Name.'
+            }
+            // handleCases.popularTeam(sender_psid);
         }
         else {
             handleChoice[sender_psid] = 'PLAYER';
-            // response = {
-            //     'text': 'Please give us the Player Name.'
-            // }
-            handleCases.popularPlayer(sender_psid);
+            response = {
+                'text': 'Please give us the Player Name.'
+            }
+            // handleCases.popularPlayer(sender_psid);
         }
         sendResponse.directMessage(sender_psid, response);
     }
@@ -83,19 +84,21 @@ const handleQuickReply = (sender_psid, received_message) => {
 
         // Get the team Name from Payload.
         key = key.slice(9);
-        // delete handleChoice[sender_psid];
-        // info.matchLookup(sender_psid, key);
-        handleCases.teamOptions(sender_psid, key);
+        delete handleChoice[sender_psid];
+        info.matchLookup(sender_psid, key);
+        // handleCases.teamOptions(sender_psid, key);
     }
 
     // Handle the Next Match option payload
-    if (key.includes('OPTION_')) {
-        if (key.includes('NEXT MATCH')) {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, teamHold[0]);
-            teamHold = [];
-        }
-    }
+    // if (key.includes('OPTION_')) {
+    //     if (key.includes('NEXT MATCH')) {
+    //         delete handleChoice[sender_psid];
+    //         console.log('get here');
+    //         // console.log('array: ', teamHold[0]);
+    //         info.matchLookup(sender_psid, teamHold[0]);
+    //         // teamHold = [];
+    //     }
+    // }
 
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
