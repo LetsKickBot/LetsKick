@@ -5,7 +5,7 @@ function checkDuplicate(name) {
     let flag = true;
     let identityTeam = [];
     let savedName = name;
-    name = name.replace(/\s/g,'').toUpperCase();
+    let name = name.replace(/\s/g,'').toUpperCase();
 
     for (var key in file) {
         if (flag) {
@@ -84,7 +84,7 @@ function timeFormat(inputTime, timezone) {
 function teamFormat(team1, team2, key) {
     let check = team1;
     team1 = "Home team: " + team1.toUpperCase();
-    team2 = "Away team: " + team2.toUpperCase(); 
+    team2 = "Away team: " + team2.toUpperCase();
     if (check != key) {
         return [team2, team1];
     }

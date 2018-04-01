@@ -63,15 +63,17 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('START_')) {
         if (key.includes('TEAM')) {
             handleChoice[sender_psid] = 'TEAM';
-            response = {
-                'text': 'Please give us the Team Name.'
-            }
+            // response = {
+            //     'text': 'Please give us the Team Name.'
+            // }
+            handleCases.popularTeam(sender_psid);
         }
         else {
             handleChoice[sender_psid] = 'PLAYER';
-            response = {
-                'text': 'Please give us the Player Name.'
-            }
+            // response = {
+            //     'text': 'Please give us the Player Name.'
+            // }
+            handleCases.popularPlayer(sender_psid);
         }
         sendResponse.directMessage(sender_psid, response);
     }
