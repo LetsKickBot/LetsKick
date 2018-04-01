@@ -61,7 +61,6 @@ function matchLookup(sender_psid, key) {
 // Look for the specific player
 function playerLookup(sender_psid, key) {
     console.log(key);
-    let key = dataFormat.checkDuplicate(key);
     let response = {
         "text": `Please wait, we are retrieving information for the ${key}...`
     };
