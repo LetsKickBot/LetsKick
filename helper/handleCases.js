@@ -19,6 +19,24 @@ function teamOptions(sender_psid, key) {
     sendResponse.quickReply(sender_psid, response, 'OPTION', group);
 }
 
+// Provides 11 popular team options
+function popularTeam(sender_psid) {
+    let key = ['Manchester United', 'Read Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'PSG', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
+    let response = {
+        'text': `Please type a team you want or choose from some quick options below!!!`
+    }
+    sendResponse.quickReply(sender_psid, response, 'POPULART', key);
+}
+
+// Provides 11 popular players options
+function popularPlayer(sender_psid) {
+    let key = ['Ronaldo', 'Messi', 'Bale', 'Neymar', 'Hazard', 'Morata', 'Ozil', 'Kroos', 'Isco', 'Alexis', 'Salad'];
+    let response = {
+        'text': `Please type a player you want or choose from some quick options below!!!`
+    }
+    sendResponse.quickReply(sender_psid, response, 'POPULARP', key);
+}
+
 // Repeats the main bot function.
 function getContinue(sender_psid) {
     let key = ['Yes', 'No'];
@@ -31,5 +49,7 @@ function getContinue(sender_psid) {
 module.exports = {
     getStart,
     teamOptions,
+    popularTeam,
+    popularPlayer,
     getContinue
 }
