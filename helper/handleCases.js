@@ -1,12 +1,14 @@
 const request = require('request');
 const sendResponse = require('./sendResponse.js');
+const info = require('./informationLookup.js');
 
 // Provides two options: Player and Team
 function getStart(sender_psid) {
     let key = ['Player', 'Team'];
-    let response = {
-        'text': 'Please tell us what information you want to look for.'
-    }
+    // let response = {
+    //     'text': 'Please tell us what information you want to look for.'
+    // }
+    response = info.getUser_Name();
     sendResponse.quickReply(sender_psid, response, 'START', key);
 }
 

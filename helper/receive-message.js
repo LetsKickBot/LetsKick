@@ -84,7 +84,7 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('OPTION_')) {
         if (key.includes('NEXT MATCH')) {
             delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, key);
+            info.matchLookup(sender_psid, handleChoice[sender_psid]);
         }
     }
 
