@@ -103,22 +103,23 @@ function quickReplyFormat(payloadCharacteristic, value) {
     return finalArr;
 }
 
-// function quickChooseFormat(payloadCharacteristic, value) {
-//     let finalArr = [];
-//     for (var i = 0; i < value.length; i++) {
-//         var map = {};
-//         map['content_type'] = 'text';
-//         map['title'] = value[i];
-//         map['payload'] = payloadCharacteristic + '_' + value[i];
-//         finalArr.push(map);
-//     }
-//     return finalArr;
-// }
+function teamOptionFormat(payloadCharacteristic, value, key) {
+    let finalArr = [];
+    for (var i = 0; i < value.length; i++) {
+        var map = {};
+        map['content_type'] = 'text';
+        map['title'] = value[i];
+        map['payload'] = payloadCharacteristic  + '_' + value[i] + '_' + key;
+        finalArr.push(map);
+    }
+    return finalArr;
+}
 
 module.exports = {
     checkDuplicate,
     completeName,
     timeFormat,
     teamFormat,
-    quickReplyFormat
+    quickReplyFormat,
+    teamOptionFormat
 }

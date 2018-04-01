@@ -6,7 +6,6 @@ const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 
 let handleChoice = {};
-let teamHold = []
 
 // Handle direct Message
 const handleMessage = (sender_psid, received_message) => {
@@ -39,8 +38,9 @@ const handleMessage = (sender_psid, received_message) => {
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
             console.log(handleChoice);
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, key);
+            handleCases.teamOptions(sender_psid, key);
+            // delete handleChoice[sender_psid];
+            // info.matchLookup(sender_psid, key);
         }
     }
 
@@ -75,8 +75,9 @@ const handleQuickReply = (sender_psid, received_message) => {
 
         // Get the team Name from Payload.
         key = key.slice(9);
-        delete handleChoice[sender_psid];
-        info.matchLookup(sender_psid, key);
+        handleCases.teamOptions(sender_psid, key);
+        // delete handleChoice[sender_psid];
+        // info.matchLookup(sender_psid, key);
     }
 
     // Handle the popular Teams
@@ -85,7 +86,9 @@ const handleQuickReply = (sender_psid, received_message) => {
         // Get the team name from Payload
         var team = key.substring(9, key.length);
         if (key.includes(team)) {
-            info.matchLookup(sender_psid, team);
+            // delete handleChoice[sender_psid];
+            // info.matchLookup(sender_psid, team);
+            handleCases.teamOptions(sender_psid, team);
         }
     }
 
@@ -95,21 +98,21 @@ const handleQuickReply = (sender_psid, received_message) => {
         // Get the player name from Payload
         var player = key.substring(9, key.length);
         if (key.includes(player)) {
+            delete handleChoice[sender_psid];
             info.playerLookup(sender_psid, player);
         }
     }
 
-
     // Handle the Next Match option payload
-    // if (key.includes('OPTION_')) {
-    //     if (key.includes('NEXT MATCH')) {
-    //         delete handleChoice[sender_psid];
-    //         console.log('get here');
-    //         // console.log('array: ', teamHold[0]);
-    //         info.matchLookup(sender_psid, teamHold[0]);
-    //         // teamHold = [];
-    //     }
-    // }
+    if (key.includes('OPTION_')) {
+
+        // Get the player name from Payload
+        var team = key.substring(17, key.length);
+        if (key.includes('Next Match_')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team);
+        }
+    }
 
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
