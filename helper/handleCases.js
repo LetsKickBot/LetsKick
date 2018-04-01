@@ -10,6 +10,15 @@ function getStart(sender_psid) {
     sendResponse.quickReply(sender_psid, response, 'START', key);
 }
 
+// Provides four options: Next Match, Team News, Team Squad, Next 5 games
+function teamOptions(sender_psid, key) {
+    let group = ['Next Match', 'Teams News', 'Teams Squad']
+    let response = {
+        'text': `You choose ${key}. Please select the options you want for the team!`
+    }
+    sendResponse.quickReply(sender_psid, response, 'OPTION_', group);
+}
+
 // Repeats the main bot function.
 function getContinue(sender_psid) {
     let key = ['Yes', 'No'];
@@ -21,5 +30,6 @@ function getContinue(sender_psid) {
 
 module.exports = {
     getStart,
+    teamOptions,
     getContinue
 }

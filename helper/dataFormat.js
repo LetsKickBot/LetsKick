@@ -108,5 +108,6 @@ module.exports = {
     completeName,
     timeFormat,
     teamFormat,
-    quickReplyFormat
+    quickReplyFormat,
+    teamOptions
 }

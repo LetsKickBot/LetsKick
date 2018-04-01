@@ -33,8 +33,9 @@ const handleMessage = (sender_psid, received_message) => {
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, key);
+            // delete handleChoice[sender_psid];
+            // info.matchLookup(sender_psid, key);
+            handleCases.teamOptions(sender_psid, key);
         }
     }
 
@@ -74,8 +75,16 @@ const handleQuickReply = (sender_psid, received_message) => {
 
         // Get the team Name from Payload.
         key = key.slice(9);
-        delete handleChoice[sender_psid];
-        info.matchLookup(sender_psid, key);
+        // delete handleChoice[sender_psid];
+        // info.matchLookup(sender_psid, key);
+        handleCases.teamOptions(sender_psid, key);
+
+        // Handle the Next Match option payload
+    } else if (key.includes('OPTION_')) {
+        if (key.includes('Match')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, key);
+        }
     }
 
     // Continues the bot by asking the initial question: Team or Player?
