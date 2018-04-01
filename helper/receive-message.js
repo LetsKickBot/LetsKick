@@ -83,7 +83,7 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('POPULART_')) {
 
         // Get the team name from Payload
-        key = key.substring(9, key.length);
+        var team = key.substring(9, key.length);
         if (key.includes(team)) {
             info.matchLookup(sender_psid, team);
         }
@@ -93,9 +93,9 @@ const handleQuickReply = (sender_psid, received_message) => {
     else if (key.includes('POPULARP_')) {
 
         // Get the player name from Payload
-        key = key.substring(9, key.length);
-        if (key.includes(team)) {
-            info.matchLookup(sender_psid, team);
+        var player = key.substring(9, key.length);
+        if (key.includes(player)) {
+            info.playerLookup(sender_psid, player);
         }
     }
 
