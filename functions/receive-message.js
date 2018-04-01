@@ -1,10 +1,9 @@
-const
-    bodyParser = require('body-parser'),
-    request = require('request'),
-    info = require('./informationLookup.js');
-    handleCases = require('./handleCases.js');
-    sendResponse = require('./sendResponse.js');
-    dataFormat = require('./dataFormat.js');
+const bodyParser = require('body-parser');
+const request = require('request');
+const info = require('./informationLookup.js');
+const handleCases = require('./handleCases.js');
+const sendResponse = require('./sendResponse.js');
+const dataFormat = require('./dataFormat.js');
 
 let handleChoice = {};
 
@@ -26,13 +25,13 @@ const handleMessage = (sender_psid, received_message) => {
 
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
-        key = dataFormat.checkSpellName(key);
+        key = dataFormat.checkDuplicate(key);
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
               "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
             }
-            sendResponse.quickReply(sender_psid, response, key);
+            sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, key);
@@ -80,8 +79,16 @@ const handleQuickReply = (sender_psid, received_message) => {
     }
 
     // Continues the bot by asking the initial question: Team or Player?
-    if (key == 'CONTINUE_YES') {
-        handleCases.getStart(sender_psid);
+    if (key.includes('CONTINUE')) {
+        if (key.includes('YES')) {
+            handleCases.getStart(sender_psid);
+        }
+        else {
+            response = {
+                'text': 'Thank you for asking me! Please come back anytime you want!'
+            }
+            sendResponse.directMessage(sender_psid, response);
+        }
     }
 }
 

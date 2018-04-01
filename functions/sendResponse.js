@@ -1,6 +1,5 @@
-const 
-    request = require('request');
-    dataFormat = require('./dataFormat.js');
+const request = require('request');
+const dataFormat = require('./dataFormat.js');
 
 // Post a form of direct message to the server
 function directMessage(sender_psid, response) {
@@ -25,8 +24,8 @@ function directMessage(sender_psid, response) {
 }
 
 // Post a form of quick reply to the server
-function quickReply(sender_psid, response, value) {
-    let jsonFile = dataFormat.quickReplies(value);
+function quickReply(sender_psid, response, payloadCharacteristic, value) {
+    let jsonFile = dataFormat.quickReplyFormat(payloadCharacteristic, value);
     let request_body = {
         "recipient": {
             "id": sender_psid

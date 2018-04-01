@@ -1,5 +1,4 @@
-const
-    file = require('../data/teamName.json');
+const file = require('../data/teamName.json');
 
 function checkDuplicate(name) {
     let correctTeam = "";
@@ -92,13 +91,13 @@ function teamFormat(team1, team2, key) {
     return [team1, team2];
 }
 
-function quickReplies(value) {
-    var finalArr = []
-    for (i = 0; i < value.length; i++) {
+function quickReplyFormat(payloadCharacteristic, value) {
+    var finalArr = [];
+    for (var i = 0; i < value.length; i++) {
         map = {};
-        map["content_type"] = "text";
-        map["title"] = value[i];
-        map["payload"] = "TEAMLIST_" + value[i].toUpperCase();
+        map['content_type'] = 'text';
+        map['title'] = value[i];
+        map['payload'] = payloadCharacteristic + '_' + value[i].toUpperCase();
         finalArr.push(map);
     }
     return finalArr;
@@ -109,5 +108,5 @@ module.exports = {
     completeName,
     timeFormat,
     teamFormat,
-    quickReplies
+    quickReplyFormat
 }

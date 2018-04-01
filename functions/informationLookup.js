@@ -1,16 +1,15 @@
-const
-    request = require('request');
-    data = require('../data/get_data.js');
-    sendResponse = require('./sendResponse.js');
-    dataFormat = require('./dataFormat.js');
-    handleCases = require('./handleCases.js');
+const request = require('request');
+const data = require('../data/get_data.js');
+const sendResponse = require('./sendResponse.js');
+const dataFormat = require('./dataFormat.js');
+const handleCases = require('./handleCases.js');
 
 // Look for the next match of the Team
 function matchLookup(sender_psid, key) {
     let response;
     key = dataFormat.checkDuplicate(key);
     response = {
-        "text": `Please wait, we are retrieving information for ${key}...`
+        "text": `Please wait, we are retrieving information for the Team...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
@@ -63,7 +62,7 @@ function matchLookup(sender_psid, key) {
 function playerLookup(sender_psid, key) {
     console.log(key);
     let response = {
-        "text": `Please wait, we are retrieving information for ${key}...`
+        "text": `Please wait, we are retrieving information for the Player...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);

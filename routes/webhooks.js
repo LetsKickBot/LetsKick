@@ -1,7 +1,6 @@
-const
-	bodyParser = require('body-parser');
-	express = require('express');
-	receive = require('../functions/receive-message');
+const bodyParser = require('body-parser');
+const express = require('express');
+const receive = require('../functions/receive-message');
 
 const router = express.Router();
 
