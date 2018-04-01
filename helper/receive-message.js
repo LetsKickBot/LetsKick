@@ -6,11 +6,13 @@ const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 
 let handleChoice = {};
+let teamHold = []
 
 // Handle direct Message
 const handleMessage = (sender_psid, received_message) => {
     let response;
     let key = received_message.text;
+    console.log(key);
 
     // Users begin the search
     if (key.toUpperCase().includes("START")) {
@@ -19,13 +21,16 @@ const handleMessage = (sender_psid, received_message) => {
 
     // Look for the Player
     else if (handleChoice[sender_psid] == 'PLAYER') {
+        console.log("In Player section");
         delete handleChoice[sender_psid];
         info.playerLookup(sender_psid, key);
     }
 
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
+        console.log("In Team section");
         key = dataFormat.checkDuplicate(key);
+        teamHold.push[key];
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
@@ -33,6 +38,7 @@ const handleMessage = (sender_psid, received_message) => {
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
+            console.log(handleChoice);
             // delete handleChoice[sender_psid];
             // info.matchLookup(sender_psid, key);
             handleCases.teamOptions(sender_psid, key);
@@ -84,7 +90,8 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('OPTION_')) {
         if (key.includes('NEXT MATCH')) {
             delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, handleChoice[sender_psid]);
+            info.matchLookup(sender_psid, teamHold[0]);
+            teamHold = [];
         }
     }
 
