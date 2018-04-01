@@ -59,6 +59,7 @@ const handleMessage = (sender_psid, received_message) => {
 const handleQuickReply = (sender_psid, received_message) => {
     let response;
     let key = received_message.quick_reply.payload;
+    // let oldKey = received_message.text;
 
     // Identify the category user want to search
     if (key.includes('START_')) {
@@ -76,7 +77,7 @@ const handleQuickReply = (sender_psid, received_message) => {
             // }
             handleCases.popularPlayer(sender_psid);
         }
-        sendResponse.directMessage(sender_psid, response);
+        // sendResponse.directMessage(sender_psid, response);
     }
 
     // Handle duplicate Team Names
@@ -89,6 +90,9 @@ const handleQuickReply = (sender_psid, received_message) => {
         // handleCases.teamOptions(sender_psid, key);
     }
 
+    if (key.includes('POPULART')) {
+
+    }
     // Handle the Next Match option payload
     // if (key.includes('OPTION_')) {
     //     if (key.includes('NEXT MATCH')) {
