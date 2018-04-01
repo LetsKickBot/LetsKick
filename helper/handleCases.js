@@ -25,7 +25,7 @@ function popularTeam(sender_psid) {
     let response = {
         'text': `Please type a team you want or choose from some quick options below!!!`
     }
-    sendResponse.quickChoose(sender_psid, response, 'POPULART', key);
+    sendResponse.quickReply(sender_psid, response, 'POPULART', key);
 }
 
 // Provides 11 popular players options
@@ -34,7 +34,7 @@ function popularPlayer(sender_psid) {
     let response = {
         'text': `Please type a player you want or choose from some quick options below!!!`
     }
-    sendResponse.quickChoose(sender_psid, response, 'POPULARTP', key);
+    sendResponse.quickReply(sender_psid, response, 'POPULARTP', key);
 }
 
 // Repeats the main bot function.

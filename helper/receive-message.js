@@ -63,21 +63,14 @@ const handleQuickReply = (sender_psid, received_message) => {
 
     // Identify the category user want to search
     if (key.includes('START_')) {
-        if (key.includes('TEAM')) {
+        if (key.includes('Team')) {
             handleChoice[sender_psid] = 'TEAM';
-            // response = {
-            //     'text': 'Please give us the Team Name.'
-            // }
             handleCases.popularTeam(sender_psid);
         }
         else {
             handleChoice[sender_psid] = 'PLAYER';
-            // response = {
-            //     'text': 'Please give us the Player Name.'
-            // }
             handleCases.popularPlayer(sender_psid);
         }
-        // sendResponse.directMessage(sender_psid, response);
     }
 
     // Handle duplicate Team Names
@@ -87,7 +80,6 @@ const handleQuickReply = (sender_psid, received_message) => {
         key = key.slice(9);
         delete handleChoice[sender_psid];
         info.matchLookup(sender_psid, key);
-        // handleCases.teamOptions(sender_psid, key);
     }
 
     // Handle the popular Teams
@@ -110,7 +102,7 @@ const handleQuickReply = (sender_psid, received_message) => {
 
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
-        if (key.includes('YES')) {
+        if (key.includes('Yes')) {
             handleCases.getStart(sender_psid);
         }
         else {
