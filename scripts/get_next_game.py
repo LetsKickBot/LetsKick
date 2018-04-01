@@ -13,7 +13,6 @@ def main():
     window_size = "1200,800"
     timeout = 20
     team_name = sys.argv[1]
-
     chrome_options = Options()
 
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)

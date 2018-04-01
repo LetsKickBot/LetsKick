@@ -5,7 +5,7 @@ const dataFormat = require('./dataFormat.js');
 const handleCases = require('./handleCases.js');
 
 // Look for the next match of the Team
-function matchLookup(sender_psid, key) {
+function matchLookup(sender_psid, key, status) {
     let response;
     key = dataFormat.checkDuplicate(key);
     response = {
@@ -21,7 +21,7 @@ function matchLookup(sender_psid, key) {
                 "text" : `Cannot find the Team: ${key}`
             }
             sendResponse.directMessage(sender_psid, response);
-        } 
+        }
         else if (key) {
             request({
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
@@ -31,7 +31,7 @@ function matchLookup(sender_psid, key) {
             }, (err, res, body) => {
                 if (err) {
                     console.error("Unable to send message:" + err);
-                } 
+                }
                 else {
                     request({
                         "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
@@ -42,11 +42,22 @@ function matchLookup(sender_psid, key) {
                         let time = dataFormat.timeFormat(reply[2], body.timezone);
                         let team = dataFormat.teamFormat(reply[0], reply[1], key);
                         let league = reply[3];
-                        response = {
-                            "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
-                        };
-                        console.log("replied");
-                        sendResponse.directMessage(sender_psid, response);
+                        let url = reply[4];
+
+                        // In case user want the Next Match Schedule
+                        if (status == 'Next Match') {
+                            response = {
+                                "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
+                            };
+                            console.log("replied");
+                            sendResponse.directMessage(sender_psid, response);
+                        }
+
+                        // In case user want to see the Team News
+                        else if (status == 'Team News ') {
+                            sendResponse.teamNewsURL(sender_psid, url);
+                            console.log("replied");
+                        }
                     })
                 }
             })
@@ -74,11 +85,11 @@ function playerLookup(sender_psid, key) {
                 'text' : `Cannot find player: ${key}`
             };
             sendResponse.directMessage(sender_psid, response);
-        } 
+        }
         else if (key) {
             let playerInfo = reply[0].toUpperCase();
             for (var eachData = 1; eachData < reply.length; eachData++) {
-                reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
+                reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);
                 playerInfo += '\n' + reply[eachData];
             }
             response = {

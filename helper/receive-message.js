@@ -39,8 +39,6 @@ const handleMessage = (sender_psid, received_message) => {
         } else {
             console.log(handleChoice);
             handleCases.teamOptions(sender_psid, key);
-            // delete handleChoice[sender_psid];
-            // info.matchLookup(sender_psid, key);
         }
     }
 
@@ -76,8 +74,6 @@ const handleQuickReply = (sender_psid, received_message) => {
         // Get the team Name from Payload.
         key = key.slice(9);
         handleCases.teamOptions(sender_psid, key);
-        // delete handleChoice[sender_psid];
-        // info.matchLookup(sender_psid, key);
     }
 
     // Handle the popular Teams
@@ -86,8 +82,6 @@ const handleQuickReply = (sender_psid, received_message) => {
         // Get the team name from Payload
         var team = key.substring(9, key.length);
         if (key.includes(team)) {
-            // delete handleChoice[sender_psid];
-            // info.matchLookup(sender_psid, team);
             handleCases.teamOptions(sender_psid, team);
         }
     }
@@ -107,10 +101,25 @@ const handleQuickReply = (sender_psid, received_message) => {
     if (key.includes('OPTION_')) {
 
         // Get the player name from Payload
-        var team = key.substring(17, key.length);
+        var team = key.substring(18, key.length);
+        var status = key.substring(7, 16);
+
+        // In case user want the Next Match Schedule
         if (key.includes('Next Match_')) {
             delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, team);
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the Team News
+        else if (key.includes('Team News ')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the Next Match Squad
+        else if (key.includes('Team Squad')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
         }
     }
 
