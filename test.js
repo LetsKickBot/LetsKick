@@ -14,11 +14,14 @@ describe('bot test', function() {
   });
   
   it('hi', function(){
+    var prompt = require('prompt-sync')();
+    var input = prompt('Message: ');
     const theScript = new BotTester.Script('132', '20');
-    theScript.sendTextMessage('Players');  //mock user sending "hi" 
-    theScript.sendTextMessage('Bale');
-    theScript.sendTextMessage('Neymar');
-    theScript.sendTextMessage('Baledasdas');
+    // count = 0;
+    theScript.sendTextMessage(input);
+    // theScript.sendTextMessage("Mu");
+    // theScript.sendTextMessage("Next Match");
+    // count += 1;
     theScript.expectTextResponses([   //either response is valid 
       'Hey!', 
       'Welcome',

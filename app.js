@@ -1,18 +1,13 @@
 //'use strict';
-//import Data from './utils/get_data';
-
 // Imports dependencies and set up http server
-const
-	// func = require('./helper/function.js'),
-  request = require('request'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express(),
-  webhooks = require('./routes/webhooks');
-
+const request = require('request');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const webhooks = require('./routes/webhooks');
+const Rx = require('rxjs/Rx');
   
 // Sets server port and logs message on success
-// process.env.PORT || 
 app.listen(process.env.PORT || 1337, () => {
 // app.listen(1337, () => {
 
