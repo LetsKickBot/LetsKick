@@ -69,18 +69,19 @@ const handleQuickReply = (sender_psid, received_message) => {
         }
         sendResponse.directMessage(sender_psid, response);
     }
-    else if (key.includes('TEAMLIST')) {
+
+    // Handle duplicate Team Names
+    if (key.includes('TEAMLIST')) {
 
         // Get the team Name from Payload.
         key = key.slice(9);
         delete handleChoice[sender_psid];
         info.matchLookup(sender_psid, key);
     }
-    else {
-        response = {
-            "text": `Invalid command`
-        };
-        sendResponse.directMessage(sender_psid, response);
+
+    // Continues the bot by asking the initial question: Team or Player?
+    if (key == 'CONTINUE_YES') {
+        handleCases.getStart(sender_psid);
     }
 }
 

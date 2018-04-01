@@ -8,21 +8,20 @@ const
 // Look for the next match of the Team
 function matchLookup(sender_psid, key) {
     let response;
-    key = dataFormat.checkSpellName(key);
+    key = dataFormat.checkDuplicate(key);
     response = {
         "text": `Please wait, we are retrieving information for ${key}...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
+
+    // Async function to look for the Next Match.
     data.get_next_game(key, (err, reply) => {
         if (err) {
             response = {
                 "text" : `Cannot find the Team: ${key}`
             }
             sendResponse.directMessage(sender_psid, response);
-            setTimeout(() => {
-                handleCases.getStart(sender_psid)
-            }, 1500);
         } 
         else if (key) {
             request({
@@ -53,6 +52,10 @@ function matchLookup(sender_psid, key) {
                 }
             })
         }
+
+        setTimeout(() => {
+            handleCases.getContinue(sender_psid);
+        }, 1500)
     })
 }
 
@@ -64,15 +67,14 @@ function playerLookup(sender_psid, key) {
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
+
+    // Async function to look for the Player.
     data.get_player_info(key, (err, reply) => {
         if (err) {
             response = {
                 'text' : `Cannot find player: ${key}`
             };
             sendResponse.directMessage(sender_psid, response);
-            setTimeout(() => {
-                handleCases.getStart(sender_psid)
-            }, 1500);
         } 
         else if (key) {
             let playerInfo = reply[0].toUpperCase();
@@ -86,6 +88,11 @@ function playerLookup(sender_psid, key) {
             console.log("replied");
             sendResponse.directMessage(sender_psid, response);
         }
+
+        // Check if user want to continue searching
+        setTimeout(() => {
+            handleCases.getContinue(sender_psid);
+        }, 1500)
     })
 }
 

@@ -1,7 +1,7 @@
 const
     file = require('../data/teamName.json');
 
-function checkSpellName(name) {
+function checkDuplicate(name) {
     let correctTeam = "";
     let flag = true;
     let identityTeam = [];
@@ -105,7 +105,7 @@ function quickReplies(value) {
 }
 
 module.exports = {
-    checkSpellName,
+    checkDuplicate,
     completeName,
     timeFormat,
     teamFormat,
