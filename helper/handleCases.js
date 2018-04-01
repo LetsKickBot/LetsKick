@@ -1,15 +1,13 @@
 const request = require('request');
 const sendResponse = require('./sendResponse.js');
-const info = require('./informationLookup.js');
 
 // Provides two options: Player and Team
 function getStart(sender_psid) {
     let key = ['Player', 'Team'];
-    // let response = {
-    //     'text': 'Please tell us what information you want to look for.'
-    // }
-
-    sendResponse.quickReply(sender_psid, info.getUser_Name(sender_psid), 'START', key);
+    let response = {
+        'text': 'Please tell us what information you want to look for.'
+    }
+    sendResponse.quickReply(sender_psid, response, 'START', key);
 }
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
