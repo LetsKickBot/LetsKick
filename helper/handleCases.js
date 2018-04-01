@@ -16,7 +16,7 @@ function teamOptions(sender_psid, key) {
     let response = {
         'text': `You choose ${key}. Please select the options you want for the team!`
     }
-    sendResponse.quickReply(sender_psid, response, 'OPTION_', group);
+    sendResponse.quickReply(sender_psid, response, 'OPTION', group);
 }
 
 // Repeats the main bot function.
