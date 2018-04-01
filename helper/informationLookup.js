@@ -9,7 +9,7 @@ function matchLookup(sender_psid, key) {
     let response;
     key = dataFormat.checkDuplicate(key);
     response = {
-        "text": `Please wait, we are retrieving information for the Team...`
+        "text": `Please wait, we are retrieving information for the ${key}...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
@@ -61,8 +61,9 @@ function matchLookup(sender_psid, key) {
 // Look for the specific player
 function playerLookup(sender_psid, key) {
     console.log(key);
+    let key = dataFormat.checkDuplicate(key);
     let response = {
-        "text": `Please wait, we are retrieving information for the Player...`
+        "text": `Please wait, we are retrieving information for the ${key}...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
