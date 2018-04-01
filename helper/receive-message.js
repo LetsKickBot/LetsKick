@@ -82,7 +82,7 @@ const handleQuickReply = (sender_psid, received_message) => {
 
     // Handle the Next Match option payload
     if (key.includes('OPTION_')) {
-        if (key.includes('Next Match')) {
+        if (key.includes('NEXT MATCH')) {
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, key);
         }
