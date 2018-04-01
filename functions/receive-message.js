@@ -38,6 +38,15 @@ const handleMessage = (sender_psid, received_message) => {
         }
     }
 
+    // Test reminder function for later use.
+    else if (key.toUpperCase().includes('REMINDER')) {
+        handleCases.getReminder(sender_psid);
+    }
+
+    else if (key.toUpperCase().includes('TEST')) {
+        handleCases.getTest(sender_psid);
+    }
+    
     // Instruction for user to use the Bot
     else {
         response = {
@@ -89,6 +98,28 @@ const handleQuickReply = (sender_psid, received_message) => {
             }
             sendResponse.directMessage(sender_psid, response);
         }
+    }
+
+    if (key.includes('REMINDER')) {
+        if (key.includes('YES')) {
+            response = {
+                'text': `IT'S 3 MINUTES ALREADY!!!`
+            };
+            setTimeout(() => {
+                sendResponse.directMessage(sender_psid, response);
+            }, 180000)
+
+
+        }
+        else {
+            response = {
+                'text': `Guess that a NO.`
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+        setTimeout(() => {
+            handleCases.getContinue(sender_psid);
+        }, 1500)
     }
 }
 
