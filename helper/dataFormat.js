@@ -109,7 +109,7 @@ function quickChooseFormat(payloadCharacteristic, value) {
         var map = {};
         map['content_type'] = 'text';
         map['title'] = value[i];
-        map['payload'] = payloadCharacteristic + '_' + value[i].toUpperCase();
+        map['payload'] = payloadCharacteristic + '_' + value[i];
         finalArr.push(map);
     }
     return finalArr;
