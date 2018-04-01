@@ -95,7 +95,7 @@ function playerLookup(sender_psid, key) {
     })
 }
 
-function getUser_Name() {
+function getUser_Name(sender_psid) {
     let response;
     request({
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
