@@ -78,10 +78,11 @@ const handleQuickReply = (sender_psid, received_message) => {
         // delete handleChoice[sender_psid];
         // info.matchLookup(sender_psid, key);
         handleCases.teamOptions(sender_psid, key);
+    }
 
-        // Handle the Next Match option payload
-    } else if (key.includes('OPTION_')) {
-        if (key.includes('Match')) {
+    // Handle the Next Match option payload
+    if (key.includes('OPTION_')) {
+        if (key.includes('Next Match')) {
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, key);
         }
