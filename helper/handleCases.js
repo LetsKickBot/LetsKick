@@ -34,7 +34,7 @@ function popularPlayer(sender_psid) {
     let response = {
         'text': `Please type a player you want or choose from some quick options below!!!`
     }
-    sendResponse.quickReply(sender_psid, response, 'POPULARTP', key);
+    sendResponse.quickReply(sender_psid, response, 'POPULARP', key);
 }
 
 // Repeats the main bot function.
