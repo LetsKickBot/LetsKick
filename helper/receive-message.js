@@ -90,7 +90,7 @@ const handleQuickReply = (sender_psid, received_message) => {
     }
 
     // Handle the popular Players
-    else if (key.includes('POPULART_')) {
+    else if (key.includes('POPULARP_')) {
 
         // Get the player name from Payload
         key = key.substring(9, key.length);
