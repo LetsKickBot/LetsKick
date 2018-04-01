@@ -8,8 +8,8 @@ function getStart(sender_psid) {
     // let response = {
     //     'text': 'Please tell us what information you want to look for.'
     // }
-    response = info.getUser_Name();
-    sendResponse.quickReply(sender_psid, response, 'START', key);
+
+    sendResponse.quickReply(sender_psid, info.getUser_Name(), 'START', key);
 }
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
