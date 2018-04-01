@@ -60,7 +60,7 @@ def main():
     home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
     away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
     date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
-
+    
     print(home_team)
     print(away_team)
     print(date)

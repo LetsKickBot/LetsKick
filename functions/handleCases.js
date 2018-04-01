@@ -33,14 +33,6 @@ function getTest(sender_psid) {
             "id": sender_psid
         },
         "message": {
-            // `LIONEL MESSI\nPosition: Forward\nHeight: 5'6" (1.69m)\nWeight: 148 lbs  (67 kg)\nAge: 30 \nDOB: June 24, 1987\nPOB: Santa Fe, Argentina \n\nFor more information: http://www.espnfc.us/player/45843`
-            // "attachment": {
-            //     "type": "image",
-            //     "payload": {
-            //         "url": "http://a.espncdn.com/combiner/i/?img=/soccernet/i/players/130x180/45843.jpg",
-            //         "is_reusable": true
-            //     }
-            // } 
             "attachment": {
                 "type": "template",
                 "payload": {
@@ -56,6 +48,8 @@ function getTest(sender_psid) {
             }
         }
     };
+
+    console.log(request_body);
     request({
         "uri": "https://graph.facebook.com/v2.6/me/messages",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},

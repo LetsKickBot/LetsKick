@@ -60,7 +60,7 @@ function matchLookup(sender_psid, key) {
 
 // Look for the specific player
 function playerLookup(sender_psid, key) {
-    console.log(key);
+    console.log('Player Name: ' + key);
     let response = {
         "text": `Please wait, we are retrieving information for the Player...`
     };
@@ -73,19 +73,23 @@ function playerLookup(sender_psid, key) {
             response = {
                 'text' : `Cannot find player: ${key}`
             };
+
+                    console.log(response);
+
             sendResponse.directMessage(sender_psid, response);
         } 
         else if (key) {
-            let playerInfo = reply[0].toUpperCase();
-            for (var eachData = 1; eachData < reply.length; eachData++) {
+            let playerImageURL = reply[0];
+            let playerURL = reply[1];
+            let playerInfo = reply[2];
+            let playerTitle = reply[2] + ' - ' + reply[3];
+            let playerSubtitle = reply[3];
+            for (var eachData = 5; eachData < 7; eachData++) {
                 reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
-                playerInfo += '\n' + reply[eachData];
+                playerSubtitle += '\n' + reply[eachData];
             }
-            response = {
-                'text': playerInfo
-            };
             console.log("replied");
-            sendResponse.directMessage(sender_psid, response);
+            sendResponse.imageReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
         }
 
         // Check if user want to continue searching

@@ -54,13 +54,29 @@ def main():
     col2dt = cols[1].find_all('dt')
 
     name = spec.find('h1').text
+
+    searchName = name.replace(' ', '_')
+    wikiPage = "https://en.wikipedia.org/wiki/" + searchName
+    browser.get(wikiPage)
+
+    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='mw-content-text']/div/table[1]/tbody/tr[1]/td/a/img")))
+    browser.find_element_by_xpath("//*[@id='mw-content-text']/div/table[1]/tbody/tr[1]/td/a/img").click()
+
+    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'mw-mmv-wrapper')))
+    html = browser.page_source
+    soup = BeautifulSoup(html, "html.parser")
+
+    imageHTML = soup.find('div', {'class': 'mw-mmv-image'}).find('img')
+    imageURL = "http:" + imageHTML['src']
+
+    print(imageURL)
+    print(wikiPage)
     print(name)
     for i in range(0, len(col1dd)):
         print(col1dt[i].text + col1dd[i].text)
 
     for i in range(0, len(col2dd)):
         print(col2dt[i].text + col2dd[i].text)
-    print('\nFor more information: ' + browser.current_url)
 
     browser.quit()
     sys.exit(0)
