@@ -21,7 +21,7 @@ function teamOptions(sender_psid, key) {
 
 // Provides 11 popular team options
 function popularTeam(sender_psid) {
-    let key = ['Manchester United', 'Read Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'PSG', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
+    let key = ['Manchester United', 'Read Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
     let response = {
         'text': `Please type a team you want or choose from some quick options below!!!`
     }

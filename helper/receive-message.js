@@ -31,7 +31,6 @@ const handleMessage = (sender_psid, received_message) => {
     else if (handleChoice[sender_psid] == 'TEAM') {
         console.log("In Team section");
         key = dataFormat.checkDuplicate(key);
-        // teamHold.push[key];
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
@@ -42,7 +41,6 @@ const handleMessage = (sender_psid, received_message) => {
             console.log(handleChoice);
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, key);
-            // handleCases.teamOptions(sender_psid, key);
         }
     }
 
@@ -59,7 +57,6 @@ const handleMessage = (sender_psid, received_message) => {
 const handleQuickReply = (sender_psid, received_message) => {
     let response;
     let key = received_message.quick_reply.payload;
-    // let oldKey = received_message.text;
 
     // Identify the category user want to search
     if (key.includes('START_')) {
@@ -84,11 +81,25 @@ const handleQuickReply = (sender_psid, received_message) => {
 
     // Handle the popular Teams
     if (key.includes('POPULART_')) {
-        var team = key.substring(9, key.length);
+
+        // Get the team name from Payload
+        key = key.substring(9, key.length);
         if (key.includes(team)) {
             info.matchLookup(sender_psid, team);
         }
     }
+
+    // Handle the popular Players
+    else if (key.includes('POPULART_')) {
+
+        // Get the player name from Payload
+        key = key.substring(9, key.length);
+        if (key.includes(team)) {
+            info.matchLookup(sender_psid, team);
+        }
+    }
+
+
     // Handle the Next Match option payload
     // if (key.includes('OPTION_')) {
     //     if (key.includes('NEXT MATCH')) {
