@@ -90,8 +90,10 @@ const handleQuickReply = (sender_psid, received_message) => {
         // handleCases.teamOptions(sender_psid, key);
     }
 
-    if (key.includes('POPULART')) {
-
+    if (key.includes('POPULART_')) {
+        if (key.includes('MANCHESTER UNITED')) {
+            info.matchLookup(sender_psid, 'Manchester United');
+        }
     }
     // Handle the Next Match option payload
     // if (key.includes('OPTION_')) {
