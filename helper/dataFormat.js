@@ -5,7 +5,7 @@ function checkDuplicate(name) {
     let flag = true;
     let identityTeam = [];
     let savedName = name;
-    let name = name.replace(/\s/g,'').toUpperCase();
+    name = name.replace(/\s/g,'').toUpperCase();
 
     for (var key in file) {
         if (flag) {
@@ -103,10 +103,23 @@ function quickReplyFormat(payloadCharacteristic, value) {
     return finalArr;
 }
 
+function quickChooseFormat(payloadCharacteristic, value) {
+    let finalArr = [];
+    for (var i = 0; i < value.length; i++) {
+        var map = {};
+        map['content_type'] = 'text';
+        map['title'] = value[i];
+        map['payload'] = payloadCharacteristic;
+        finalArr.push(map);
+    }
+    return finalArr;
+}
+
 module.exports = {
     checkDuplicate,
     completeName,
     timeFormat,
     teamFormat,
-    quickReplyFormat
+    quickReplyFormat,
+    quickChooseFormat
 }
