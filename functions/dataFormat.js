@@ -9,8 +9,8 @@ function checkDuplicate(name) {
 
     for (var key in file) {
         if (flag) {
-            array = file[key];
-            team = key.replace(/\s/g,'').toUpperCase();
+            var array = file[key];
+            var team = key.replace(/\s/g,'').toUpperCase();
 
             // Check to see if the specific team name has duplicate with other team name at diffrent location
             if ((name.length >= 4) && team.indexOf(name) !== -1) {
@@ -92,9 +92,9 @@ function teamFormat(team1, team2, key) {
 }
 
 function quickReplyFormat(payloadCharacteristic, value) {
-    var finalArr = [];
+    let finalArr = [];
     for (var i = 0; i < value.length; i++) {
-        map = {};
+        var map = {};
         map['content_type'] = 'text';
         map['title'] = value[i];
         map['payload'] = payloadCharacteristic + '_' + value[i].toUpperCase();
