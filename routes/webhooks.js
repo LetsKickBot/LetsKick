@@ -1,7 +1,8 @@
 const
     bodyParser = require('body-parser'),
     express = require('express');
-    recieve = require('../helper/receive-message');
+
+const receive = require('../helper/receive-message');
 
 const router = express.Router();
 
@@ -27,9 +28,9 @@ router.post('/', (req, res) => {
       // Checks if the event is a message or postback and
       // pass the event to the appropriate handler function
       if (webhook_event.message) {
-        recieve.handleMessage(sender_psid, webhook_event.message);
+        receive.handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        recieve.handlePostback(sender_psid, webhook_event.postback);
+        receive.handlePostback(sender_psid, webhook_event.postback);
       }
 
     });

@@ -29,6 +29,7 @@ const handleMessage = (sender_psid, received_message) => {
           response = {
             "text" : "Something went wrong. Please try again"
           }
+          console.log(err);
         } else if (key) {
           request( {
             "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
