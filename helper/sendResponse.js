@@ -81,7 +81,6 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
             "id": sender_psid
         },
         "message": {
-            "text": 'Here is the lastest ' + key + ' news.',
             "attachment": {
                 "type": "template",
                 "payload": {
