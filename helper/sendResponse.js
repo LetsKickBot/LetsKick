@@ -81,11 +81,12 @@ function teamNewsURL(sender_psid, url) {
             "id": sender_psid
         },
         "message": {
-            "text": 'Here is the team news',
+            // "text": 'Here is the team news',
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
+                    "image_aspect_ratio": 'square',
                     "elements": [{
                             "title": 'News',
                             "subtitle": 'Welcome to Lets Kick',

@@ -55,7 +55,7 @@ function matchLookup(sender_psid, key, status) {
                         }
 
                         // In case user want to see the Team News
-                        else if (status.includes('Team News ')) {
+                        else if (status.includes('Team News')) {
                             sendResponse.teamNewsURL(sender_psid, url);
                             console.log("replied");
                         }
