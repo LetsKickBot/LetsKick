@@ -1,13 +1,9 @@
 //'use strict';
-//import Data from './utils/get_data';
-
 // Imports dependencies and set up http server
-const
-  request = require('request'),
-  express = require('express'),
-  bodyParser = require('body-parser'),
-  app = express()
-
+const request = require('request');
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
 const webhooks = require('./routes/webhooks');
 
 // endpoint

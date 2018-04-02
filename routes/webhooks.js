@@ -1,7 +1,5 @@
-const
-    bodyParser = require('body-parser'),
-    express = require('express');
-
+const bodyParser = require('body-parser');
+const express = require('express');
 const receive = require('../helper/receive-message');
 
 const router = express.Router();
@@ -17,29 +15,30 @@ router.post('/', (req, res) => {
     // Iterates over each entry - there may be multiple if batched
     body.entry.forEach(function(entry) {
 
-      // Gets the message. entry.messaging is an array, but
-      // will only ever contain one message, so we get index 0
+      // Gets the message
       let webhook_event = entry.messaging[0];
-      let user_message = webhook_event.message.text;
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
 
-      // Checks if the event is a message or postback and
-      // pass the event to the appropriate handler function
-      if (webhook_event.message) {
+      // Handle quick reply buttons
+      if (webhook_event.message.quick_reply) {
+        receive.handleQuickReply(sender_psid, webhook_event.message);
+
+      // Handle Direct Message
+      } else if (webhook_event.message) {
         receive.handleMessage(sender_psid, webhook_event.message);
+
+      // Handle Postback
       } else if (webhook_event.postback) {
         receive.handlePostback(sender_psid, webhook_event.postback);
       }
-
     });
 
     // Returns a '200 OK' response to all requests
     res.status(200).send('EVENT_RECEIVED');
 
   } else {
-    // Return a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
   }
 

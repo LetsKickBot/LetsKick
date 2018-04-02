@@ -2,6 +2,10 @@
 
 Let's Kick Messenger Bot
 
+## How use run it
+  - npm install
+  - pip install -r requirements.txt
+
 ### Functionalities
   - Clubs and players lookup
   - Reminder before matches
@@ -10,4 +14,4 @@ Let's Kick Messenger Bot
 ### Stacks used
   - Nodejs
   
-Contributed by Tuan Nguyen, Bao Nguyen, Phuoc Do
+Contributed by Tuan Nguyen, Bao Nguyen, Phuoc Do, Thinh Nguyen
