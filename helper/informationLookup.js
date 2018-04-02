@@ -7,6 +7,7 @@ const handleCases = require('./handleCases.js');
 // Look for the next match of the Team
 function matchLookup(sender_psid, key, status) {
     let response;
+    console.log(status);
     key = dataFormat.checkDuplicate(key);
     response = {
         "text": `Please wait, we are retrieving information for the ${key}...`

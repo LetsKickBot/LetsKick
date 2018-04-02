@@ -103,6 +103,7 @@ const handleQuickReply = (sender_psid, received_message) => {
         // Get the player name from Payload
         var team = key.substring(18, key.length);
         var status = key.substring(7, 16);
+        console.log(status);
 
         // In case user want the Next Match Schedule
         if (key.includes('Next Match_')) {
