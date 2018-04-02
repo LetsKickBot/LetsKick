@@ -13,8 +13,8 @@ def main():
     window_size = "1200,800"
     timeout = 20
     team_name = sys.argv[1]
-    chrome_options = Options()
 
+    chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
     chrome_options.add_argument("--headless")
@@ -42,6 +42,8 @@ def main():
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     url = browser.current_url
+    newHtml = browser.page_source
+    newSoup = BeautifulSoup(newHtml, "html.parser")
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
 
     browser.switch_to_window(browser.window_handles[1])
@@ -60,12 +62,18 @@ def main():
     home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
     away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
     date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
+    imageUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+    newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
+    newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
 
     print(home_team)
     print(away_team)
     print(date)
     print(game_details)
     print(url)
+    print(imageUrl)
+    print(newsTitle)
+    print(newsSubtitle)
 
     browser.quit()
     sys.exit(0)

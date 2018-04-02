@@ -44,7 +44,10 @@ function matchLookup(sender_psid, key, status) {
                         let team = dataFormat.teamFormat(reply[0], reply[1], key);
                         let league = reply[3];
                         let url = reply[4];
-
+                        let imageUrl = reply[5];
+                        let newsTitle = reply[6];
+                        let newsSubtitle = reply[7];
+/
                         // In case user want the Next Match Schedule
                         if (status.includes('Next Match')) {
                             response = {
@@ -56,7 +59,7 @@ function matchLookup(sender_psid, key, status) {
 
                         // In case user want to see the Team News
                         else if (status.includes('Team News')) {
-                            sendResponse.teamNewsURL(sender_psid, url);
+                            sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
                             console.log("replied");
                         }
                     })

@@ -75,26 +75,26 @@ function teamOptionChoose(sender_psid, response, payloadCharacteristic, group, v
     });
 }
 
-function teamNewsURL(sender_psid, url, key) {
+function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
     let request_body = {
         "recipient": {
             "id": sender_psid
         },
         "message": {
-            // "text": 'Here is the team news',
+            "text": 'Here is the lastest ' + key + ' news.',
             "attachment": {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
-                    "image_aspect_ratio": 'square',
+                    "image_aspect_ratio": 'rectangle',
                     "elements": [{
-                            "title": key + ' News',
-                            "subtitle": 'Breaking News......',
-                            "image_url": 'http://givemesport.azureedge.net/images/18/03/10/e401263ac48b0be301316480f1361e60/960.jpg',
+                            "title": newsTitle,
+                            "subtitle": newsSubtitle,
+                            "image_url": imageUrl,
                             "buttons": [{
                                     "type": 'web_url',
                                     "url": url,
-                                    "title": 'More Information'
+                                    "title": 'View More'
                                 }, {
                                     "type": 'element_share',
                                     "share_contents": {
@@ -102,15 +102,15 @@ function teamNewsURL(sender_psid, url, key) {
                                             "type": "template",
                                             "payload": {
                                                 "template_type": "generic",
-                                                "image_aspect_ratio": 'square',
+                                                "image_aspect_ratio": 'rectangle',
                                                 "elements": [{
-                                                        "title": key + ' News',
-                                                        "subtitle": 'Breaking News......',
-                                                        "image_url": 'http://givemesport.azureedge.net/images/18/03/10/e401263ac48b0be301316480f1361e60/960.jpg',
+                                                        "title": newsTitle,
+                                                        "subtitle": newsSubtitle,
+                                                        "image_url": imageUrl,
                                                         "buttons": [{
                                                                 "type": 'web_url',
                                                                 "url": url,
-                                                                "title": 'More Information'
+                                                                "title": 'View More'
                                                             }]
                                                         }]
                                                     }
