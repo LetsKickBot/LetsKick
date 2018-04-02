@@ -135,7 +135,6 @@ const handleQuickReply = (sender_psid, received_message) => {
             sendResponse.directMessage(sender_psid, response);
         }
     }
-}
 
 module.exports = {
   handleMessage,
