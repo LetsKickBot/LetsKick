@@ -83,7 +83,7 @@ function playerLookup(sender_psid, key) {
             let playerURL = reply[1];
             let playerInfo = reply[2];
             let playerTitle = reply[2] + ' - ' + reply[3];
-            let playerSubtitle = reply[3];
+            let playerSubtitle = reply[4];
             for (var eachData = 5; eachData < 7; eachData++) {
                 reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
                 playerSubtitle += '\n' + reply[eachData];
