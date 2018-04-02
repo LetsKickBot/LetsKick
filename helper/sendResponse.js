@@ -75,11 +75,8 @@ function teamOptionChoose(sender_psid, response, payloadCharacteristic, group, v
     });
 }
 
+// Post a form of quick reply to the server with teamNews
 function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
-    console.log(url);
-    console.log(imageUrl);
-    console.log(newsTitle);
-    console.log(newsSubtitle);
     let request_body = {
         "recipient": {
             "id": sender_psid

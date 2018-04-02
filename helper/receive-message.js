@@ -110,7 +110,7 @@ const handleQuickReply = (sender_psid, received_message) => {
             info.matchLookup(sender_psid, team, status);
         }
 
-        // In case user want to see the Team News
+        // In case user want to see the lastest Team News
         else if (key.includes('Team News _')) {
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, team, status);

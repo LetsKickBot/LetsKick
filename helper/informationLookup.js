@@ -7,7 +7,6 @@ const handleCases = require('./handleCases.js');
 // Look for the next match of the Team
 function matchLookup(sender_psid, key, status) {
     let response;
-    console.log(status);
     key = dataFormat.checkDuplicate(key);
     response = {
         "text": `Please wait, we are retrieving information for the ${key}...`
@@ -47,7 +46,7 @@ function matchLookup(sender_psid, key, status) {
                         let imageUrl = reply[5];
                         let newsTitle = reply[6];
                         let newsSubtitle = reply[7];
-                        
+
                         // In case user want the Next Match Schedule
                         if (status.includes('Next Match')) {
                             response = {
@@ -57,10 +56,19 @@ function matchLookup(sender_psid, key, status) {
                             sendResponse.directMessage(sender_psid, response);
                         }
 
-                        // In case user want to see the Team News
+                        // In case user want to see the lastest Team News
                         else if (status.includes('Team News')) {
                             sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
                             console.log("replied");
+                        }
+
+                        // In case user want to see the Next Match Squad
+                        else if (status.includes('Team Squad')) {
+                            response = {
+                                "text": 'We are currently working on this feature. Please come back another time.'
+                            }
+                            console.log(replied);
+                            sendResponse.directMessage(sender_psid, response);
                         }
                     })
                 }
