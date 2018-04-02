@@ -112,7 +112,7 @@ function teamNewsURL(sender_psid, url, key) {
                                                                 "url": url,
                                                                 "title": 'More Information'
                                                             }]
-                                                        }
+                                                        }]
                                                     }
                                                 }
                                             }
