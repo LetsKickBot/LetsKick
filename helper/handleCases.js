@@ -16,7 +16,7 @@ function getStart(sender_psid) {
                   let userName = body.first_name;
 
                 // Create the payload for a basic text message
-                  response = {
+                  let response = {
                     "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today?`
                   }
                   sendResponse.quickReply(sender_psid, response, 'START', key);
