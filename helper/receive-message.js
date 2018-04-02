@@ -1,89 +1,144 @@
-const
-  bodyParser = require('body-parser'),
-  request = require('request'),
-  Data = require('../data/get_data'),
-  task = require('./function')
+const bodyParser = require('body-parser');
+const request = require('request');
+const info = require('./informationLookup.js');
+const handleCases = require('./handleCases.js');
+const sendResponse = require('./sendResponse.js');
+const dataFormat = require('./dataFormat.js');
 
+let handleChoice = {};
+
+// Handle direct Message
 const handleMessage = (sender_psid, received_message) => {
-  let response;
-  console.log(received_message.text);
-  let key = task.checkSpell(received_message.text);
-  console.log(key);
+    let response;
+    let key = received_message.text;
+    console.log('User Message: ', key);
 
-  // Check if the message contains text
-  if (key == "") {
-    response = {
-      "text": `We cannot find your team, please give us another one!`
+    // Users begin the search
+    if (key.toUpperCase().includes("START")) {
+        handleCases.getStart(sender_psid);
     }
-    console.log("no teamname");
-    callSendAPI(sender_psid, response);
-  } else {
-    response = {
-      "text": `\`\`\`\nPlease wait, we are retrieving information for ${key}...\n\`\`\``
-    };
-    console.log("waiting...");
-    callSendAPI(sender_psid, response);
 
-    Data.get_next_game(key, (err, reply) => {
-        if (err) {
-          response = {
-            "text" : "Something went wrong. Please try again"
-          }
-          console.log(err);
-        } else if (key) {
-          request( {
-            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-            "method": "GET",
-            "json": true,
-          }, (err, res, body) => {
-          // Test
-            if (err) {
-              console.error("Unable to send message:" + err);
-            } else {
-              let time = task.timeFormat(reply[2], body.timezone);
-              let team = task.teamFormat(reply[0], reply[1], key);
-            // Create the payload for a basic text message
-              response = {
-                "text": `${team[0]} will play against ${team[1]} on *${time}*, for ${reply[3]}.`
-              }
-              console.log("replied");
-              callSendAPI(sender_psid, response); 
+    // Look for the Player
+    else if (handleChoice[sender_psid] == 'PLAYER') {
+        console.log("In player section")
+        delete handleChoice[sender_psid];
+        info.playerLookup(sender_psid, key);
+    }
+
+    // Look for the Team
+    else if (handleChoice[sender_psid] == 'TEAM') {
+        console.log("In team section")
+        key = dataFormat.checkDuplicate(key);
+        console.log('team: ', key);
+        if (typeof(key) == 'object') {
+            let newKey = dataFormat.completeName(key);
+            response = {
+              "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
             }
-        })
-      }
-    })
-  }
-}
-
-const callSendAPI = (sender_psid, response) => {
-  // Construct the message body
-  let request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": response
-  }
-
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (err) {
-      console.error("Unable to send message:" + err);
+            sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
+        } else {
+            handleCases.teamOptions(sender_psid, key);
+        }
     }
-  });
+
+    // Instruction for user to use the Bot
+    else {
+        response = {
+            "text": `Please begin by typing in 'Start'`,
+        };
+        sendResponse.directMessage(sender_psid, response);
+    }
 }
 
-function handlePostback (sender_psid, received_postback) {
+// Handle Quick Reply
+const handleQuickReply = (sender_psid, received_message) => {
+    let response;
+    let key = received_message.quick_reply.payload;
 
+    // Identify the category user want to search
+    if (key.includes('START_')) {
+        if (key.includes('Team')) {
+            handleChoice[sender_psid] = 'TEAM';
+            handleCases.popularTeam(sender_psid);
+        }
+        else {
+            handleChoice[sender_psid] = 'PLAYER';
+            handleCases.popularPlayer(sender_psid);
+        }
+    }
+
+    // Handle duplicate Team Names
+    if (key.includes('TEAMLIST')) {
+
+        // Get the team Name from Payload.
+        key = key.slice(9);
+        handleCases.teamOptions(sender_psid, key);
+    }
+
+    // Handle the popular Teams
+    if (key.includes('POPULART_')) {
+
+        // Get the team name from Payload
+        var team = key.substring(9, key.length);
+        console.log('Line 83 Team: ', team)
+        if (key.includes(team)) {
+            handleCases.teamOptions(sender_psid, team);
+        }
+    }
+
+    // Handle the popular Players
+    else if (key.includes('POPULARP_')) {
+
+        // Get the player name from Payload
+        var player = key.substring(9, key.length);
+        if (key.includes(player)) {
+            delete handleChoice[sender_psid];
+            info.playerLookup(sender_psid, player);
+        }
+    }
+
+    // Handle the Next Match option payload
+    if (key.includes('OPTION_')) {
+
+        // Get the player name from Payload
+        var team = key.substring(18, key.length);
+        console.log('Line 105 Team: ', team)
+        var status = key.substring(7, 18);
+
+        // In case user want the Next Match Schedule
+        if (key.includes('Next Match_')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the lastest Team News
+        else if (key.includes('Team News _')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the Next Match Squad
+        else if (key.includes('Team Squad_')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+    }
+
+    // Continues the bot by asking the initial question: Team or Player?
+    if (key.includes('CONTINUE')) {
+        if (key.includes('Yes')) {
+            handleCases.getStart(sender_psid);
+        }
+        else {
+            response = {
+                'text': 'Thank you for asking me! Please come back anytime you want!'
+            }
+            sendResponse.directMessage(sender_psid, response);
+        }
+    }
 }
 
 module.exports = {
   handleMessage,
-  callSendAPI,
-  handlePostback
+  handleQuickReply
 };

@@ -13,7 +13,8 @@ import os
 def main():
     window_size = "1200,800"
     timeout = 20
-    player_name = sys.argv[1]
+    # player_name = sys.argv[1]
+    player_name = 'Messi'
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
@@ -43,7 +44,9 @@ def main():
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'player-spec')))
     html = browser.page_source
+    url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
+    print(url)
 
     spec = soup.find('div', {'class': 'player-spec'})
     cols = spec.find_all('dl')
@@ -59,10 +62,7 @@ def main():
 
     for i in range(0, len(col2dd)):
         print(col2dt[i].text + col2dd[i].text)
-
-    if len(col2dd) < 3:
-        print('POB: ')
-    print(browser.current_url)
+    # print('\nFor more information: ' + browser.current_url)
 
     browser.quit()
     sys.exit(0)
