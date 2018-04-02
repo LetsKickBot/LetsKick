@@ -6,14 +6,14 @@ function getStart(sender_psid) {
     let key = ['Player', 'Team'];
     request({
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "full_name"},
+                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
                 "method": "GET",
                 "json": true,
               }, (err, res, body) => {
                 if (err) {
                   console.error("Unable to send message:" + err);
                 } else {
-                  let userName = body.full_name;
+                  let userName = body.first_name;
 
                 // Create the payload for a basic text message
                   let response = {
