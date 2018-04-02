@@ -111,13 +111,14 @@ const handleQuickReply = (sender_psid, received_message) => {
         }
 
         // In case user want to see the Team News
-        else if (key.includes('Team News ')) {
+        else if (key.includes('Team News _')) {
             delete handleChoice[sender_psid];
+            console.log(status);
             info.matchLookup(sender_psid, team, status);
         }
 
         // In case user want to see the Next Match Squad
-        else if (key.includes('Team Squad')) {
+        else if (key.includes('Team Squad_')) {
             delete handleChoice[sender_psid];
             info.matchLookup(sender_psid, team, status);
         }

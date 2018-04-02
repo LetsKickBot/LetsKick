@@ -45,7 +45,7 @@ function matchLookup(sender_psid, key, status) {
                         let url = reply[4];
 
                         // In case user want the Next Match Schedule
-                        if (status == 'Next Match') {
+                        if (status.includes('Next Match')) {
                             response = {
                                 "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
                             };
@@ -54,7 +54,7 @@ function matchLookup(sender_psid, key, status) {
                         }
 
                         // In case user want to see the Team News
-                        else if (status == 'Team News ') {
+                        else if (status.includes('Team News ')) {
                             sendResponse.teamNewsURL(sender_psid, url);
                             console.log("replied");
                         }
