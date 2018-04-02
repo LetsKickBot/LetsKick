@@ -61,12 +61,12 @@ function completeName(key) {
 
 function timeFormat(inputTime, timezone) {
     let time = new Date(inputTime);
-    let hour = time.getHours();
     let minute = time.getMinutes();
     let date = time.getDate();
     let month = time.getMonth() + 1;
     let noon = " AM";
     time.setHours(time.getHours() + timezone);
+    let hour = time.getHours();
     if (hour > 12) {
         hour -= 12;
         noon = " PM";
@@ -83,8 +83,8 @@ function timeFormat(inputTime, timezone) {
 
 function teamFormat(team1, team2, key) {
     let check = team1;
-    team1 = "Home team: " + team1.toUpperCase();
-    team2 = "Away team: " + team2.toUpperCase(); 
+    team1 = "Home team: " + team1;
+    team2 = "Away team: " + team2;
     if (check != key) {
         return [team2, team1];
     }
@@ -97,7 +97,19 @@ function quickReplyFormat(payloadCharacteristic, value) {
         var map = {};
         map['content_type'] = 'text';
         map['title'] = value[i];
-        map['payload'] = payloadCharacteristic + '_' + value[i].toUpperCase();
+        map['payload'] = payloadCharacteristic + '_' + value[i];
+        finalArr.push(map);
+    }
+    return finalArr;
+}
+
+function teamOptionFormat(payloadCharacteristic, value, key) {
+    let finalArr = [];
+    for (var i = 0; i < value.length; i++) {
+        var map = {};
+        map['content_type'] = 'text';
+        map['title'] = value[i];
+        map['payload'] = payloadCharacteristic  + '_' + value[i] + '_' + key;
         finalArr.push(map);
     }
     return finalArr;
@@ -108,5 +120,6 @@ module.exports = {
     completeName,
     timeFormat,
     teamFormat,
-    quickReplyFormat
+    quickReplyFormat,
+    teamOptionFormat
 }

@@ -8,7 +8,7 @@ const dataFormat = require('./dataFormat.js');
 let handleChoice = {};
 
 // Handle direct Message
-const handleMessage = (sender_psid, received_message) => {
+function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
 
@@ -33,20 +33,11 @@ const handleMessage = (sender_psid, received_message) => {
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
         } else {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, key);
+            console.log(handleChoice);
+            handleCases.teamOptions(sender_psid, key);
         }
     }
 
-    // Test reminder function for later use.
-    else if (key.toUpperCase().includes('REMINDER')) {
-        handleCases.getReminder(sender_psid);
-    }
-
-    else if (key.toUpperCase().includes('TEST')) {
-        handleCases.getTest(sender_psid);
-    }
-    
     // Instruction for user to use the Bot
     else {
         response = {
@@ -57,25 +48,20 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 // Handle Quick Reply
-const handleQuickReply = (sender_psid, received_message) => {
+function handleQuickReply(sender_psid, received_message) {
     let response;
     let key = received_message.quick_reply.payload;
 
     // Identify the category user want to search
     if (key.includes('START_')) {
-        if (key.includes('TEAM')) {
+        if (key.includes('Team')) {
             handleChoice[sender_psid] = 'TEAM';
-            response = {
-                'text': 'Please give us the Team Name.'
-            }
+            handleCases.popularTeam(sender_psid);
         }
         else {
             handleChoice[sender_psid] = 'PLAYER';
-            response = {
-                'text': 'Please give us the Player Name.'
-            }
+            handleCases.popularPlayer(sender_psid);
         }
-        sendResponse.directMessage(sender_psid, response);
     }
 
     // Handle duplicate Team Names
@@ -83,13 +69,59 @@ const handleQuickReply = (sender_psid, received_message) => {
 
         // Get the team Name from Payload.
         key = key.slice(9);
-        delete handleChoice[sender_psid];
-        info.matchLookup(sender_psid, key);
+        handleCases.teamOptions(sender_psid, key);
+    }
+
+    // Handle the popular Teams
+    if (key.includes('POPULART_')) {
+
+        // Get the team name from Payload
+        var team = key.substring(9, key.length);
+        if (key.includes(team)) {
+            handleCases.teamOptions(sender_psid, team);
+        }
+    }
+
+    // Handle the popular Players
+    else if (key.includes('POPULARP_')) {
+
+        // Get the player name from Payload
+        var player = key.substring(9, key.length);
+        if (key.includes(player)) {
+            delete handleChoice[sender_psid];
+            info.playerLookup(sender_psid, player);
+        }
+    }
+
+    // Handle the Next Match option payload
+    if (key.includes('OPTION_')) {
+
+        // Get the player name from Payload
+        var team = key.substring(18, key.length);
+        var status = key.substring(7, 18);
+
+        // In case user want the Next Match Schedule
+        if (key.includes('Next Match_')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the lastest Team News
+        else if (key.includes('Team News _')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
+
+        // In case user want to see the Next Match Squad
+        else if (key.includes('Team Squad_')) {
+            delete handleChoice[sender_psid];
+            info.matchLookup(sender_psid, team, status);
+        }
     }
 
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
-        if (key.includes('YES')) {
+        if (key.includes('Yes')) {
             handleCases.getStart(sender_psid);
         }
         else {
@@ -98,28 +130,6 @@ const handleQuickReply = (sender_psid, received_message) => {
             }
             sendResponse.directMessage(sender_psid, response);
         }
-    }
-
-    if (key.includes('REMINDER')) {
-        if (key.includes('YES')) {
-            response = {
-                'text': `IT'S 3 MINUTES ALREADY!!!`
-            };
-            setTimeout(() => {
-                sendResponse.directMessage(sender_psid, response);
-            }, 180000)
-
-
-        }
-        else {
-            response = {
-                'text': `Guess that a NO.`
-            };
-            sendResponse.directMessage(sender_psid, response);
-        }
-        setTimeout(() => {
-            handleCases.getContinue(sender_psid);
-        }, 1500)
     }
 }
 

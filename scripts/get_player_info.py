@@ -17,7 +17,6 @@ def main():
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM')
-
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--window-size=%s" % window_size)
@@ -54,13 +53,10 @@ def main():
     col2dt = cols[1].find_all('dt')
 
     name = spec.find('h1').text
-
-    searchName = name.replace(' ', '_')
-    wikiPage = "https://en.wikipedia.org/wiki/" + searchName
     imageHTML = spec.find('img')
     imageURL = imageHTML['src']
     print(imageURL)
-    print(wikiPage)
+    print(browser.current_url)
     print(name)
     for i in range(0, len(col1dd)):
         print(col1dt[i].text + col1dd[i].text)

@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+log.txt
 
 # Python lib
 lib/
@@ -64,4 +65,3 @@ typings/
 *.xml
 *.iml
 .idea/
-

@@ -5,17 +5,16 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha __tests__/bottest.js",
-    "start": "babel-node app.js --presets es2015,stage-2"
+    "start": "node app.js > log.txt"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "fb-local-chat-bot": "^0.1.42",
     "node-fetch": "^1.7.3",
-    "python-shell": "^0.4.0",
-    "syncprompt": "^2.0.0"
+    "prompt-sync": "^4.1.6",
+    "python-shell": "^0.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -23,8 +22,6 @@
     "babel-preset-stage-2": "^6.24.1",
     "jest": "^22.1.4",
     "messenger-bot-tester": "^1.3.1",
-    "mocha": "^5.0.1",
-    "readline-sync": "^1.4.9",
-    "rxjs": "^5.5.7"
+    "mocha": "^5.0.1"
   }
 }
