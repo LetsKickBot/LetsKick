@@ -76,6 +76,10 @@ function teamOptionChoose(sender_psid, response, payloadCharacteristic, group, v
 }
 
 function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
+    console.log(url);
+    console.log(imageUrl);
+    console.log(newsTitle);
+    console.log(newsSubtitle);
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -85,7 +89,7 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
                 "type": "template",
                 "payload": {
                     "template_type": "generic",
-                    "image_aspect_ratio": 'rectangle',
+                    "image_aspect_ratio": 'square',
                     "elements": [{
                             "title": newsTitle,
                             "subtitle": newsSubtitle,
@@ -101,7 +105,7 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
                                             "type": "template",
                                             "payload": {
                                                 "template_type": "generic",
-                                                "image_aspect_ratio": 'rectangle',
+                                                "image_aspect_ratio": 'square',
                                                 "elements": [{
                                                         "title": newsTitle,
                                                         "subtitle": newsSubtitle,
