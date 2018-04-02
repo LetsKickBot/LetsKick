@@ -75,7 +75,7 @@ function teamOptionChoose(sender_psid, response, payloadCharacteristic, group, v
     });
 }
 
-function teamNewsURL(sender_psid, url) {
+function teamNewsURL(sender_psid, url, key) {
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -88,14 +88,35 @@ function teamNewsURL(sender_psid, url) {
                     "template_type": "generic",
                     "image_aspect_ratio": 'square',
                     "elements": [{
-                            "title": 'News',
-                            "subtitle": 'Welcome to Lets Kick',
+                            "title": key + ' News',
+                            "subtitle": 'Breaking News......',
                             "image_url": 'http://givemesport.azureedge.net/images/18/03/10/e401263ac48b0be301316480f1361e60/960.jpg',
                             "buttons": [{
                                     "type": 'web_url',
                                     "url": url,
                                     "title": 'More Information'
-                                }]
+                                }, {
+                                    "type": 'element_share',
+                                    "share_contents": {
+                                        "attachment": {
+                                            "type": "template",
+                                            "payload": {
+                                                "template_type": "generic",
+                                                "image_aspect_ratio": 'square',
+                                                "elements": [{
+                                                        "title": key + ' News',
+                                                        "subtitle": 'Breaking News......',
+                                                        "image_url": 'http://givemesport.azureedge.net/images/18/03/10/e401263ac48b0be301316480f1361e60/960.jpg',
+                                                        "buttons": [{
+                                                                "type": 'web_url',
+                                                                "url": url,
+                                                                "title": 'More Information'
+                                                            }]
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }]
                         }]
                 }
             }
