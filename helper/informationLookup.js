@@ -47,7 +47,7 @@ function matchLookup(sender_psid, key, status) {
                         let imageUrl = reply[5];
                         let newsTitle = reply[6];
                         let newsSubtitle = reply[7];
-/
+                        
                         // In case user want the Next Match Schedule
                         if (status.includes('Next Match')) {
                             response = {
