@@ -4,7 +4,60 @@ const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 const handleCases = require('./handleCases.js');
 
+let nextMatchList = require('../data/nextMatchList.json');
+let bucket = require('../data/firebase.js');
+let db = bucket.db;
+
+
 // Look for the next match of the Team
+function teamNameLookup(sender_psid, key) {
+    let flag = true;
+    key = key.toUpperCase();
+
+    db.ref('Teams/').on("child_added", (teamName) => {
+        if (flag == true && teamName.key.includes(key)) {
+            flag = false;
+            handleCases.teamOptions(sender_psid, teamName.val().name, teamName.val().imageURL);
+        }
+        db.ref('Teams/').off();
+    });
+
+    setTimeout(() => {
+        if (flag == true) {
+            response = {
+                'text': 'Please wait, we are retrieving information...'
+            };
+            sendResponse.directMessage(sender_psid, response);
+
+            data.get_team_name(key, (err, reply) => {
+                if (err) {
+                    response = {
+                        "text" : `Cannot find the Team: ${key}`
+                    }
+                    sendResponse.directMessage(sender_psid, response);
+                }
+                else {
+                    flag = false;
+                    console.log(key);
+                    var teamName = reply[0];
+                    var imageURL = reply[1];
+                    if (!(reply[0].toUpperCase().includes(key.toUpperCase()))) {
+                        db.ref('Teams/' + key.toUpperCase() + '/').set({
+                            'name': teamName,
+                            'imageURL': imageURL 
+                        });
+                    }
+                    db.ref('Teams/' + teamName.toUpperCase() + '/').set({
+                        'name': teamName,
+                        'imageURL': imageURL 
+                    });
+                    handleCases.teamOptions(sender_psid, teamName, imageURL);
+                }
+            })
+        }
+    }, 1200);
+}
+
 function matchLookup(sender_psid, key, status) {
     let response;
     key = dataFormat.checkDuplicate(key);
@@ -82,43 +135,85 @@ function matchLookup(sender_psid, key, status) {
 
 // Look for the specific player
 function playerLookup(sender_psid, key) {
-    console.log(key);
-    let response = {
-        "text": `Please wait, we are retrieving player information...`
-    };
-    console.log("waiting...");
-    sendResponse.directMessage(sender_psid, response);
 
-    // Async function to look for the Player.
-    data.get_player_info(key, (err, reply) => {
-        if (err) {
-            response = {
-                'text' : `Cannot find player: ${key}`
-            };
-            sendResponse.directMessage(sender_psid, response);
-        } 
-        else if (key) {
-            let playerImageURL = reply[0];
-            let playerURL = reply[1];
-            let playerInfo = reply[2];
-            let playerTitle = reply[2] + ' - ' + reply[3];
-            let playerSubtitle = reply[4];
-            for (var eachData = 5; eachData < 7; eachData++) {
-                reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
-                playerSubtitle += '\n' + reply[eachData];
-            }
-            console.log("replied");
-            sendResponse.imageReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
+    let flag = true;
+    key = key.toUpperCase();
+
+    db.ref('Players/').on("child_added", (playerName) => {
+        if (flag == true && playerName.key.includes(key)) {
+            flag = false;
+            sendResponse.imageReply(sender_psid, playerName.val().playerTitle,
+                playerName.val().playerSubtitle, playerName.val().playerImageURL,
+                playerName.val().playerURL);
+            setTimeout(() => {
+                handleCases.getContinue(sendResponse_psid);
+            }, 1500)
+            db.ref('Players/').off()
         }
+    });
 
-        // Check if user want to continue searching
-        setTimeout(() => {
-            handleCases.getContinue(sender_psid);
-        }, 1500)
-    })
+    setTimeout(() => {
+        if (flag == true) {
+            console.log(key);
+            let response = {
+                "text": `Please wait, we are retrieving player information...`
+            };
+            console.log("waiting...");
+            sendResponse.directMessage(sender_psid, response);
+
+            // Async function to look for the Player.
+            data.get_player_info(key, (err, reply) => {
+                if (err) {
+                    response = {
+                        'text' : `Cannot find player: ${key}`
+                    };
+                    sendResponse.directMessage(sender_psid, response);
+                } 
+                else {
+                    flag = false;
+                    let playerImageURL = reply[0];
+                    let playerURL = reply[1];
+                    let playerName = reply[2];
+                    let playerTitle = reply[2] + ' - ' + reply[3];
+                    let playerSubtitle = reply[4];
+                    for (var eachData = 5; eachData < 7; eachData++) {
+                        reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
+                        playerSubtitle += '\n' + reply[eachData];
+                    }
+
+
+                    if (!(reply[2].toUpperCase().includes(key.toUpperCase()))) {
+                        db.ref('Players/' + key.toUpperCase() + '/').set({
+                            'playerURL': playerURL,
+                            'playerTitle': playerTitle,
+                            'playerSubtitle': playerSubtitle,
+                            'playerImageURL': playerImageURL
+                        });
+                    }
+
+                    db.ref('Players/' + playerName.toUpperCase() + '/').set({
+                        'playerURL': playerURL,
+                        'playerTitle': playerTitle,
+                        'playerSubtitle': playerSubtitle,
+                        'playerImageURL': playerImageURL
+                    });
+
+
+
+                    console.log("replied");
+                    sendResponse.imageReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
+                }
+                // Check if user want to continue searching
+                setTimeout(() => {
+                    handleCases.getContinue(sender_psid);
+                }, 1500)
+            })
+        }
+    }, 1200);
 }
 
 module.exports = {
+    teamNameLookup,
     matchLookup,
     playerLookup
 }

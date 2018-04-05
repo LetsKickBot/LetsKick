@@ -1,0 +1,142 @@
+{
+  "AC MILAN": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/103.png&h=150&w=150",
+    "name": "AC Milan"
+  },
+  "AREMA INDONESIA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/default-team-logo-500.png&w=100&h=100",
+    "name": "Arema Indonesia"
+  },
+  "ARSENAL": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/359.png&h=150&w=150",
+    "name": "Arsenal"
+  },
+  "AS ROMA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/104.png&h=150&w=150",
+    "name": "AS Roma"
+  },
+  "ATLETICO MADRID": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1068.png&h=150&w=150",
+    "name": "Atletico Madrid"
+  },
+  "BARCELONA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/83.png&h=150&w=150",
+    "name": "Barcelona"
+  },
+  "BAYERN MUNICH": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/132.png&h=150&w=150",
+    "name": "Bayern Munich"
+  },
+  "BORUSSIA DORTMUND": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/124.png&h=150&w=150",
+    "name": "Borussia Dortmund"
+  },
+  "BRAZIL": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/bra.png&h=150&w=150",
+    "name": "Brazil"
+  },
+  "CANADA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/can.png&h=150&w=150",
+    "name": "Canada"
+  },
+  "CHELSEA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/363.png&h=150&w=150",
+    "name": "Chelsea"
+  },
+  "CHILE": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/chi.png&h=150&w=150",
+    "name": "Chile"
+  },
+  "CRYSTAL PALACE": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/384.png&h=150&w=150",
+    "name": "Crystal Palace"
+  },
+  "EVERTON": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/368.png&h=150&w=150",
+    "name": "Everton"
+  },
+  "FC BASEL": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/989.png&h=150&w=150",
+    "name": "FC Basel"
+  },
+  "FRANCE": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/fra.png&h=150&w=150",
+    "name": "France"
+  },
+  "INTER MILAN": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/110.png&h=150&w=150",
+    "name": "Internazionale"
+  },
+  "INTERNAZIONALE": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/110.png&h=150&w=150",
+    "name": "Internazionale"
+  },
+  "JUVENTUS": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/111.png&h=150&w=150",
+    "name": "Juventus"
+  },
+  "MANCHESTER CITY": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/382.png&h=150&w=150",
+    "name": "Manchester City"
+  },
+  "MANCHESTER UNITED": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/360.png&h=150&w=150",
+    "name": "Manchester United"
+  },
+  "MYANMAR": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/mya.png&h=150&w=150",
+    "name": "Myanmar"
+  },
+  "NETHERLANDS": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/ned.png&h=150&w=150",
+    "name": "Netherlands"
+  },
+  "NEWCASTLE UNITED": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/361.png&h=150&w=150",
+    "name": "Newcastle United"
+  },
+  "PARIS SAINT-GERMAIN": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/160.png&h=150&w=150",
+    "name": "Paris Saint-Germain"
+  },
+  "REAL BETIS": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/244.png&h=150&w=150",
+    "name": "Real Betis"
+  },
+  "SAMPDORIA": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/2734.png&h=150&w=150",
+    "name": "Sampdoria"
+  },
+  "SEVILLA ATLETICO": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/8449.png&h=150&w=150",
+    "name": "Sevilla Atletico"
+  },
+  "SWANSEA CITY": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/318.png&h=150&w=150",
+    "name": "Swansea City"
+  },
+  "THAILAND": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/tha.png&h=150&w=150",
+    "name": "Thailand"
+  },
+  "TOTTENHAM HOTSPUR": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/367.png&h=150&w=150",
+    "name": "Tottenham Hotspur"
+  },
+  "UNITED STATES": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/usa.png&h=150&w=150",
+    "name": "United States"
+  },
+  "UZBEKISTAN": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/uzb.png&h=150&w=150",
+    "name": "Uzbekistan"
+  },
+  "VIETNAM": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/countries/500/vie.png&h=150&w=150",
+    "name": "Vietnam"
+  },
+  "WERDER BREMEN": {
+    "imageURL": "http://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/137.png&h=150&w=150",
+    "name": "Werder Bremen"
+  }
+}

@@ -103,16 +103,26 @@ function quickReplyFormat(payloadCharacteristic, value) {
     return finalArr;
 }
 
-function teamOptionFormat(payloadCharacteristic, value, key) {
+function teamOptionFormat(payloadCharacteristic, choices, teamName) {
     let finalArr = [];
-    for (var i = 0; i < value.length; i++) {
+    for (var i = 0; i < choices.length - 1; i++) {
         var map = {};
-        map['content_type'] = 'text';
-        map['title'] = value[i];
-        map['payload'] = payloadCharacteristic  + '_' + value[i] + '_' + key;
+        map['type'] = 'postback';
+        map['title'] = choices[i];
+        map['payload'] = payloadCharacteristic  + choices[i] + '_' + teamName;
         finalArr.push(map);
     }
+    finalArr.push({
+        'type': 'web_url',
+        'url': 'https://en.wikipedia.org/wiki/' + teamName.replace(/\s/g,'_') + '_F.C.',
+        'title': 'Wikipedia'
+    })
     return finalArr;
+}
+
+function decodeUnderline(key) {
+    var startPoint = key.indexOf('_') + 1;
+    return key.slice(startPoint);
 }
 
 module.exports = {
@@ -121,5 +131,6 @@ module.exports = {
     timeFormat,
     teamFormat,
     quickReplyFormat,
-    teamOptionFormat
+    teamOptionFormat,
+    decodeUnderline
 }

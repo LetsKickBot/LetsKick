@@ -25,12 +25,9 @@ function getStart(sender_psid) {
 }
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
-function teamOptions(sender_psid, key) {
-    let group = ['Next Match', 'Team News ', 'Team Squad']
-    let response = {
-        'text': `You choose ${key}. Please select the options you want for the team!`
-    }
-    sendResponse.teamOptionChoose(sender_psid, response, 'OPTION', group, key);
+function teamOptions(sender_psid, teamName, imageURL) {
+    let choices = ['Next Match', 'Team News', 'Team Squad'];
+    sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
 // Provides 11 popular team options

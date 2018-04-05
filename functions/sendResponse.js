@@ -50,17 +50,37 @@ function quickReply(sender_psid, response, payloadCharacteristic, value) {
 }
 
 // Post a form of quick reply to the server
-function teamOptionChoose(sender_psid, response, payloadCharacteristic, group, value) {
-    let jsonFile = dataFormat.teamOptionFormat(payloadCharacteristic, group, value);
+function teamOptionChoose(sender_psid, teamName, payloadCharacteristic, choices, imageURL) {
+
+    // Sample Button: 
+    // {
+    //     'type' : 'postback',
+    //     'title': 'Next Match',
+    //     'payload': 'OPTIONNext Match_Chelsea'
+    // }
+    let button = dataFormat.teamOptionFormat(payloadCharacteristic, choices, teamName);
     let request_body = {
         "recipient": {
             "id": sender_psid
         },
         "message": {
-            "text": response["text"],
-            "quick_replies": jsonFile
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": 'generic',
+                    "image_aspect_ratio": 'square',
+                    "elements": 
+                    [
+                        {
+                            "title": teamName.toUpperCase(),
+                            "image_url": imageURL,
+                            "buttons": button
+                        }
+                    ]
+                }
+            }
         }
-    };
+    }
 
     // Send the HTTP request to the Messenger Platform
     request({
