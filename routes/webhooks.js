@@ -1,6 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
-const receive = require('../helper/receive-message');
+const receive = require('../functions/receive-message');
 
 const router = express.Router();
 
@@ -46,7 +46,6 @@ router.post('/', (req, res) => {
 
 // Adds support for GET requests to our webhook
 router.get('/', (req, res) => {
-
   // Your verify token. Should be a random string.
   let VERIFY_TOKEN = "<YOUR_VERIFY_TOKEN>";
 

@@ -5,22 +5,22 @@ const sendResponse = require('./sendResponse.js');
 function getStart(sender_psid) {
     let key = ['Player', 'Team'];
     request({
-                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
-                "method": "GET",
-                "json": true,
-              }, (err, res, body) => {
-                if (err) {
-                  console.error("Unable to send message:" + err);
-                } else {
-                  let userName = body.first_name;
+        "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+        "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "first_name"},
+        "method": "GET",
+        "json": true,
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+            } else {
+            let userName = body.first_name;
 
-                // Create the payload for a basic text message
-                  let response = {
-                    "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today?`
-                  }
-                  sendResponse.quickReply(sender_psid, response, 'START', key);
-                }
+            // Create the payload for a basic text message
+            let response = {
+                "text": `Hi ${userName}, Welcome to our Lets Kick bot. What are you looking for today?`
+            }
+            sendResponse.quickReply(sender_psid, response, 'START', key);
+        }
     })
 }
 
@@ -35,7 +35,7 @@ function teamOptions(sender_psid, key) {
 
 // Provides 11 popular team options
 function popularTeam(sender_psid) {
-    let key = ['Manchester United', 'Read Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
+    let key = ['Manchester United', 'Real Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
     let response = {
         'text': `Please type a team you want or choose from some quick options below!!!`
     }

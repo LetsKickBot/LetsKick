@@ -53,13 +53,16 @@ def main():
     col2dt = cols[1].find_all('dt')
 
     name = spec.find('h1').text
+    imageHTML = spec.find('img')
+    imageURL = imageHTML['src']
+    print(imageURL)
+    print(browser.current_url)
     print(name)
     for i in range(0, len(col1dd)):
         print(col1dt[i].text + col1dd[i].text)
 
     for i in range(0, len(col2dd)):
         print(col2dt[i].text + col2dd[i].text)
-    # print('\nFor more information: ' + browser.current_url)
 
     browser.quit()
     sys.exit(0)

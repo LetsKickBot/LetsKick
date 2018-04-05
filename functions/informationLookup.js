@@ -9,7 +9,7 @@ function matchLookup(sender_psid, key, status) {
     let response;
     key = dataFormat.checkDuplicate(key);
     response = {
-        "text": `Please wait, we are retrieving information for the ${key}...`
+        "text": `Please wait, we are retrieving the team information...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
@@ -74,7 +74,6 @@ function matchLookup(sender_psid, key, status) {
                 }
             })
         }
-
         setTimeout(() => {
             handleCases.getContinue(sender_psid);
         }, 1500)
@@ -85,7 +84,7 @@ function matchLookup(sender_psid, key, status) {
 function playerLookup(sender_psid, key) {
     console.log(key);
     let response = {
-        "text": `Please wait, we are retrieving information for the ${key}...`
+        "text": `Please wait, we are retrieving player information...`
     };
     console.log("waiting...");
     sendResponse.directMessage(sender_psid, response);
@@ -97,18 +96,19 @@ function playerLookup(sender_psid, key) {
                 'text' : `Cannot find player: ${key}`
             };
             sendResponse.directMessage(sender_psid, response);
-        }
+        } 
         else if (key) {
-            let playerInfo = reply[0].toUpperCase();
-            for (var eachData = 1; eachData < reply.length; eachData++) {
-                reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);
-                playerInfo += '\n' + reply[eachData];
+            let playerImageURL = reply[0];
+            let playerURL = reply[1];
+            let playerInfo = reply[2];
+            let playerTitle = reply[2] + ' - ' + reply[3];
+            let playerSubtitle = reply[4];
+            for (var eachData = 5; eachData < 7; eachData++) {
+                reply[eachData] = reply[eachData].charAt(0).toUpperCase() + reply[eachData].slice(1);  
+                playerSubtitle += '\n' + reply[eachData];
             }
-            response = {
-                'text': playerInfo
-            };
             console.log("replied");
-            sendResponse.directMessage(sender_psid, response);
+            sendResponse.imageReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
         }
 
         // Check if user want to continue searching

@@ -8,10 +8,9 @@ const dataFormat = require('./dataFormat.js');
 let handleChoice = {};
 
 // Handle direct Message
-const handleMessage = (sender_psid, received_message) => {
+function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
-    console.log(key);
 
     // Users begin the search
     if (key.toUpperCase().includes("START")) {
@@ -20,15 +19,12 @@ const handleMessage = (sender_psid, received_message) => {
 
     // Look for the Player
     else if (handleChoice[sender_psid] == 'PLAYER') {
-        console.log("In Player section");
-        console.log(handleChoice);
         delete handleChoice[sender_psid];
         info.playerLookup(sender_psid, key);
     }
 
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
-        console.log("In Team section");
         key = dataFormat.checkDuplicate(key);
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
@@ -52,7 +48,7 @@ const handleMessage = (sender_psid, received_message) => {
 }
 
 // Handle Quick Reply
-const handleQuickReply = (sender_psid, received_message) => {
+function handleQuickReply(sender_psid, received_message) {
     let response;
     let key = received_message.quick_reply.payload;
 
