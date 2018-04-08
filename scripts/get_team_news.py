@@ -1,4 +1,4 @@
-
+from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 import sys
 import os
+import bs4
 
 def main():
     window_size = "1200,800"
@@ -19,7 +20,7 @@ def main():
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
     chrome_options.add_argument("--headless")
-    # chrome_options.add_argument("no-sandbox")
+    chrome_options.add_argument("no-sandbox")
 
     browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get("http://www.espn.com/espn/story/_/id/21087319/soccer-teams")
@@ -42,41 +43,36 @@ def main():
         browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Club')]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
-    url = browser.current_url
-    # newHtml = browser.page_source
-    # newSoup = BeautifulSoup(newHtml, "html.parser")
+    newHtml = browser.page_source
+    newSoup = BeautifulSoup(newHtml, "html.parser")
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
+
     browser.switch_to_window(browser.window_handles[1])
     browser.implicitly_wait(1)
 
-    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'next-match')))
-    browser.find_element_by_class_name('next-match').find_element_by_xpath(".//*[contains(text(), 'Game Details')]").click()
+    
+    imageUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+    newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
+    newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
 
-    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='competitors sm-score']")))
-    html = browser.page_source
-    soup = BeautifulSoup(html, "html.parser")
+    # Get the deep news
+    # entireNewsUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a')['href']
+    # entireNewsUrl = 'http://www.espn.com' + entireNewsUrl
+    # browser.get(entireNewsUrl)
+    # newest = browser.page_source
+    # newestSoup = BeautifulSoup(newest, "html.parser")
 
-    game_details = soup.find('div', {'class': 'game-details header'}).text
-    game_details = game_details.strip()
-    next_game = soup.find('div', {'class': 'competitors sm-score'})
-    home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
-    away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
-    date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
-    # imageUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
-    # newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
-    # newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
-    # teamImageUrl = newSoup.find('head').findAll('meta')[11]['content']
+    print(imageUrl)
+    print(newsTitle)
+    print(newsSubtitle)
+    # entireNews = ''
 
-    print(home_team)
-    print(away_team)
-    print(date)
-    print(game_details)
-    print(url)
-    # print(imageUrl)
-    # print(newsTitle)
-    # print(newsSubtitle)
-    # print(teamImageUrl)
+    # for text in newestSoup.find('div', {'class': 'article-body'}).findAll('p'):
+    #     for i in text:
+    #         if (type(i) == bs4.element.NavigableString):
+    #             entireNews += i
 
+    # print(entireNews)
     browser.quit()
     sys.exit(0)
 
