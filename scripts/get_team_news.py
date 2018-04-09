@@ -13,8 +13,7 @@ import bs4
 def main():
     window_size = "1200,800"
     timeout = 20
-    # team_name = sys.argv[1]
-    team_name = 'Manchester United'
+    team_name = sys.argv[1]
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
@@ -34,16 +33,17 @@ def main():
     browser.implicitly_wait(2)
 
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-results")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
     except TimeoutException:
         print("Cannot find team")
         browser.quit()
         sys.exit(1)
     else:
-        browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Club')]").click()
+        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     newHtml = browser.page_source
+    url = browser.current_url
     newSoup = BeautifulSoup(newHtml, "html.parser")
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
 
@@ -55,24 +55,11 @@ def main():
     newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
     newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
 
-    # Get the deep news
-    # entireNewsUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a')['href']
-    # entireNewsUrl = 'http://www.espn.com' + entireNewsUrl
-    # browser.get(entireNewsUrl)
-    # newest = browser.page_source
-    # newestSoup = BeautifulSoup(newest, "html.parser")
-
+    print(url)
     print(imageUrl)
     print(newsTitle)
     print(newsSubtitle)
-    # entireNews = ''
 
-    # for text in newestSoup.find('div', {'class': 'article-body'}).findAll('p'):
-    #     for i in text:
-    #         if (type(i) == bs4.element.NavigableString):
-    #             entireNews += i
-
-    # print(entireNews)
     browser.quit()
     sys.exit(0)
 
