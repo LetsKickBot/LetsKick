@@ -32,13 +32,13 @@ def main():
     browser.implicitly_wait(4)
 
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-results")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li[1]/a/div[2]/span[1]")))
     except TimeoutException:
         print("Cannot find team")
         browser.quit()
         sys.exit(1)
     else:
-        browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Club')]").click()
+        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li[1]/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     url = browser.current_url
