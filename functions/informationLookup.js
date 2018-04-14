@@ -4,7 +4,6 @@ const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 const handleCases = require('./handleCases.js');
 
-let nextMatchList = require('../data/nextMatchList.json');
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
 
