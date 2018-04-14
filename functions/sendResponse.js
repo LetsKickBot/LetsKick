@@ -161,7 +161,7 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
     });
 }
 
-function imageReply(sender_psid, title, subtitle, imageURL, infoURL) {
+function playerReply(sender_psid, title, subtitle, imageURL, infoURL) {
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -184,6 +184,11 @@ function imageReply(sender_psid, title, subtitle, imageURL, infoURL) {
                                     "type": 'web_url',
                                     "url": infoURL,
                                     "title": 'More Information'
+                                },
+                                {
+                                    "type": 'postback',
+                                    "title": 'Back',
+                                    "payload": "OPTIONBack"
                                 }
                             ]
                         }
@@ -209,5 +214,5 @@ module.exports = {
     quickReply,
     teamOptionChoose,
     teamNewsURL,
-    imageReply
+    playerReply
 };

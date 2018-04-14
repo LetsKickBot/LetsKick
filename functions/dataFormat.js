@@ -105,18 +105,13 @@ function quickReplyFormat(payloadCharacteristic, value) {
 
 function teamOptionFormat(payloadCharacteristic, choices, teamName) {
     let finalArr = [];
-    for (var i = 0; i < choices.length - 1; i++) {
+    for (var i = 0; i < choices.length; i++) {
         var map = {};
         map['type'] = 'postback';
         map['title'] = choices[i];
         map['payload'] = payloadCharacteristic  + choices[i] + '_' + teamName;
         finalArr.push(map);
     }
-    finalArr.push({
-        'type': 'web_url',
-        'url': 'https://en.wikipedia.org/wiki/' + teamName.replace(/\s/g,'_') + '_F.C.',
-        'title': 'Wikipedia'
-    })
     return finalArr;
 }
 

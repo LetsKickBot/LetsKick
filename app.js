@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 1337, () => {
 
   console.log('webhook is listening on port ', process.env.PORT || 1337);
-  console.log(process.env.FIREBASE_CONFIG);
+
 });
 
 app.use(bodyParser.json());

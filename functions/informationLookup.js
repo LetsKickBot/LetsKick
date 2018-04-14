@@ -141,7 +141,7 @@ function playerLookup(sender_psid, key) {
     db.ref('Players/').on("child_added", (playerName) => {
         if (flag == true && playerName.key.includes(key)) {
             flag = false;
-            sendResponse.imageReply(sender_psid, playerName.val().playerTitle,
+            sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
                 playerName.val().playerSubtitle, playerName.val().playerImageURL,
                 playerName.val().playerURL);
             setTimeout(() => {
@@ -200,7 +200,7 @@ function playerLookup(sender_psid, key) {
 
 
                     console.log("replied");
-                    sendResponse.imageReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
+                    sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
                 }
                 // Check if user want to continue searching
                 setTimeout(() => {
