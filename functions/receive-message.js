@@ -4,6 +4,10 @@ const info = require('./informationLookup.js');
 const handleCases = require('./handleCases.js');
 const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
+const data = require('../data/get_data.js');
+
+let bucket = require('../data/firebase.js');
+let db = bucket.db;
 
 let handleChoice = {};
 
@@ -26,15 +30,18 @@ function handleMessage(sender_psid, received_message) {
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
         key = dataFormat.checkDuplicate(key);
+        console.log(key);   
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
               "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
-        } else {
-            console.log(handleChoice);
-            handleCases.teamOptions(sender_psid, key);
+        } 
+        
+        else {
+            delete handleChoice[sender_psid];
+            info.teamNameLookup(sender_psid, key);
         }
     }
 
@@ -53,7 +60,7 @@ function handleQuickReply(sender_psid, received_message) {
     let key = received_message.quick_reply.payload;
 
     // Identify the category user want to search
-    if (key.includes('START_')) {
+    if (key.includes('START')) {
         if (key.includes('Team')) {
             handleChoice[sender_psid] = 'TEAM';
             handleCases.popularTeam(sender_psid);
@@ -73,20 +80,19 @@ function handleQuickReply(sender_psid, received_message) {
     }
 
     // Handle the popular Teams
-    if (key.includes('POPULART_')) {
+    if (key.includes('POPULART')) {
 
         // Get the team name from Payload
-        var team = key.substring(9, key.length);
-        if (key.includes(team)) {
-            handleCases.teamOptions(sender_psid, team);
-        }
+        var teamName = dataFormat.decodeUnderline(key);
+        delete handleChoice[sender_psid];
+        info.teamNameLookup(sender_psid, teamName);
     }
 
     // Handle the popular Players
-    else if (key.includes('POPULARP_')) {
+    else if (key.includes('POPULARP')) {
 
         // Get the player name from Payload
-        var player = key.substring(9, key.length);
+        var player = dataFormat.decodeUnderline(key);
         if (key.includes(player)) {
             delete handleChoice[sender_psid];
             info.playerLookup(sender_psid, player);
@@ -94,29 +100,14 @@ function handleQuickReply(sender_psid, received_message) {
     }
 
     // Handle the Next Match option payload
-    if (key.includes('OPTION_')) {
+    if (key.includes('OPTION')) {
 
         // Get the player name from Payload
         var team = key.substring(18, key.length);
         var status = key.substring(7, 18);
 
-        // In case user want the Next Match Schedule
-        if (key.includes('Next Match_')) {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, team, status);
-        }
-
-        // In case user want to see the lastest Team News
-        else if (key.includes('Team News _')) {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, team, status);
-        }
-
-        // In case user want to see the Next Match Squad
-        else if (key.includes('Team Squad_')) {
-            delete handleChoice[sender_psid];
-            info.matchLookup(sender_psid, team, status);
-        }
+        delete handleChoice[sender_psid];
+        info.matchLookup(sender_psid, team, status);
     }
 
     // Continues the bot by asking the initial question: Team or Player?
@@ -133,7 +124,23 @@ function handleQuickReply(sender_psid, received_message) {
     }
 }
 
+function handlePostback(sender_psid, messagePostback) {
+    let payload = messagePostback.payload;
+    let response;
+    if (payload.includes('OPTION')) {
+        teamName = dataFormat.decodeUnderline(payload);
+        info.matchLookup(sender_psid, teamName, payload);
+    }
+    else {
+        response = {
+            'text': 'Nothing to do!'
+        };
+        sendResponse.directMessage(sender_psid, response);
+    }
+}
+
 module.exports = {
   handleMessage,
-  handleQuickReply
+  handleQuickReply,
+  handlePostback
 };

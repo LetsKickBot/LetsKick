@@ -15,5 +15,12 @@ module.exports = {
       spawn('killall', ['-9', 'chromedriver']);
       callback(err, data);
     })
+  },
+  get_team_name: function (team_name, callback) {
+    PythonShell.run('./scripts/get_team_name.py', {args: [team_name]}, (err, data) => {
+      spawn('killall', ['-9', 'chrome']);
+      spawn('killall', ['-9', 'chromedriver']);
+      callback(err, data);
+    })
   }
 };
