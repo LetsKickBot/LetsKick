@@ -8,7 +8,6 @@ from bs4 import BeautifulSoup
 
 import sys
 import os
-import bs4
 
 def main():
     window_size = "1200,800"

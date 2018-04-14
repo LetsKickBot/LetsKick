@@ -32,17 +32,17 @@ def main():
     browser.implicitly_wait(2)
 
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-results")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
     except TimeoutException:
         print("Cannot find team")
         browser.quit()
         sys.exit(1)
     else:
-        browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Club')]").click()
+        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
-    # newHtml = browser.page_source
-    # newSoup = BeautifulSoup(newHtml, "html.parser")
+    newHtml = browser.page_source
+    newSoup = BeautifulSoup(newHtml, "html.parser")
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
     browser.switch_to_window(browser.window_handles[1])
     browser.implicitly_wait(1)
@@ -60,13 +60,13 @@ def main():
     home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
     away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
     date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
-    # teamImageUrl = newSoup.find('head').findAll('meta')[11]['content']
+    teamImageUrl = newSoup.find('head').findAll('meta')[11]['content']
 
     print(home_team)
     print(away_team)
     print(date)
     print(game_details)
-    # print(teamImageUrl)
+    print(teamImageUrl)
 
     browser.quit()
     sys.exit(0)
