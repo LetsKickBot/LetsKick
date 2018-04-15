@@ -14,7 +14,6 @@ let onGoing = [];
 function teamNameLookup(sender_psid, key) {
     let flag = true;
     key = key.toUpperCase();
-    console.log(onGoing);
 
     // Check if the team name is already in the database or not
     db.ref('Teams/').on("child_added", (teamName) => {
