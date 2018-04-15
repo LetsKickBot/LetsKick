@@ -58,77 +58,115 @@ function teamNameLookup(sender_psid, key) {
 }
 
 function matchLookup(sender_psid, key, status) {
-    let response;
-    key = dataFormat.checkDuplicate(key);
-    response = {
-        "text": `Please wait, we are retrieving the team information...`
-    };
-    console.log("waiting...");
-    sendResponse.directMessage(sender_psid, response);
+    let flag = true;
+    key = key.toUpperCase();
 
-    // Async function to look for the Next Match.
-    data.get_next_game(key, (err, reply) => {
-        if (err) {
-            response = {
-                "text" : `Cannot find the Team: ${key}`
+    db.ref('Matches/').on("child_added", (match) => {
+        if (flag == true && match.val().includes(key)) {
+            var flag = false;
+            var team = dataFormat.teamFormat(match.val().team1, match.val().team2, key);
+            var time = match.val().time;
+            var league = match.val().league;
+            if (status.includes('Next Match')) {
+                response = {
+                    "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
+                };
+                console.log("replied");
+                sendResponse.directMessage(sender_psid, response);
             }
-            sendResponse.directMessage(sender_psid, response);
+
+            setTimeout(() => {
+                handleCases.getContinue(sender_psid);
+            }, 1500)
+
+            db.ref('Matches/').off()
         }
-        else if (key) {
-            request({
-                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                "method": "GET",
-                "json": true,
-            }, (err, res, body) => {
+    })
+
+    setTimeout(() => {
+        if (flag == true) {
+            let response;
+            key = dataFormat.checkDuplicate(key);
+            response = {
+                "text": `Please wait, we are retrieving the team information...`
+            };
+            console.log("waiting...");
+            sendResponse.directMessage(sender_psid, response);
+
+            // Async function to look for the Next Match.
+            data.get_next_game(key, (err, reply) => {
                 if (err) {
-                    console.error("Unable to send message:" + err);
+                    response = {
+                        "text" : `Cannot find the Team: ${key}`
+                    }
+                    sendResponse.directMessage(sender_psid, response);
                 }
-                else {
+                else if (key) {
                     request({
                         "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                         "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
                         "method": "GET",
                         "json": true,
                     }, (err, res, body) => {
-                        let time = dataFormat.timeFormat(reply[2], body.timezone);
-                        let team = dataFormat.teamFormat(reply[0], reply[1], key);
-                        let league = reply[3];
-                        let url = reply[4];
-                        let imageUrl = reply[5];
-                        let newsTitle = reply[6];
-                        let newsSubtitle = reply[7];
-
-                        // In case user want the Next Match Schedule
-                        if (status.includes('Next Match')) {
-                            response = {
-                                "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
-                            };
-                            console.log("replied");
-                            sendResponse.directMessage(sender_psid, response);
+                        if (err) {
+                            console.error("Unable to send message:" + err);
                         }
+                        else {
+                            request({
+                                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                "method": "GET",
+                                "json": true,
+                            }, (err, res, body) => {
+                                let time = dataFormat.timeFormat(reply[2], body.timezone);
+                                let team = dataFormat.teamFormat(reply[0], reply[1], key);
+                                let league = reply[3];
+                                let url = reply[4];
+                                let imageUrl = reply[5];
+                                let newsTitle = reply[6];
+                                let newsSubtitle = reply[7];
 
-                        // In case user want to see the lastest Team News
-                        else if (status.includes('Team News')) {
-                            sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
-                            console.log("replied");
-                        }
 
-                        // In case user want to see the Next Match Squad
-                        else if (status.includes('Team Squad')) {
-                            response = {
-                                "text": 'We are currently working on this feature. Please come back another time.'
-                            }
-                            console.log(replied);
-                            sendResponse.directMessage(sender_psid, response);
+                                db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
+                                    'team1': reply[0],
+                                    'team2': reply[1],
+                                    'time': time,
+                                    'league': league,
+                                    'url': url
+                                });
+
+                                // In case user want the Next Match Schedule
+                                if (status.includes('Next Match')) {
+                                    response = {
+                                        "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
+                                    };
+                                    console.log("replied");
+                                    sendResponse.directMessage(sender_psid, response);
+                                }
+
+                                // In case user want to see the lastest Team News
+                                else if (status.includes('Team News')) {
+                                    sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
+                                    console.log("replied");
+                                }
+
+                                // In case user want to see the Next Match Squad
+                                else if (status.includes('Team Squad')) {
+                                    response = {
+                                        "text": 'We are currently working on this feature. Please come back another time.'
+                                    }
+                                    console.log(replied);
+                                    sendResponse.directMessage(sender_psid, response);
+                                }
+                            })
                         }
                     })
                 }
+                setTimeout(() => {
+                    handleCases.getContinue(sender_psid);
+                }, 1500)
             })
         }
-        setTimeout(() => {
-            handleCases.getContinue(sender_psid);
-        }, 1500)
     })
 }
 
@@ -145,7 +183,7 @@ function playerLookup(sender_psid, key) {
                 playerName.val().playerSubtitle, playerName.val().playerImageURL,
                 playerName.val().playerURL);
             setTimeout(() => {
-                handleCases.getContinue(sendResponse_psid);
+                handleCases.getContinue(sender_psid);
             }, 1500)
             db.ref('Players/').off()
         }

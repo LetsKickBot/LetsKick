@@ -128,12 +128,12 @@ function handlePostback(sender_psid, messagePostback) {
     let payload = messagePostback.payload;
     let response;
     if (payload.includes('OPTION')) {
-        if (payload.includes('Next Match')) {
+        if (payload.includes('Back')) {
+            handleMessage(sender_psid, {'text':'START'});
+        }
+        else {
             teamName = dataFormat.decodeUnderline(payload);
             info.matchLookup(sender_psid, teamName, payload);
-        }
-        else if (payload.includes('Back')) {
-            handleMessage(sender_psid, {'text':'START'});
         }
     }
     else {
