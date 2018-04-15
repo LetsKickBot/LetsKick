@@ -60,7 +60,7 @@ function getContinue(sender_psid) {
 function setReminder(sender_psid, match) {
     let key = ['Yes', 'No'];
     let response = {
-        'text': 'Do you want to Set Remminder for this match?'
+        'text': 'Do you want to Set Reminder for this match?'
     }
     sendResponse.sendReminder(sender_psid, response, 'REMINDER', match);
 }

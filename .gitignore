@@ -66,5 +66,3 @@ typings/
 *.iml
 .idea/
 
-# Test Folders
-__tests__/
