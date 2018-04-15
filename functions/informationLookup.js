@@ -67,7 +67,7 @@ function matchLookup(sender_psid, key, status) {
     key = key.toUpperCase();
 
     db.ref('Matches/').orderByChild('time').on("child_added", (match) => {
-        if (flag == true && match.key.includes(key)) {
+        if (flag == true && match.key.includes(key) && status.includes('Next Match')) {
             flag = false;
                 var team1 = match.val().team1;
                 var team2 = match.val().team2;
@@ -170,139 +170,174 @@ function matchLookup(sender_psid, key, status) {
             console.log("waiting...");
             sendResponse.directMessage(sender_psid, response);
 
-            // Async function to look for the Next Match.
-            data.get_next_game(key, (err, reply) => {
-                if (err) {
-                    response = {
-                        "text" : `Cannot find the Team: ${key}`
-                    }
-                    sendResponse.directMessage(sender_psid, response);
-                }
-                else if (key) {
-                    request({
-                        "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                        "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                        "method": "GET",
-                        "json": true,
-                    }, (err, res, body) => {
-                        if (err) {
-                            console.error("Unable to send message:" + err);
+            
+            // In case user want the Next Match Schedule
+            if (status.includes('Next Match')) {
+
+                // Async function to look for the Next Match.
+                data.get_next_game(key, (err, reply) => {
+                    if (err) {
+                        response = {
+                            "text" : `Cannot find the Team: ${key}`
                         }
-                        else {
-                            request({
-                                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                                "method": "GET",
-                                "json": true,
-                            }, (err, res, body) => {
-                                flag = false;
-                                let time = dataFormat.timeFormat(reply[2], body.timezone);
-                                let team = dataFormat.teamFormat(reply[0], reply[1], key);
-                                let league = reply[3];
-                                let url = reply[4];
-                                let imageUrl = reply[5];
-                                let newsTitle = reply[6];
-                                let newsSubtitle = reply[7];
+                        sendResponse.directMessage(sender_psid, response);
+                    }
+                    else if (key) {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            if (err) {
+                                console.error("Unable to send message:" + err);
+                            }
+                            else {
+                                request({
+                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                    "method": "GET",
+                                    "json": true,
+                                }, (err, res, body) => {
+                                    flag = false;
+                                    let time = dataFormat.timeFormat(reply[2], body.timezone);
+                                    let team = dataFormat.teamFormat(reply[0], reply[1], key);
+                                    let league = reply[3];
+                                    let url = reply[4];
 
-                                // Gets team name if it does not exist in the database yet.
-                                updateDB.dbTeamName(reply[0]);
-                                updateDB.dbTeamName(reply[1]);
+                                    // Gets team name if it does not exist in the database yet.
+                                    updateDB.dbTeamName(reply[0]);
+                                    updateDB.dbTeamName(reply[1]);
 
-                                db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
-                                    'team1': reply[0],
-                                    'team2': reply[1],
-                                    'time': reply[2],
-                                    'league': league,
-                                    'url': url
-                                });
+                                    db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
+                                        'team1': reply[0],
+                                        'team2': reply[1],
+                                        'time': reply[2],
+                                        'league': league,
+                                        'url': url
+                                    });
 
-                                // Updates match information after the game
-                                setTimeout(() => {
-                                    var removeIndex = onGoing.indexOf(reply[0]);
-                                    onGoing.splice(removeIndex, 1);
-                                    data.get_next_game(reply[0], (err, reply1) => {
-                                        if (!err) {
-                                            console.log("FOUNDED MATCH: " + reply[0]);
-                                            db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
-                                                'team1': reply1[0],
-                                                'team2': reply1[1],
-                                                'time': reply1[2],
-                                                'league': reply1[3],
-                                                'url': reply1[4]
-                                            });
-                                            db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
+                                    // Updates match information after the game
+                                    setTimeout(() => {
+                                        var removeIndex = onGoing.indexOf(reply[0]);
+                                        onGoing.splice(removeIndex, 1);
+                                        data.get_next_game(reply[0], (err, reply1) => {
+                                            if (!err) {
+                                                console.log("FOUNDED MATCH: " + reply[0]);
+                                                db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
+                                                    'team1': reply1[0],
+                                                    'team2': reply1[1],
+                                                    'time': reply1[2],
+                                                    'league': reply1[3],
+                                                    'url': reply1[4]
+                                                });
+                                                db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
 
-                                            // Gets team name if it does not exist in the database yet.
-                                            updateDB.dbTeamName(reply1[0]);
-                                            updateDB.dbTeamName(reply1[1]);
-                                        }
-                                        else {
-                                            console.log("Error occured on Server for MATCH: " + reply[0]);
-                                        }
-                                    })
-                                }, (new Date(reply[2])).getTime() - (new Date()).getTime() + 8100000);
-                                onGoing.push(reply[0]);
+                                                // Gets team name if it does not exist in the database yet.
+                                                updateDB.dbTeamName(reply1[0]);
+                                                updateDB.dbTeamName(reply1[1]);
+                                            }
+                                            else {
+                                                console.log("Error occured on Server for MATCH: " + reply[0]);
+                                            }
+                                        })
+                                    }, (new Date(reply[2])).getTime() - (new Date()).getTime() + 8100000);
+                                    onGoing.push(reply[0]);
 
-                                // Updates match information after the game
-                                setTimeout(() => {
-                                    var removeIndex = onGoing.indexOf(reply[1]);
-                                    onGoing.splice(removeIndex, 1);
-                                    data.get_next_game(reply[1], (err, reply1) => {
-                                        if (!err) {
-                                            console.log("FOUNDED MATCH: " + reply[1]);
-                                            db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
-                                                'team1': reply1[0],
-                                                'team2': reply1[1],
-                                                'time': reply1[2],
-                                                'league': reply1[3],
-                                                'url': reply1[4]
-                                            });
-                                            db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
+                                    // Updates match information after the game
+                                    setTimeout(() => {
+                                        var removeIndex = onGoing.indexOf(reply[1]);
+                                        onGoing.splice(removeIndex, 1);
+                                        data.get_next_game(reply[1], (err, reply1) => {
+                                            if (!err) {
+                                                console.log("FOUNDED MATCH: " + reply[1]);
+                                                db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
+                                                    'team1': reply1[0],
+                                                    'team2': reply1[1],
+                                                    'time': reply1[2],
+                                                    'league': reply1[3],
+                                                    'url': reply1[4]
+                                                });
+                                                db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
 
-                                            // Gets team name if it does not exist in the database yet.
-                                            updateDB.dbTeamName(reply1[0]);
-                                            updateDB.dbTeamName(reply1[1]);
-                                        }
-                                        else {
-                                            console.log("Error occured on Server for MATCH: " + reply[1]);
-                                        }
-                                    })
+                                                // Gets team name if it does not exist in the database yet.
+                                                updateDB.dbTeamName(reply1[0]);
+                                                updateDB.dbTeamName(reply1[1]);
+                                            }
+                                            else {
+                                                console.log("Error occured on Server for MATCH: " + reply[1]);
+                                            }
+                                        })
 
-                                }, (new Date(reply[2])).getTime() - (new Date()).getTime() + 8100000);
-                                onGoing.push(reply[1]);
+                                    }, (new Date(reply[2])).getTime() - (new Date()).getTime() + 8100000);
+                                    onGoing.push(reply[1]);
 
-
-                                // In case user want the Next Match Schedule
-                                if (status.includes('Next Match')) {
                                     response = {
                                         "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
                                     };
                                     console.log("replied");
                                     sendResponse.directMessage(sender_psid, response);
-                                }
+                                })
+                            }
+                        })
+                        setTimeout(() => {
+                            handleCases.setReminder(sender_psid, reply[0].toUpperCase() + '_' + reply[1].toUpperCase());
+                        }, 1000);
+                    }
+                })
+            } 
 
-                                // In case user want to see the lastest Team News
-                                else if (status.includes('Team News')) {
+            // In case user want to see the lastest Team News
+            else if (status.includes('Team News')) {
+                // Async function to look for the Next Match.
+                data.get_team_news(key, (err, reply) => {
+                    if (err) {
+                        response = {
+                            "text" : `Cannot find the Team: ${key}`
+                        }
+                        sendResponse.directMessage(sender_psid, response);
+                    }
+                    else if (key) {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            if (err) {
+                                console.error("Unable to send message:" + err);
+                            }
+                            else {
+                                request({
+                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                    "method": "GET",
+                                    "json": true,
+                                }, (err, res, body) => {
+                                    let url = reply[0];
+                                    let imageUrl = reply[1];
+                                    let newsTitle = reply[2];
+                                    let newsSubtitle = reply[3];
+
                                     sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
                                     console.log("replied");
-                                }
 
-                                // In case user want to see the Next Match Squad
-                                else if (status.includes('Team Squad')) {
-                                    response = {
-                                        "text": 'We are currently working on this feature. Please come back another time.'
-                                    }
-                                    console.log(replied);
-                                    sendResponse.directMessage(sender_psid, response);
-                                }
-                            })
-                        }
-                    })
-                    setTimeout(() => {
-                        handleCases.setReminder(sender_psid, reply[0].toUpperCase() + '_' + reply[1].toUpperCase());
-                    }, 1000);
-                }
-            })
+                                    // In case user want to see the Next Match Squad
+                                    // else if (status.includes('Team Squad')) {
+                                    //     response = {
+                                    //         "text": 'We are currently working on this feature. Please come back another time.'
+                                    //     }
+                                    //     console.log(replied);
+                                    //     sendResponse.directMessage(sender_psid, response);
+                                    // }
+
+                                })
+                            }
+                        })
+                    }
+
+                })
+            }
         }
     }, 1200)
 }

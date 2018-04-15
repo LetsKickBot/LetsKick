@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const app = express();
 const webhooks = require('./routes/webhooks');
 
-// endpoint
+//endpoint
 app.get('/', (req, res) => {
-  res.send('Server ON!');
+	res.send('Server ON!');
 })
 
 // Sets server port and logs message on success

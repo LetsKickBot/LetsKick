@@ -43,7 +43,9 @@ def main():
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'player-spec')))
     html = browser.page_source
+    url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
+    print(url)
 
     spec = soup.find('div', {'class': 'player-spec'})
     cols = spec.find_all('dl')

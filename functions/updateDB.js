@@ -10,10 +10,10 @@ let db = bucket.db;
 function dbTeamName(key) {
     db.ref('Teams/').child(key.toUpperCase()).once('value', function(snapshot) {
         if (!snapshot.exists()) {
-        	console.log('Looking for: ' + key.toUpperCase());
+            console.log('Looking for: ' + key.toUpperCase());
             data.get_team_name(key, (err, reply) => {
                 if (!err) {
-                	console.log("FOUNDED TEAM: " + key);
+                    console.log("FOUNDED TEAM: " + key);
                     var teamName = reply[0];
                     var imageURL = reply[1];
                     if (!(reply[0].toUpperCase().includes(key.toUpperCase()))) {
@@ -28,7 +28,7 @@ function dbTeamName(key) {
                     });
                 }
                 else {
-                	console.log("Error occured on Server for TEAM: " + key);
+                    console.log("Error occured on Server for TEAM: " + key);
                 }
             })
         }
@@ -36,5 +36,5 @@ function dbTeamName(key) {
 }
 
 module.exports = {
-	dbTeamName
+    dbTeamName
 }

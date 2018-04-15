@@ -154,6 +154,11 @@ function handlePostback(sender_psid, messagePostback) {
             sendResponse.directMessage(sender_psid, response); 
         }
 
+        // else if (payload.includes('Team News')) {
+        //     teamName = dataFormat.decodeUnderline(payload);
+        //     info.matchLookup(sender_psid, teamName, payload);
+        // }
+
         // Looking for match's information
         else {
             teamName = dataFormat.decodeUnderline(payload);
