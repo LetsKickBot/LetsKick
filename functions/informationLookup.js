@@ -60,9 +60,11 @@ function teamNameLookup(sender_psid, key) {
 function matchLookup(sender_psid, key, status) {
     let flag = true;
     key = key.toUpperCase();
+    console.log(key);   
 
     db.ref('Matches/').on("child_added", (match) => {
-        if (flag == true && match.val().includes(key)) {
+        if (flag == true && match.key.includes(key)) {
+            console.log("ABC");
             var flag = false;
             var team = dataFormat.teamFormat(match.val().team1, match.val().team2, key);
             var time = match.val().time;
@@ -81,7 +83,7 @@ function matchLookup(sender_psid, key, status) {
 
             db.ref('Matches/').off()
         }
-    })
+    });
 
     setTimeout(() => {
         if (flag == true) {
@@ -118,6 +120,7 @@ function matchLookup(sender_psid, key, status) {
                                 "method": "GET",
                                 "json": true,
                             }, (err, res, body) => {
+                                flag = false;
                                 let time = dataFormat.timeFormat(reply[2], body.timezone);
                                 let team = dataFormat.teamFormat(reply[0], reply[1], key);
                                 let league = reply[3];
