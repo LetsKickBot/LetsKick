@@ -3,7 +3,7 @@ const data = require('../data/get_data.js');
 const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 const handleCases = require('./handleCases.js');
-const scripting = require('./scripting.js');
+const updateDB = require('./updateDB.js');
 
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
@@ -75,8 +75,8 @@ function matchLookup(sender_psid, key, status) {
                 var league = match.val().league;
 
                 // Gets team name if it does not exist in the database yet.
-                scripting.scriptingTeamName(team1);
-                scripting.scriptingTeamName(team2);
+                updateDB.dbTeamName(team1);
+                updateDB.dbTeamName(team2);
 
             request({
                 "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
@@ -116,8 +116,8 @@ function matchLookup(sender_psid, key, status) {
                             db.ref('Matches/' + match.key + '/').set({});
 
                             // Gets team name if it does not exist in the database yet.
-                            scripting.scriptingTeamName(reply[0]);
-                            scripting.scriptingTeamName(reply[1]);
+                            updateDB.dbTeamName(reply[0]);
+                            updateDB.dbTeamName(reply[1]);
                         }
                         else {
                             console.log("Error occured on Server for MATCH: " + team1);
@@ -145,8 +145,8 @@ function matchLookup(sender_psid, key, status) {
                             db.ref('Matches/' + match.key + '/').set({});
 
                             // Gets team name if it does not exist in the database yet.
-                            scripting.scriptingTeamName(reply[0]);
-                            scripting.scriptingTeamName(reply[1]);
+                            updateDB.dbTeamName(reply[0]);
+                            updateDB.dbTeamName(reply[1]);
                         }
                         else {
                             console.log("Error occured on Server for MATCH: " + team2);
@@ -205,8 +205,8 @@ function matchLookup(sender_psid, key, status) {
                                 let newsSubtitle = reply[7];
 
                                 // Gets team name if it does not exist in the database yet.
-                                scripting.scriptingTeamName(reply[0]);
-                                scripting.scriptingTeamName(reply[1]);
+                                updateDB.dbTeamName(reply[0]);
+                                updateDB.dbTeamName(reply[1]);
 
                                 db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
                                     'team1': reply[0],
@@ -233,8 +233,8 @@ function matchLookup(sender_psid, key, status) {
                                             db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
 
                                             // Gets team name if it does not exist in the database yet.
-                                            scripting.scriptingTeamName(reply1[0]);
-                                            scripting.scriptingTeamName(reply1[1]);
+                                            updateDB.dbTeamName(reply1[0]);
+                                            updateDB.dbTeamName(reply1[1]);
                                         }
                                         else {
                                             console.log("Error occured on Server for MATCH: " + reply[0]);
@@ -260,8 +260,8 @@ function matchLookup(sender_psid, key, status) {
                                             db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({});
 
                                             // Gets team name if it does not exist in the database yet.
-                                            scripting.scriptingTeamName(reply1[0]);
-                                            scripting.scriptingTeamName(reply1[1]);
+                                            updateDB.dbTeamName(reply1[0]);
+                                            updateDB.dbTeamName(reply1[1]);
                                         }
                                         else {
                                             console.log("Error occured on Server for MATCH: " + reply[1]);
@@ -298,11 +298,10 @@ function matchLookup(sender_psid, key, status) {
                             })
                         }
                     })
+                    setTimeout(() => {
+                        handleCases.setReminder(sender_psid, reply[0].toUpperCase() + '_' + reply[1].toUpperCase());
+                    }, 1000);
                 }
-
-                setTimeout(() => {
-                    handleCases.setReminder(sender_psid, reply[0].toUpperCase() + '_' + reply[1].toUpperCase());
-                }, 1000)
             })
         }
     }, 1200)

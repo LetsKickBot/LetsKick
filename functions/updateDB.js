@@ -7,7 +7,7 @@ const handleCases = require('./handleCases.js');
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
 
-function scriptingTeamName(key) {
+function dbTeamName(key) {
     db.ref('Teams/').child(key.toUpperCase()).once('value', function(snapshot) {
         if (!snapshot.exists()) {
         	console.log('Looking for: ' + key.toUpperCase());
@@ -36,5 +36,5 @@ function scriptingTeamName(key) {
 }
 
 module.exports = {
-	scriptingTeamName
+	dbTeamName
 }
