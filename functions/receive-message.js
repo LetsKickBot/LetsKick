@@ -15,6 +15,7 @@ let handleChoice = {};
 function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
+    console.log('User Message: ', key);
 
     // Users begin the search
     if (key.toUpperCase().includes("START")) {
@@ -23,6 +24,7 @@ function handleMessage(sender_psid, received_message) {
 
     // Look for the Player
     else if (handleChoice[sender_psid] == 'PLAYER') {
+        console.log("In player section")
         delete handleChoice[sender_psid];
         info.playerLookup(sender_psid, key);
     }
@@ -30,15 +32,15 @@ function handleMessage(sender_psid, received_message) {
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
         key = dataFormat.checkDuplicate(key);
-        console.log(key);   
+        console.log(key);
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
               "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
-        } 
-        
+        }
+
         else {
             delete handleChoice[sender_psid];
             info.teamNameLookup(sender_psid, key);
@@ -98,7 +100,7 @@ function handleQuickReply(sender_psid, received_message) {
             info.playerLookup(sender_psid, player);
         }
     }
-
+    
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
         if (key.includes('Yes')) {
@@ -111,6 +113,7 @@ function handleQuickReply(sender_psid, received_message) {
             sendResponse.directMessage(sender_psid, response);
         }
     }
+}
 
     // Sets reminder for a match
     if (key.includes('REMINDER')) {
@@ -151,7 +154,7 @@ function handlePostback(sender_psid, messagePostback) {
             response = {
                 'text': 'Please give us the team name'
             };
-            sendResponse.directMessage(sender_psid, response); 
+            sendResponse.directMessage(sender_psid, response);
         }
 
         // Looking for match's information
