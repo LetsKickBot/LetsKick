@@ -26,6 +26,9 @@ function scriptingTeamName(key) {
                         'imageURL': imageURL 
                     });
                 }
+                else {
+                	console.log("Error occured on Server for TEAM: " + key);
+                }
             })
         }
     });

@@ -119,6 +119,9 @@ function matchLookup(sender_psid, key, status) {
                             scripting.scriptingTeamName(reply[0]);
                             scripting.scriptingTeamName(reply[1]);
                         }
+                        else {
+                            console.log("Error occured on Server for MATCH: " + team1);
+                        }
                     })
                 }, (new Date(match.val().time)).getTime() - (new Date()).getTime() + 8100000);
                 onGoing.push(team1);
@@ -143,6 +146,9 @@ function matchLookup(sender_psid, key, status) {
                             // Gets team name if it does not exist in the database yet.
                             scripting.scriptingTeamName(reply[0]);
                             scripting.scriptingTeamName(reply[1]);
+                        }
+                        else {
+                            console.log("Error occured on Server for MATCH: " + team2);
                         }
                     })
                 }, (new Date(match.val().time)).getTime() - (new Date()).getTime() + 8100000);
@@ -228,6 +234,9 @@ function matchLookup(sender_psid, key, status) {
                                             scripting.scriptingTeamName(reply1[0]);
                                             scripting.scriptingTeamName(reply1[1]);
                                         }
+                                        else {
+                                            console.log("Error occured on Server for MATCH: " + reply[0]);
+                                        }
                                     })
                                 }, (new Date(reply[2])).getTime() - (new Date()).getTime() + 8100000);
                                 onGoing.push(reply[0]);
@@ -250,6 +259,9 @@ function matchLookup(sender_psid, key, status) {
                                             // Gets team name if it does not exist in the database yet.
                                             scripting.scriptingTeamName(reply1[0]);
                                             scripting.scriptingTeamName(reply1[1]);
+                                        }
+                                        else {
+                                            console.log("Error occured on Server for MATCH: " + reply[1]);
                                         }
                                     })
 
