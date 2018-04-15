@@ -26,7 +26,7 @@ function getStart(sender_psid) {
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
 function teamOptions(sender_psid, teamName, imageURL) {
-    let choices = ['Next Match', 'Team News', 'Back'];
+    let choices = ['Next Match', 'Team News', 'Another Team'];
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
@@ -52,9 +52,17 @@ function popularPlayer(sender_psid) {
 function getContinue(sender_psid) {
     let key = ['Yes', 'No'];
     let response = {
-        'text': 'Do you want to continue?'
+        'text': 'Do you want to get back to the START?'
     }
     sendResponse.quickReply(sender_psid, response, 'CONTINUE', key);
+}
+
+function setReminder(sender_psid, match) {
+    let key = ['Yes', 'No'];
+    let response = {
+        'text': 'Do you want to Set Remminder for this match?'
+    }
+    sendResponse.sendReminder(sender_psid, response, 'REMINDER', match);
 }
 
 module.exports = {
@@ -62,5 +70,6 @@ module.exports = {
     teamOptions,
     popularTeam,
     popularPlayer,
-    getContinue
+    getContinue,
+    setReminder
 }

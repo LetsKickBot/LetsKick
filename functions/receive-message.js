@@ -75,8 +75,8 @@ function handleQuickReply(sender_psid, received_message) {
     if (key.includes('TEAMLIST')) {
 
         // Get the team Name from Payload.
-        key = key.slice(9);
-        handleCases.teamOptions(sender_psid, key);
+        teamName = dataFormat.decodeUnderline(key);
+        info.teamNameLookup(sender_psid, teamName);
     }
 
     // Handle the popular Teams
@@ -99,17 +99,6 @@ function handleQuickReply(sender_psid, received_message) {
         }
     }
 
-    // Handle the Next Match option payload
-    if (key.includes('OPTION')) {
-
-        // Get the player name from Payload
-        var team = key.substring(18, key.length);
-        var status = key.substring(7, 18);
-
-        delete handleChoice[sender_psid];
-        info.matchLookup(sender_psid, team, status);
-    }
-
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
         if (key.includes('Yes')) {
@@ -122,25 +111,59 @@ function handleQuickReply(sender_psid, received_message) {
             sendResponse.directMessage(sender_psid, response);
         }
     }
+
+    // Sets reminder for a match
+    if (key.includes('REMINDER')) {
+        if (key.includes('YES')) {
+            var matchInfo = dataFormat.decodeUnderline(key);
+            db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
+                setTimeout(() => {
+                    var response = {
+                        'text': `In 2 minutes:\n${match.val().team1} vs ${match.val().team2}`
+                    };
+                    sendResponse.directMessage(sender_psid, response);
+                }, (new Date(match.val().time)).getTime() - (new Date()).getTime() - 120000);
+            })
+        }
+        setTimeout(() => {
+            handleCases.getContinue(sender_psid);
+        }, 1000)
+    }
 }
 
 function handlePostback(sender_psid, messagePostback) {
     let payload = messagePostback.payload;
     let response;
     if (payload.includes('OPTION')) {
-        if (payload.includes('Back')) {
-            handleMessage(sender_psid, {'text':'START'});
+
+        // Search for different player name
+        if (payload.includes('ANOTHERPLAYER')) {
+            handleChoice[sender_psid] = 'PLAYER';
+            response = {
+                'text': 'Please give us the player name'
+            };
+            sendResponse.directMessage(sender_psid, response);
         }
+
+        // Search for different team name
+        else if (payload.includes('Another Team')) {
+            handleChoice[sender_psid] = 'TEAM';
+            response = {
+                'text': 'Please give us the team name'
+            };
+            sendResponse.directMessage(sender_psid, response); 
+        }
+
+        // Looking for match's information
         else {
             teamName = dataFormat.decodeUnderline(payload);
             info.matchLookup(sender_psid, teamName, payload);
         }
     }
-    else {
-        response = {
-            'text': 'Nothing to do!'
-        };
-        sendResponse.directMessage(sender_psid, response);
+
+    // Jump back to 'Start' option
+    if (payload == 'BACKTOSTART') {
+        handleMessage(sender_psid, { 'text' : 'START'})
     }
 }
 
