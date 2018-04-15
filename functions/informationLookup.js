@@ -106,6 +106,7 @@ function matchLookup(sender_psid, key, status) {
                     onGoing.splice(removeIndex, 1);
                     data.get_next_game(team1, (err, reply) => {
                         if (!err) {
+                            console.log("FOUNDED MATCH: " + team1);
                             db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
                                 'team1': reply[0],
                                 'team2': reply[1],
@@ -134,6 +135,7 @@ function matchLookup(sender_psid, key, status) {
                     onGoing.splice(removeIndex, 1);
                     data.get_next_game(team2, (err, reply) => {
                         if (!err) {
+                            console.log("FOUNDED MATCH: " + team2);
                             db.ref('Matches/' + reply[0].toUpperCase() + '_' + reply[1].toUpperCase() + '/').set({
                                 'team1': reply[0],
                                 'team2': reply[1],
@@ -221,6 +223,7 @@ function matchLookup(sender_psid, key, status) {
                                     onGoing.splice(removeIndex, 1);
                                     data.get_next_game(reply[0], (err, reply1) => {
                                         if (!err) {
+                                            console.log("FOUNDED MATCH: " + reply[0]);
                                             db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
                                                 'team1': reply1[0],
                                                 'team2': reply1[1],
@@ -247,6 +250,7 @@ function matchLookup(sender_psid, key, status) {
                                     onGoing.splice(removeIndex, 1);
                                     data.get_next_game(reply[1], (err, reply1) => {
                                         if (!err) {
+                                            console.log("FOUNDED MATCH: " + reply[1]);
                                             db.ref('Matches/' + reply1[0].toUpperCase() + '_' + reply1[1].toUpperCase() + '/').set({
                                                 'team1': reply1[0],
                                                 'team2': reply1[1],

@@ -13,6 +13,7 @@ function scriptingTeamName(key) {
         	console.log('Looking for: ' + key.toUpperCase());
             data.get_team_name(key, (err, reply) => {
                 if (!err) {
+                	console.log("FOUNDED TEAM: " + key);
                     var teamName = reply[0];
                     var imageURL = reply[1];
                     if (!(reply[0].toUpperCase().includes(key.toUpperCase()))) {
