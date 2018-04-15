@@ -5,15 +5,13 @@
   "main": "app.js",
   "scripts": {
     "test": "mocha __tests__/bottest.js",
-    "start": "babel-node app.js --presets es2015,stage-2"
+    "start": "node app.js > log.txt"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "ical-generator": "^0.2.10",
-    "ics": "^2.4.1",
     "node-fetch": "^1.7.3",
     "prompt-sync": "^4.1.6",
     "python-shell": "^0.4.0"

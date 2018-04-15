@@ -33,17 +33,19 @@ def main():
     browser.implicitly_wait(2)
 
     try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[contains(text(), 'Soccer Player')]")))
+        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
     except TimeoutException:
         print("Cannot find player")
         browser.quit()
         sys.exit(1)
     else:
-        browser.find_element_by_class_name('search-results').find_element_by_xpath("//*[contains(text(), 'Soccer Player')]").click()
+        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'player-spec')))
     html = browser.page_source
+    url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
+    print(url)
 
     spec = soup.find('div', {'class': 'player-spec'})
     cols = spec.find_all('dl')
@@ -59,7 +61,6 @@ def main():
 
     for i in range(0, len(col2dd)):
         print(col2dt[i].text + col2dd[i].text)
-    # print('\nFor more information: ' + browser.current_url)
 
     browser.quit()
     sys.exit(0)
