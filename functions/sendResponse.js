@@ -280,6 +280,7 @@ function sendReminder(sender_psid, response, payloadCharacteristic, match) {
 module.exports = {
     directMessage,
     quickReply,
+    quickDataAccess,
     teamOptionChoose,
     teamNewsURL,
     playerReply,

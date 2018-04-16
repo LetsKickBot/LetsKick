@@ -76,6 +76,7 @@ function setReminder(sender_psid, match) {
 module.exports = {
     getStart,
     teamOptions,
+    teamData,
     popularTeam,
     popularPlayer,
     getContinue,

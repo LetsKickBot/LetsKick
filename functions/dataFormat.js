@@ -138,6 +138,7 @@ module.exports = {
     timeFormat,
     teamFormat,
     quickReplyFormat,
+    teamDataQuick,
     teamOptionFormat,
     decodeUnderline
 }
