@@ -31,7 +31,7 @@ module.exports = {
     })
   },
   get_team_schedule: function (team_name, callback) {
-    PythonShell.run('./scripts/get_team_get_team_schedule.py', {args: [team_name]}, (err, data) => {
+    PythonShell.run('./scripts/get_team_schedule.py', {args: [team_name]}, (err, data) => {
       spawn('killall', ['-9', 'chrome']);
       spawn('killall', ['-9', 'chromedriver']);
       callback(err, data);

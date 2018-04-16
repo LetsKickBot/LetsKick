@@ -331,6 +331,7 @@ function matchLookup(sender_psid, key, status) {
 
             else if (status.includes('Team Squad')) {
                 // Async function to look for the Next Match.
+                console.log("team: ", key);
                 data.get_team_squad(key, (err, reply) => {
                     if (err) {
                         response = {
@@ -371,9 +372,8 @@ function matchLookup(sender_psid, key, status) {
                             }
                         })
                     }
-
                 })
-            } 
+            }
         }
     }, 1200)
 }
