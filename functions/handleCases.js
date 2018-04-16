@@ -26,7 +26,7 @@ function getStart(sender_psid) {
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
 function teamOptions(sender_psid, teamName, imageURL) {
-    let choices = ['Next Match', 'Team News', 'Another Team'];
+    let choices = ['Next Match', 'Team News', 'Team Squad', 'Another Team'];
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
