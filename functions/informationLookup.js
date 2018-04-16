@@ -321,16 +321,6 @@ function matchLookup(sender_psid, key, status) {
 
                                     sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
                                     console.log("replied");
-
-                                    // In case user want to see the Next Match Squad
-                                    // else if (status.includes('Team Squad')) {
-                                    //     response = {
-                                    //         "text": 'We are currently working on this feature. Please come back another time.'
-                                    //     }
-                                    //     console.log(replied);
-                                    //     sendResponse.directMessage(sender_psid, response);
-                                    // }
-
                                 })
                             }
                         })
@@ -338,6 +328,52 @@ function matchLookup(sender_psid, key, status) {
 
                 })
             }
+
+            else if (status.includes('Team Squad')) {
+                // Async function to look for the Next Match.
+                data.get_team_squad(key, (err, reply) => {
+                    if (err) {
+                        response = {
+                            "text" : `Cannot find the Team Squad: ${key}`
+                        }
+                        sendResponse.directMessage(sender_psid, response);
+                    }
+                    else if (key) {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            if (err) {
+                                console.error("Unable to send message:" + err);
+                            }
+                            else {
+                                request({
+                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                    "method": "GET",
+                                    "json": true,
+                                }, (err, res, body) => {
+                                    let url = reply[0];
+                                    let formation = reply[1];
+                                    let players = reply[2];
+                                    let teamPlayer = ""
+                                    for (var i = 0; i < players.length; i++) {
+                                        teamPlayer = '\n' + teamPlayer + players[i];
+                                    }
+                                    response = {
+                                        "text" : `Team Formation: ${formation}\nPlayers:${teamPlayer}`
+                                    }
+                                    sendResponse.directMessage(sender_psid, response);
+                                    console.log("replied");
+                                })
+                            }
+                        })
+                    }
+
+                })
+            } 
         }
     }, 1200)
 }
