@@ -78,7 +78,8 @@ def main():
 
     print(url)
     print(formation)
-    print(whoPlay)
+    for i in whoPlay:
+        print(i)
     
     browser.quit()
     sys.exit(0)
