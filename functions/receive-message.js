@@ -106,30 +106,11 @@ function handleQuickReply(sender_psid, received_message) {
         if (key.includes('Go Back')) {
             handleCases.getStart(sender_psid);
         }
-
-        teamName = dataFormat.decodeUnderline(key);
-        info.matchLookup(sender_psid, teamName, key);
-        // // In case that user want the team news
-        // if (key.includes('Team News')) {
-        //     teamName = dataFormat.decodeUnderline(key);
-        //     info.matchLookup(sender_psid, teamName, key);
-        // }
-
-        // // In case that user want the team squad
-        // else if (key.includes('Team Squad')) {
-        //     teamName = dataFormat.decodeUnderline(key);
-        //     info.matchLookup(sender_psid, teamName, key);
-        // }
-
-        // // In case that user want the team schedules
-        // else if (key.includes('Team Schedules')) {
-
-        // }
-
-        // //  In case that user want the team coach
-        // else {
-
-        // }
+        
+        else {
+            teamName = dataFormat.decodeUnderline(key);
+            info.matchLookup(sender_psid, teamName, key);
+        }
     }
 
     // Continues the bot by asking the initial question: Team or Player?
