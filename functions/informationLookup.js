@@ -359,8 +359,12 @@ function matchLookup(sender_psid, key, status) {
                                     let url = reply[0];
                                     let formation = reply[1];
                                     let players = reply[2];
+                                    let teamSub = ''
+                                    for (var i = 0; i < players.length; i++) {
+                                        teamSub += players[i] + ' '
+                                    }
                                     response = {
-                                        "text" : `Team Formation: ${formation}\nPlayers:${players}`
+                                        "text" : `Team Formation: ${formation}\nPlayers:${teamSub}`
                                     }
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");

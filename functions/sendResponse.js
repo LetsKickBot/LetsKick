@@ -169,6 +169,11 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
                                     }
                                 }
                             }
+                        },
+                        {
+                            "type": 'postback',
+                            "title": 'Another Team',
+                            "payload": 'OPTIONAnother Team'
                         }]
                     }]
                 }

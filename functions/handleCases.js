@@ -31,7 +31,7 @@ function teamOptions(sender_psid, teamName, imageURL) {
 }
 
 function teamData(sender_psid, teamName) {
-    let choices = ['Team News', 'Team Squad', 'Team Schedules', 'Team Coach'];
+    let choices = ['Team News', 'Team Squad', 'Team Schedules', 'Team Coach', 'Go Back'];
     let response = {
         'text': `Please select the option of data you want`
     }

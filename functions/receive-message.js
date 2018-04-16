@@ -102,7 +102,11 @@ function handleQuickReply(sender_psid, received_message) {
 
     // In case that user want to get the team datas
     if (key.includes('TEAMDATA')) {
-        
+
+        if (key.includes('Go Back')) {
+            handleCases.getStart(sender_psid);
+        }
+
         teamName = dataFormat.decodeUnderline(key);
         info.matchLookup(sender_psid, teamName, key);
         // // In case that user want the team news
