@@ -20,7 +20,7 @@ def main():
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("no-sandbox")
 
-    browser = webdriver.Chrome(chrome_options=chrome_optaions)
+    browser = webdriver.Chrome(chrome_options=chrome_options)
     browser.get('http://www.skysports.com/football/teams')
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//input[@class='site-search__input site-search--inpage__input']")))
