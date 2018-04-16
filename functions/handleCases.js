@@ -26,9 +26,16 @@ function getStart(sender_psid) {
 
 // Provides four options: Next Match, Team News, Team Squad, Next 5 games
 function teamOptions(sender_psid, teamName, imageURL) {
-    // let choices = ['Next Match', 'Team News', 'Team Squad', 'Another Team'];
-    let choices = ['Next Match', 'Team News', 'Team Squad'];
+    let choices = ['Next Match', 'Team Data', 'Another Team'];
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
+}
+
+function teamData(sender_psid, teamName) {
+    let choices = ['Team News', 'Team Squad', 'Team Schedules', 'Team Coach'];
+    let response = {
+        'text': `Please select the option of data you want`
+    }
+    sendResponse.quickDataAccess(sender_psid, teamName ,response, "TEAMDATA", choices);
 }
 
 // Provides 11 popular team options

@@ -50,6 +50,32 @@ function quickReply(sender_psid, response, payloadCharacteristic, value) {
 }
 
 // Post a form of quick reply to the server
+function quickDataAccess(sender_psid, teamName, response, payloadCharacteristic, value) {
+    let jsonFile = dataFormat.teamDataQuick(payloadCharacteristic, value, teamName);
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": {
+            "text": response["text"],
+            "quick_replies": jsonFile
+        }
+    };
+
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
+
+// Post a form of quick reply to the server
 function teamOptionChoose(sender_psid, teamName, payloadCharacteristic, choices, imageURL) {
 
     // Sample Button: 

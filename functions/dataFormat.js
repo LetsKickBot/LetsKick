@@ -103,6 +103,18 @@ function quickReplyFormat(payloadCharacteristic, value) {
     return finalArr;
 }
 
+function teamDataQuick(payloadCharacteristic, value, teamName) {
+    let finalArr = [];
+    for (var i = 0; i < value.length; i++) {
+        var map = {};
+        map['content_type'] = 'text';
+        map['title'] = value[i];
+        map['payload'] = payloadCharacteristic + value[i] + '_' + teamName;
+        finalArr.push(map);
+    }
+    return finalArr;
+}
+
 function teamOptionFormat(payloadCharacteristic, choices, teamName) {
     let finalArr = [];
     for (var i = 0; i < choices.length; i++) {

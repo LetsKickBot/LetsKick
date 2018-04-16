@@ -100,6 +100,31 @@ function handleQuickReply(sender_psid, received_message) {
         }
     }
 
+    // In case that user want to get the team datas
+    if (key.includes('TEAMDATA')) {
+
+        // In case that user want the team news
+        if (key.includes('Team News')) {
+            teamName = dataFormat.decodeUnderline(key);
+            info.matchLookup(sender_psid, teamName, key);
+        }
+
+        // In case that user want the team squad
+        else if (key.includes('Team Squad')) {
+
+        }
+
+        // In case that user want the team schedules
+        else if (key.includes('Team Schedules')) {
+
+        }
+
+        //  In case that user want the team coach
+        else {
+
+        }
+    }
+
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
         if (key.includes('Yes')) {
@@ -153,6 +178,12 @@ function handlePostback(sender_psid, messagePostback) {
                 'text': 'Please give us the team name'
             };
             sendResponse.directMessage(sender_psid, response); 
+        }
+
+        else if (payload.includes('Team Data')) {
+            teamName = dataFormat.decodeUnderline(payload);
+            console.log('In postback team: ', teamName);
+            handleCases.teamData(sender_psid, teamName);
         }
 
         // Looking for match's information
