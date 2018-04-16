@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 import sys
 import os
+import unicodedata
 
 def main():
     window_size = "1200,800"
@@ -73,7 +74,7 @@ def main():
 
     j = 0
     while (j < 11):
-        whoPlay.append(playersList[j] + ' - ' + playersNumberList[j])
+        whoPlay.append(str(unicodedata.normalize('NFD', playersList[j]).encode('ascii', 'ignore').decode("utf-8")) + ' - ' + playersNumberList[j])
         j += 1
 
     print(url)
