@@ -30,6 +30,7 @@ function handleMessage(sender_psid, received_message) {
     // Look for the Team
     else if (handleChoice[sender_psid] == 'TEAM') {
         key = dataFormat.checkDuplicate(key);
+        console.log("In team")
         console.log(key);   
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
@@ -153,11 +154,6 @@ function handlePostback(sender_psid, messagePostback) {
             };
             sendResponse.directMessage(sender_psid, response); 
         }
-
-        // else if (payload.includes('Team News')) {
-        //     teamName = dataFormat.decodeUnderline(payload);
-        //     info.matchLookup(sender_psid, teamName, payload);
-        // }
 
         // Looking for match's information
         else {
