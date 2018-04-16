@@ -374,6 +374,22 @@ function matchLookup(sender_psid, key, status) {
                     }
                 })
             }
+
+            else if (status.includes('Team Schedules')) {
+                response = {
+                    "text": `We currently working on this futures for schedules`
+                }
+                sendResponse.directMessage(sender_psid, response);
+                console.log("reply");
+            }
+
+            else if (status.includes('Team Coach')) {
+                response = {
+                    "text": `We currently working on this futures for coach`
+                }
+                sendResponse.directMessage(sender_psid, response);
+                console.log("reply");
+            }
         }
     }, 1200)
 }
@@ -447,7 +463,6 @@ function playerLookup(sender_psid, key) {
                     console.log("replied");
                     sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
                 }
-                // Check if user want to continue searching
             })
         }
     }, 1200);

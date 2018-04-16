@@ -28,7 +28,7 @@ def main():
 
     browser.find_element_by_xpath("//input[@class='site-search__input site-search--inpage__input']").send_keys(team_name)
     
-    browser.implicitly_wait(2)
+    browser.implicitly_wait(3)
 
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "autocomplete__results-item")))
@@ -55,7 +55,7 @@ def main():
     soup = BeautifulSoup(squadHtml, "html.parser")
     url = browser.current_url
 
-    browser.implicitly_wait(1)
+    browser.implicitly_wait(2)
 
     formation = soup.find('div', {'class': 'box -bp30-hdn s11-graphic-container'}).find('div', {'class': 'span10 strap1 -center -ondark -interact text-h5 arrangement'}).text
     players = soup.find('div', {'class': 'box -bp30-hdn s11-graphic-container'}).findAll('span', {'class': 'col span3/4'})
