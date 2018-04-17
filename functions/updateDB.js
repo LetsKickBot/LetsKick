@@ -35,6 +35,30 @@ function dbTeamName(key) {
     });
 }
 
+function updateMatches() {
+    db.ref('Teams/').once('value', (val) => {
+        val.forEach((val1) => {
+            
+            data.get_next_game(val1.key, (err, reply) => {
+                if (err) {
+                    console.log(err);
+                }
+                if (!err) {
+                    console.log(reply[0]);
+
+                    db.ref('Matches/' + reply[0].toUpperCase() + '/').set({
+                        'team1': reply[0],
+                        'team2': reply[1],
+                        'time': reply[2],
+                        'league': reply[3],
+                        'url': reply[4]
+                    });
+                }
+            })
+        })
+    })
+}
+
 module.exports = {
 	dbTeamName
 }

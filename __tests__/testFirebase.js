@@ -1,6 +1,7 @@
 let firebase = require('firebase');
 let fs = require('fs');
 const dataFormat = require('../functions/dataFormat.js');
+const info = require('../functions/informationLookup.js');
 
 const config = {
     apiKey: "AIzaSyCjIHgfbmnB-zyOqpZjM6X7jSaorm083cg",
@@ -23,6 +24,13 @@ db.ref('Matches/').once('value', (newVal) => {
 	})
 })
 
+// db.ref('Matches/').set({});
+
+db.ref('Teams/').once('value', (val) => {
+	val.forEach((val1) => {
+		info.matchLookup('1', val1.key, '1');
+	})
+})
 module.exports = {
 	db
 }
