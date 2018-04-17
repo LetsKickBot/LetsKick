@@ -361,8 +361,9 @@ function matchLookup(sender_psid, key, status) {
                                     let players = reply[2];
                                     let teamSub = ''
                                     for (var i = 0; i < players.length; i++) {
-                                        teamSub += players[i] + '\n'
-                                        // for (var j = 0; j)
+                                        for (var j = 0; j < i.length; j ++) {
+                                            teamSub += i[j] + ' '
+                                        }
                                     }
                                     response = {
                                         "text" : `Here is the lastest formation:\nTeam Formation: ${formation}\nPlayers:${teamSub}`
