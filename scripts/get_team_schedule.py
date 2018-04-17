@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 import sys
 import os
+import unicodedata
 
 def main():
     window_size = "1200,800"
@@ -71,11 +72,15 @@ def main():
     for i in range(len(passGames) - 5, len(passGames)):
         if ((passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name winner'}) == None) or 
             (passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name winner'}) == None)):
-            awayTeams.append(passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text)
-            homeTeams.append(passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text)
+            team = passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
+            teams = passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
+            awayTeams.append(str(unicodedata.normalize('NFD', team).encode('ascii', 'ignore').decode("utf-8")))
+            homeTeams.append(str(unicodedata.normalize('NFD', teams).encode('ascii', 'ignore').decode("utf-8")))
         else:
-            awayTeams.append(passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name winner'}).text)
-            homeTeams.append(passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name winner'}).text)
+            team = passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name winner'}).text
+            teams = passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name winner'}).text
+            awayTeams.append(str(unicodedata.normalize('NFD', team).encode('ascii', 'ignore').decode("utf-8")))
+            homeTeams.append(str(unicodedata.normalize('NFD', teams).encode('ascii', 'ignore').decode("utf-8")))
 
         if((passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value winner'}) == None) or
             (passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}) == None)):
@@ -98,20 +103,20 @@ def main():
         passFewGames.append(homeTeams[i] + ' [' + scoresHome[i] + '] - ' + '[' + scoresAway[i] + '] ' + awayTeams[i] + ' on ' + date[i] + ' in '
             + league[i])
 
-    print(len(nextFewGames));
+    print(len(nextFewGames))
     # For the pass 5 games
     for i, j in enumerate(passFewGames, 1):
-        print(i, '.', j)
+        print(str(i) + '.' + j)
 
     # For the next few games
     j = 1
     if (len(nextFewGames) > 5):
         for i in range(0, 5):
-            print(j, '.', nextFewGames[i])
+            print(str(j) + '.' + nextFewGames[i])
             j += 1
-    elif ((len(nextFewGames) < 5) and (len(nextFewGames) != 0)):
+    elif ((len(nextFewGames) <= 5) and (len(nextFewGames) != 0)):
         for i in range(len(nextFewGames)):
-            print(j, '.', nextFewGames[i])
+            print(str(j) + '.' + nextFewGames[i])
             j += 1
     else:
         print('There is no coming match in next few days!.')

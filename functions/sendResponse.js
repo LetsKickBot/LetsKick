@@ -253,12 +253,12 @@ function sendReminder(sender_psid, response, payloadCharacteristic, match) {
         },
         "message": {
             "text": response["text"],
-            "quick_replies": 
-            [  
+            "quick_replies":
+            [
                 {
                     'content_type': 'text',
                     'title': 'Yes',
-                    'payload': payloadCharacteristic + 'YES_' + match  
+                    'payload': payloadCharacteristic + 'YES_' + match
                 },
                 {
                     'content_type': 'text',
@@ -282,6 +282,47 @@ function sendReminder(sender_psid, response, payloadCharacteristic, match) {
     });
 }
 
+function mediaPlay(sender_psid, title, currentVideo, url) {
+    let request_body = {
+        "recipient": {
+        "id": sender_psid
+        },
+        "messages": {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "media",
+                    "elements" : [
+                        {
+                            "media_type" : "Video",
+                            "url": currentVideo,
+                            "buttons" : [
+                                {
+                                   "type": 'web_url',
+                                    "url": url,
+                                    "title": 'See More Video',
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
+
 module.exports = {
     directMessage,
     quickReply,
@@ -289,5 +330,6 @@ module.exports = {
     teamOptionChoose,
     teamNewsURL,
     playerReply,
-    sendReminder
+    sendReminder,
+    mediaPlay
 };

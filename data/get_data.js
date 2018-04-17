@@ -45,7 +45,21 @@ module.exports = {
     })
   },
   get_team_coach: function (team_name, callback) {
-    PythonShell.run('./scripts/get_team_news.py', {args: [team_name]}, (err, data) => {
+    PythonShell.run('./scripts/get_team_coach.py', {args: [team_name]}, (err, data) => {
+      spawn('killall', ['-9', 'chrome']);
+      spawn('killall', ['-9', 'chromedriver']);
+      callback(err, data);
+    })
+  },
+  get_team_video: function (team_name, callback) {
+    PythonShell.run('./scripts/get_team_video.py', {args: [team_name]}, (err, data) => {
+      spawn('killall', ['-9', 'chrome']);
+      spawn('killall', ['-9', 'chromedriver']);
+      callback(err, data);
+    })
+  },
+  get_player_news: function (team_name, callback) {
+    PythonShell.run('./scripts/get_player_news.py', {args: [player_name]}, (err, data) => {
       spawn('killall', ['-9', 'chrome']);
       spawn('killall', ['-9', 'chromedriver']);
       callback(err, data);

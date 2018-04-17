@@ -170,7 +170,6 @@ function matchLookup(sender_psid, key, status) {
             console.log("waiting...");
             sendResponse.directMessage(sender_psid, response);
 
-            
             // In case user want the Next Match Schedule
             if (status.includes('Next Match')) {
 
@@ -285,7 +284,7 @@ function matchLookup(sender_psid, key, status) {
                         }, 1000);
                     }
                 })
-            } 
+            }
 
             // In case user want to see the lastest Team News
             else if (status.includes('Team News')) {
@@ -403,6 +402,7 @@ function matchLookup(sender_psid, key, status) {
                                     "json": true,
                                 }, (err, res, body) => {
                                     let length = reply[0]
+                                    console.log("length: ", length)
                                     let oldMatches = ''
                                     let nextMatches = ''
 
@@ -411,13 +411,26 @@ function matchLookup(sender_psid, key, status) {
                                         oldMatches += reply[i] + '\n'
                                     }
 
-                                    // For the next matches Need to debug for next match if there are no coming match
-                                    for (var j = 6; j < (6 + length)-1; j++) {
+                                    // For the next coming matches
+                                    for (var j = 6; j < 6 + length; j++) {
                                         nextMatches += reply[j] + '\n'
                                     }
+                                    // if (length > 5) {
+                                    //     for (var j = 6; j < (6 + 5); j++) {
+                                    //         nextMatches += reply[j] + '\n'
+                                    //     }
+                                    // } else if ((length <= 5) && (length != 0)) {
+                                    //     for (var j = 6; j < (6 + length); j++) {
+                                    //         nextMatches += reply[j] + '\n'
+                                    //     }
+                                    // } else {
+                                    //     for (var j = 6; j < 7; j++) {
+                                    //         nextMatches += reply[j] + '\n'
+                                    //     }
+                                    // }
 
                                     response = {
-                                        "text" : `SOME RECENTLY MATCHES:\n${oldMatches} SOME MATCHES COMING UP:\n${nextMatches}`
+                                        "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING UP MATCHES:\n${nextMatches}`
                                     }
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");
@@ -434,6 +447,44 @@ function matchLookup(sender_psid, key, status) {
                 }
                 sendResponse.directMessage(sender_psid, response);
                 console.log("reply");
+            }
+
+            else if (status.includes('Latest Highlight')) {
+                data.get_team_video(key, (err, reply) => {
+                    if (err) {
+                        response = {
+                            "text" : `Cannot find the current Team video: ${key}`
+                        }
+                        sendResponse.directMessage(sender_psid, response);
+                    }
+                    else if (key) {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            if (err) {
+                                console.error("Unable to send message:" + err);
+                            }
+                            else {
+                                request({
+                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                    "method": "GET",
+                                    "json": true,
+                                }, (err, res, body) => {
+                                    let url = reply[0];
+                                    let title = reply[1];
+                                    let currentVideo = reply[2];
+
+                                    sendResponse.mediaPlay(sender_psid, title, currentVideo, url);
+                                    console.log("replied");
+                                })
+                            }
+                        })
+                    }
+                })
             }
         }
     }, 1200)
