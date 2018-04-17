@@ -5,6 +5,7 @@ const handleCases = require('./handleCases.js');
 const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 const data = require('../data/get_data.js');
+const updateDB = require('../functions/updateDB.js');
 
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
@@ -15,6 +16,10 @@ let handleChoice = {};
 function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
+
+    if (key.toUpperCase() == "ONGOING") {
+        info.displayOnGoing();
+    }
 
     // Users begin the search
     if (key.toUpperCase().includes("START")) {

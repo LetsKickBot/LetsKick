@@ -1,4 +1,4 @@
-const request = require('request');
+ const request = require('request');
 const sendResponse = require('./sendResponse.js');
 
 // Provides two options: Player and Team

@@ -26,6 +26,8 @@ function dbTeamName(key) {
                         'name': teamName,
                         'imageURL': imageURL 
                     });
+
+
                 }
                 else {
                 	console.log("Error occured on Server for TEAM: " + key);
@@ -35,30 +37,45 @@ function dbTeamName(key) {
     });
 }
 
-function updateMatches() {
-    db.ref('Teams/').once('value', (val) => {
-        val.forEach((val1) => {
-            
-            data.get_next_game(val1.key, (err, reply) => {
-                if (err) {
-                    console.log(err);
+function dbNextGame(key, iniTime) {
+    if (iniTime != -1) {
+        setTimeout(() => {
+            dbNextGame(key, -1)
+        }, iniTime - (new Date()).getTime() + 8100000);
+    }
+    else {
+        data.get_team_name(key, (err, reply) => {
+            if (err) {
+                console.log("Error occured on Server for Match: " + key);
+            }
+            else {
+                console.log("Found Match: " + key);
+                if (key.toUpperCase() != reply[0].toUpperCase()) {
+                    var temp = reply[0];
+                    reply[0] = reply[1];
+                    reply[1] = temp;
                 }
-                if (!err) {
-                    console.log(reply[0]);
 
-                    db.ref('Matches/' + reply[0].toUpperCase() + '/').set({
-                        'team1': reply[0],
-                        'team2': reply[1],
-                        'time': reply[2],
-                        'league': reply[3],
-                        'url': reply[4]
-                    });
-                }
-            })
+                db.ref('Matches/' + key.toUpperCase() + '/').set({
+                    'team1': reply[0],
+                    'team2': reply[1],
+                    'time': reply[2],
+                    'league': reply[3],
+                    'url': reply[4]
+                })
+
+                dbTeamName(reply[0]);
+                dbTeamName(reply[1]);
+
+                setTimeout(() => {
+                    dbNextGame(key, -1)
+                }, (new Date(reply[2]).getTime() - (new Date()).getTime() + 8100000) )
+            }
         })
-    })
+    }
 }
 
 module.exports = {
-	dbTeamName
+	dbTeamName,
+    dbNextGame
 }
