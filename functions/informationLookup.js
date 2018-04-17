@@ -360,10 +360,8 @@ function matchLookup(sender_psid, key, status) {
                                     let formation = reply[1];
                                     let players = reply[2];
                                     let teamSub = ''
-                                    for (var i = 0; i < players.length; i++) {
-                                        for (var j = 0; j < i.length; j ++) {
-                                            teamSub += i[j] + ' '
-                                        }
+                                    for (var i = 2; i < 13; i++) {
+                                        teamSub += reply[i] + '\n'
                                     }
                                     response = {
                                         "text" : `Here is the lastest formation:\nTeam Formation: ${formation}\nPlayers:${teamSub}`
@@ -378,11 +376,43 @@ function matchLookup(sender_psid, key, status) {
             }
 
             else if (status.includes('Team Schedules')) {
-                response = {
-                    "text": `We currently working on this futures for schedules`
-                }
-                sendResponse.directMessage(sender_psid, response);
-                console.log("reply");
+                // Async function to look for the Next Match.
+                console.log("team: ", key);
+                data.get_team_schedule(key, (err, reply) => {
+                    if (err) {
+                        response = {
+                            "text" : `Cannot find the Team Schedules: ${key}`
+                        }
+                        sendResponse.directMessage(sender_psid, response);
+                    }
+                    else if (key) {
+                        request({
+                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                            "method": "GET",
+                            "json": true,
+                        }, (err, res, body) => {
+                            if (err) {
+                                console.error("Unable to send message:" + err);
+                            }
+                            else {
+                                request({
+                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                                    "method": "GET",
+                                    "json": true,
+                                }, (err, res, body) => {
+
+                                    response = {
+                                        "text" : `Match DATA:\n`
+                                    }
+                                    sendResponse.directMessage(sender_psid, response);
+                                    console.log("replied");
+                                })
+                            }
+                        })
+                    }
+                })
             }
 
             else if (status.includes('Team Coach')) {

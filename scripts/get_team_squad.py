@@ -14,7 +14,7 @@ def main():
     window_size = "1200,800"
     timeout = 20
     team_name = sys.argv[1]
-
+    # team_name = 'Real Madrid'
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
@@ -79,9 +79,9 @@ def main():
 
     print(url)
     print(formation)
-    print(whoPlay)
-    # for i in whoPlay:
-    #     print(i)
+    # print(whoPlay)
+    for i in whoPlay:
+        print(i)
     
     browser.quit()
     sys.exit(0)
