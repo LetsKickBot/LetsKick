@@ -75,7 +75,7 @@ function handleQuickReply(sender_psid, received_message) {
     if (key.includes('TEAMLIST')) {
 
         // Get the team Name from Payload.
-        teamName = dataFormat.decodeUnderline(key);
+        teamName = (dataFormat.decodeUnderline(key))[1];
         info.teamNameLookup(sender_psid, teamName);
     }
 
@@ -83,7 +83,7 @@ function handleQuickReply(sender_psid, received_message) {
     if (key.includes('POPULART')) {
 
         // Get the team name from Payload
-        var teamName = dataFormat.decodeUnderline(key);
+        var teamName = (dataFormat.decodeUnderline(key))[1];
         delete handleChoice[sender_psid];
         info.teamNameLookup(sender_psid, teamName);
     }
@@ -92,7 +92,7 @@ function handleQuickReply(sender_psid, received_message) {
     else if (key.includes('POPULARP')) {
 
         // Get the player name from Payload
-        var player = dataFormat.decodeUnderline(key);
+        var player = (dataFormat.decodeUnderline(key))[1];
         if (key.includes(player)) {
             delete handleChoice[sender_psid];
             info.playerLookup(sender_psid, player);
@@ -115,7 +115,7 @@ function handleQuickReply(sender_psid, received_message) {
     // Sets reminder for a match
     if (key.includes('REMINDER')) {
         if (key.includes('YES')) {
-            var matchInfo = dataFormat.decodeUnderline(key);
+            var matchInfo = (dataFormat.decodeUnderline(key))[1];
             db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
                 setTimeout(() => {
                     var response = {
@@ -156,7 +156,7 @@ function handlePostback(sender_psid, messagePostback) {
 
         // Looking for match's information
         else {
-            teamName = dataFormat.decodeUnderline(payload);
+            teamName = (dataFormat.decodeUnderline(payload))[1];
             info.matchLookup(sender_psid, teamName, payload);
         }
     }

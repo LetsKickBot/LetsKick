@@ -117,7 +117,7 @@ function teamOptionFormat(payloadCharacteristic, choices, teamName) {
 
 function decodeUnderline(key) {
     var startPoint = key.indexOf('_') + 1;
-    return key.slice(startPoint);
+    return [key.slice(0, startPoint - 1), key.slice(startPoint)];
 }
 
 module.exports = {

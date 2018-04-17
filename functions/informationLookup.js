@@ -186,7 +186,7 @@ function matchLookup(sender_psid, key, status) {
                         "json": true,
                     }, (err, res, body) => {
                         if (err) {
-                            console.error("Unable to send message:" + err);
+                            console.error('Unable to send message:' + err);
                         }
                         else {
                             request({
