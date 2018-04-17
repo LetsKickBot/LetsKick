@@ -79,11 +79,18 @@ def main():
 
         if((passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value winner'}) == None) or
             (passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}) == None)):
+            if((passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}) != None)):
+                scoresAway.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}).text)
+            else:
+                scoresAway.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value winner'}).text)
             scoresHome.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value'}).text)
-            scoresAway.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value winner'}).text)
         else:
-            scoresHome.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value winner'}).text)
+            if((passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value'}) != None)):
+                scoresAway.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value'}).text)
+            else:
+                scoresHome.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value winner'}).text)
             scoresAway.append(passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}).text)
+
         date.append(passGames[i].find('div', {'class' : 'date'}).text)
         league.append(passGames[i].find('div', {'class' : 'league'}).text)
 
@@ -91,24 +98,23 @@ def main():
         passFewGames.append(homeTeams[i] + ' [' + scoresHome[i] + '] - ' + '[' + scoresAway[i] + '] ' + awayTeams[i] + ' on ' + date[i] + ' in '
             + league[i])
 
+    print(len(nextFewGames));
     # For the pass 5 games
-    # for i, j in enumerate(passFewGames, 1):
-    #     print(i, '.', j)
-    print(passFewGames)
+    for i, j in enumerate(passFewGames, 1):
+        print(i, '.', j)
 
     # For the next few games
-    # j = 1
-    # if (len(nextFewGames) > 5):
-    #     for i in range(0, 5):
-    #         print(j, '.', nextFewGames[i])
-    #         j += 1
-    # elif ((len(nextFewGames) < 5) and (len(nextFewGames) != 0)):
-    #     for i in range(len(nextFewGames)):
-    #         print(j, '.', nextFewGames[i])
-    #         j += 1
-    # else:
-    #     print('There is no coming match in next few days!.')
-    print(nextFewGames)
+    j = 1
+    if (len(nextFewGames) > 5):
+        for i in range(0, 5):
+            print(j, '.', nextFewGames[i])
+            j += 1
+    elif ((len(nextFewGames) < 5) and (len(nextFewGames) != 0)):
+        for i in range(len(nextFewGames)):
+            print(j, '.', nextFewGames[i])
+            j += 1
+    else:
+        print('There is no coming match in next few days!.')
 
     browser.quit()
     sys.exit(0)

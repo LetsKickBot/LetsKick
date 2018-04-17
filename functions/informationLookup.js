@@ -364,7 +364,7 @@ function matchLookup(sender_psid, key, status) {
                                         teamSub += reply[i] + '\n'
                                     }
                                     response = {
-                                        "text" : `Here is the lastest formation:\nTeam Formation: ${formation}\nPlayers:${teamSub}`
+                                        "text" : `Here is the recently formation team used:\nTEAM FORMATION: ${formation}\nPLAYERS:\n${teamSub}`
                                     }
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");
@@ -402,9 +402,22 @@ function matchLookup(sender_psid, key, status) {
                                     "method": "GET",
                                     "json": true,
                                 }, (err, res, body) => {
+                                    let length = reply[0]
+                                    let oldMatches = ''
+                                    let nextMatches = ''
+
+                                    // For the old matches
+                                    for (var i = 1; i < 6; i++) {
+                                        oldMatches += reply[i] + '\n'
+                                    }
+
+                                    // For the next matches Need to debug for next match if there are no coming match
+                                    for (var j = 6; j < (6 + length)-1; j++) {
+                                        nextMatches += reply[j] + '\n'
+                                    }
 
                                     response = {
-                                        "text" : `Match DATA:\n`
+                                        "text" : `SOME RECENTLY MATCHES:\n${oldMatches} SOME MATCHES COMING UP:\n${nextMatches}`
                                     }
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");
