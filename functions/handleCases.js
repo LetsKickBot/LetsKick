@@ -1,5 +1,6 @@
- const request = require('request');
+const request = require('request');
 const sendResponse = require('./sendResponse.js');
+const dataFormat = require('./dataFormat.js');
 
 // Provides two options: Player and Team
 function getStart(sender_psid) {
@@ -57,12 +58,39 @@ function getContinue(sender_psid) {
     sendResponse.quickReply(sender_psid, response, 'CONTINUE', key);
 }
 
-function setReminder(sender_psid, match) {
+function askReminder(sender_psid, match) {
     let key = ['Yes', 'No'];
     let response = {
         'text': 'Do you want to Set Reminder for this match?'
     }
     sendResponse.sendReminder(sender_psid, response, 'REMINDER', match);
+}
+
+function setReminder(sender_psid, key) {
+    var matchInfo = (dataFormat.decodeUnderline(key))[1];
+    db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
+        var timeDif = (new Date(match.val().time)) - (new Date());
+        if (timeDif > 0) {
+            setTimeout(() => {
+                var response = {
+                    'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
+                };
+                sendResponse.directMessage(sender_psid, response);
+            }, (new Date(match.val().time)) - (new Date()) - 900000);
+        }
+        else if (timeDif < -7200000) {
+            var response = {
+                'text': 'This match has been played.'
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+        else {
+            var response = {
+                'text': `${match.val().team1} is playing again ${match.val().team2} right now`
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+    })
 }
 
 module.exports = {
@@ -71,5 +99,5 @@ module.exports = {
     popularTeam,
     popularPlayer,
     getContinue,
-    setReminder
+    askReminder
 }

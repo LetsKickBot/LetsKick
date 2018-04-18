@@ -62,11 +62,11 @@ function completeName(key) {
 function timeFormat(inputTime, timezone) {
     let time = new Date(inputTime);
     let minute = time.getMinutes();
-    let date = time.getDate();
-    let month = time.getMonth() + 1;
     let noon = " AM";
     time.setHours(time.getHours() + timezone);
     let hour = time.getHours();
+    let date = time.getDate();
+    let month = time.getMonth() + 1;
     if (hour > 12) {
         hour -= 12;
         noon = " PM";

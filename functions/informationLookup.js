@@ -67,7 +67,7 @@ function matchLookup(sender_psid, key, status) {
     key = key.toUpperCase();
 
     // Check if Match has already been in the DataBase
-    db.ref('Matches/').on("child_added", (match) => {
+    db.ref('Matches/').orderByChild('time').on("child_added", (match) => {
         if (flag == true && match.key.includes(key)) {
             flag = false;
             var team1 = match.val().team1;

@@ -41,7 +41,7 @@ function dbNextGame(key, iniTime) {
     if (iniTime != -1) {
         setTimeout(() => {
             dbNextGame(key, -1)
-        }, iniTime - (new Date()).getTime() + 8100000);
+        }, iniTime - (new Date()).getTime() + 8300000);
     }
     else {
         data.get_team_name(key, (err, reply) => {
@@ -69,13 +69,28 @@ function dbNextGame(key, iniTime) {
 
                 setTimeout(() => {
                     dbNextGame(key, -1)
-                }, (new Date(reply[2]).getTime() - (new Date()).getTime() + 8100000) )
+                }, (new Date(reply[2]) - (new Date()) + 8300000) )
             }
         })
     }
 }
 
+function clearOldMatches() {
+    db.ref('Matches/').once('value', (allMatches) => {
+        allMatches.forEach((eachMatch) => {
+            if (new Date() > new Date(eachMatch.val().time)) {
+                db.ref('Matches/' + eachMatch.key + '/').set({});
+            }
+        })
+        console.log('Cleared old matches.')
+    })
+    setTimeout(() => {
+        clearOldMatches();
+    }, 43200000);
+}
+
 module.exports = {
 	dbTeamName,
-    dbNextGame
+    dbNextGame,
+    clearOldMatches
 }

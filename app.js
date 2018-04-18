@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const webhooks = require('./routes/webhooks');
+const updateDB = require('./functions/updateDB.js');
 
 // endpoint
 app.get('/', (req, res) => {
@@ -15,6 +16,7 @@ app.get('/', (req, res) => {
 app.listen(process.env.PORT || 1337, () => {
 
   console.log('webhook is listening on port ', process.env.PORT || 1337);
+  updateDB.clearOldMatches();
 
 });
 

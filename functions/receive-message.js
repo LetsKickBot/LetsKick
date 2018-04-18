@@ -120,15 +120,7 @@ function handleQuickReply(sender_psid, received_message) {
     // Sets reminder for a match
     if (key.includes('REMINDER')) {
         if (key.includes('YES')) {
-            var matchInfo = (dataFormat.decodeUnderline(key))[1];
-            db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
-                setTimeout(() => {
-                    var response = {
-                        'text': `In 2 minutes:\n${match.val().team1} vs ${match.val().team2}`
-                    };
-                    sendResponse.directMessage(sender_psid, response);
-                }, (new Date(match.val().time)).getTime() - (new Date()).getTime() - 120000);
-            })
+            handleMessage.setReminder(sender_psid, key);
         }
         setTimeout(() => {
             handleCases.getContinue(sender_psid);
