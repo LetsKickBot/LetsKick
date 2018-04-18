@@ -2,6 +2,9 @@ const request = require('request');
 const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 
+let bucket = require('../data/firebase.js');
+let db = bucket.db;
+
 // Provides two options: Player and Team
 function getStart(sender_psid) {
     let key = ['Player', 'Team'];
@@ -70,13 +73,24 @@ function setReminder(sender_psid, key) {
     var matchInfo = (dataFormat.decodeUnderline(key))[1];
     db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
         var timeDif = (new Date(match.val().time)) - (new Date());
-        if (timeDif > 0) {
+        if (timeDif > 2147483616) {
+            var response = {
+                'text': "Sorry, We cannot set reminder because the match is too far away."
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+        else if (timeDif > 0) {
             setTimeout(() => {
                 var response = {
                     'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
                 };
                 sendResponse.directMessage(sender_psid, response);
             }, (new Date(match.val().time)) - (new Date()) - 900000);
+
+            var response = {
+                'text': 'Reminder is set.'
+            };
+            sendResponse.directMessage(sender_psid, response);
         }
         else if (timeDif < -7200000) {
             var response = {
@@ -99,5 +113,6 @@ module.exports = {
     popularTeam,
     popularPlayer,
     getContinue,
-    askReminder
+    askReminder,
+    setReminder
 }

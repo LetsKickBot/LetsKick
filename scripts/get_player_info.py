@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 import sys
 import os
@@ -32,17 +33,25 @@ def main():
 
     browser.implicitly_wait(2)
 
-    try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
-    except TimeoutException:
-        print("Cannot find player")
+    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
+
+    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements(By.XPATH, ".//*")
+    found = False
+
+    for result in search_results:
+        if result.find_element_by_class_name('search_results__cat').text == 'Soccer':
+            result.find_element_by_class_name('search_results__cat').click()
+            found = True
+            break
+
+    if not found:
+        print("Cannot find team")
         browser.quit()
         sys.exit(1)
-    else:
-        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'player-spec')))
     html = browser.page_source
+    url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
 
     spec = soup.find('div', {'class': 'player-spec'})
@@ -55,14 +64,18 @@ def main():
     name = spec.find('h1').text
     imageHTML = spec.find('img')
     imageURL = imageHTML['src']
+    name = unidecode(name)
+
     print(imageURL)
     print(browser.current_url)
     print(name)
     for i in range(0, len(col1dd)):
-        print(col1dt[i].text + col1dd[i].text)
+        info = col1dt[i].text + col1dd[i].text
+        print(unidecode(info))
 
     for i in range(0, len(col2dd)):
-        print(col2dt[i].text + col2dd[i].text)
+        info = col2dt[i].text + col2dd[i].text
+        print(unidecode(info))
 
     browser.quit()
     sys.exit(0)

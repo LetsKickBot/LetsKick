@@ -5,7 +5,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
-from unidecode import unidecode
 
 import sys
 import os
@@ -30,7 +29,7 @@ def main():
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-box")))
     browser.find_element_by_class_name('search-box').send_keys(team_name)
 
-    browser.implicitly_wait(4)
+    browser.implicitly_wait(2)
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
 
@@ -50,36 +49,22 @@ def main():
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     newHtml = browser.page_source
+    url = browser.current_url
     newSoup = BeautifulSoup(newHtml, "html.parser")
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
+
     browser.switch_to_window(browser.window_handles[1])
-    browser.implicitly_wait(2)
+    browser.implicitly_wait(1)
 
-    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, 'next-match')))
-    browser.find_element_by_class_name('next-match').find_element_by_xpath(".//*[contains(text(), 'Game Details')]").click()
 
-    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='competitors sm-score']")))
-    html = browser.page_source
-    soup = BeautifulSoup(html, "html.parser")
+    imageUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+    newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
+    newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
 
-    game_details = soup.find('div', {'class': 'game-details header'}).text
-    game_details = game_details.strip()
-    next_game = soup.find('div', {'class': 'competitors sm-score'})
-    home_team = next_game.find('div', {'class': 'team home '}).find('span', {'class': 'long-name'}).text
-    away_team = next_game.find('div', {'class': 'team away '}).find('span', {'class': 'long-name'}).text
-    date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
-    teamImageUrl = newSoup.find('head').findAll('meta')[11]['content']
-
-    home_team = unidecode(home_team)
-    away_team = unidecode(away_team)
-    date = unidecode(date)
-    game_details = unidecode(game_details)
-    
-    print(home_team)
-    print(away_team)
-    print(date)
-    print(game_details)
-    print(teamImageUrl)
+    print(url)
+    print(imageUrl)
+    print(newsTitle)
+    print(newsSubtitle)
 
     browser.quit()
     sys.exit(0)

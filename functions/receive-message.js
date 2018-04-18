@@ -17,8 +17,16 @@ function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
 
+    if (key.toUpperCase() == "UPDATEMATCHESFROMTEAMS") {
+        updateDB.updateMatchesFromTeams();
+    }
+
     if (key.toUpperCase() == "ONGOING") {
         info.displayOnGoing();
+    }
+
+    if (key.toUpperCase() == "RUNNING") {
+        updateDB.getRunning();
     }
 
     // Users begin the search
@@ -120,7 +128,7 @@ function handleQuickReply(sender_psid, received_message) {
     // Sets reminder for a match
     if (key.includes('REMINDER')) {
         if (key.includes('YES')) {
-            handleMessage.setReminder(sender_psid, key);
+            handleCases.setReminder(sender_psid, key);
         }
         setTimeout(() => {
             handleCases.getContinue(sender_psid);

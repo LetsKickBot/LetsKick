@@ -8,7 +8,7 @@ const updateDB = require('./updateDB.js');
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
 
-let onGoing = [];
+let onGoing = updateDB.getOnGoing();
 
 // Looks for the name and logo of the team.
 function teamNameLookup(sender_psid, key) {
@@ -16,12 +16,13 @@ function teamNameLookup(sender_psid, key) {
     key = key.toUpperCase();
 
     // Check if the team name is already in the database or not
-    db.ref('Teams/').on("child_added", (teamName) => {
-        if (flag == true && teamName.key.includes(key)) {
-            flag = false;
-            handleCases.teamOptions(sender_psid, teamName.val().name, teamName.val().imageURL);
-        }
-        db.ref('Teams/').off("child_added");
+    db.ref('Teams/').once("value", (allTeamName) => {
+        allTeamName.forEach((teamName) => {
+            if (teamName.key.includes(key)) {
+                flag = false;
+                handleCases.teamOptions(sender_psid, teamName.val().name, teamName.val().imageURL);
+            }
+        })
     });
 
     // If the team name is not in the database, look it up.
@@ -67,45 +68,46 @@ function matchLookup(sender_psid, key, status) {
     key = key.toUpperCase();
 
     // Check if Match has already been in the DataBase
-    db.ref('Matches/').orderByChild('time').on("child_added", (match) => {
-        if (flag == true && match.key.includes(key)) {
-            flag = false;
-            var team1 = match.val().team1;
-            var team2 = match.val().team2;
-            var team = dataFormat.teamFormat(team1, team2, key);
-            var league = match.val().league;
+    db.ref('Matches/').orderByChild('time').once("value", (allMatches) => {
+        allMatches.forEach((match) => {
+            if (match.key.includes(key)) {
+                flag = false;
+                var team1 = match.val().team1;
+                var team2 = match.val().team2;
+                var team = dataFormat.teamFormat(team1, team2, key);
+                var league = match.val().league;
 
-            // Creates Team Name.
-            updateDB.dbTeamName(match.val().team1);
-            updateDB.dbTeamName(match.val().team2);
+                // Creates Team Name.
+                updateDB.dbTeamName(match.val().team1);
+                updateDB.dbTeamName(match.val().team2);
+                updateDB.dbNextGame(match.val().team2);
 
-            if (!onGoing.includes(team1)) {
-                updateDB.dbNextGame(team1, (new Date(match.val().time)).getTime());
-                onGoing.push(team1);
-            }
-
-            request({
-                "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                "method": "GET",
-                "json": true,
-            }, (err, res, body) => {
-                var time = dataFormat.timeFormat(match.val().time, body.timezone);
-                if (status.includes('Next Match')) {
-                    response = {
-                        "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
-                    };
-                    console.log("replied");
-                    sendResponse.directMessage(sender_psid, response);
+                if (!onGoing.includes(team1)) {
+                    updateDB.dbNextGame(team1, (new Date(match.val().time)).getTime());
+                    onGoing.push(team1);
                 }
 
-                setTimeout(() => {
-                    handleCases.setReminder(sender_psid, match.key);
-                }, 1000);
-            })
+                request({
+                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                    "method": "GET",
+                    "json": true,
+                }, (err, res, body) => {
+                    var time = dataFormat.timeFormat(match.val().time, body.timezone);
+                    if (status.includes('Next Match')) {
+                        response = {
+                            "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
+                        };
+                        console.log("replied");
+                        sendResponse.directMessage(sender_psid, response);
+                    }
 
-            db.ref('Matches/').off("child_added");
-        }
+                    setTimeout(() => {
+                        handleCases.askReminder(sender_psid, match.key);
+                    }, 1000);
+                })
+            }
+        })
     });
 
 
@@ -119,18 +121,17 @@ function matchLookup(sender_psid, key, status) {
             };
             sendResponse.directMessage(sender_psid, response);
 
+            updateDB.setRunning(true);
             // Async function to look for the Next Match.
             data.get_next_game(key, (err, reply) => {
                 if (err) {
                     console.log("Error occured on Server for MATCH: " + key);
                     response = {
-                        "text" : `Cannot find the Team: ${key}`
+                        "text" : `Cannot find the Match for: ${key}`
                     }
                     sendResponse.directMessage(sender_psid, response);
                 }
                 else {
-                     
-                 } {
                     request({
                         "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                         "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -163,6 +164,7 @@ function matchLookup(sender_psid, key, status) {
                         // Creates Team Names
                         updateDB.dbTeamName(reply[0]);
                         updateDB.dbTeamName(reply[1]);
+                        updateDB.dbNextGame(reply[1]);
 
                         // Updates match information after the game
                         if (!onGoing.includes(reply[0])) {
@@ -177,10 +179,11 @@ function matchLookup(sender_psid, key, status) {
                             };
                             sendResponse.directMessage(sender_psid, response);
                         }
+                        updateDB.setRunning(false);
                     })
 
                     setTimeout(() => {
-                        handleCases.setReminder(sender_psid, reply[0].toUpperCase());
+                        handleCases.askReminder(sender_psid, reply[0].toUpperCase());
                     }, 1000);
                 }
             })
@@ -196,15 +199,26 @@ function playerLookup(sender_psid, key) {
     key = key.toUpperCase();
 
     // Checks if the player is already in database
-    db.ref('Players/').on("child_added", (playerName) => {
-        if (flag == true && playerName.key.includes(key)) {
-            flag = false;
-            sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
-                playerName.val().playerSubtitle, playerName.val().playerImageURL,
-                playerName.val().playerURL);
-            db.ref('Players/').off("child_added");
-        }
-    });
+    db.ref('Players/').once("value", (allPlayers) => {
+        allPlayers.forEach((eachPlayer) => {
+            if (eachPlayer.key.includes(key)) {
+                flag = false;
+                sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
+                    playerName.val().playerSubtitle, playerName.val().playerImageURL,
+                    playerName.val().playerURL);
+            }
+        })
+    })
+
+    // db.ref('Players/').on("child_added", (playerName) => {
+    //     if (flag == true && playerName.key.includes(key)) {
+    //         flag = false;
+    //         sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
+    //             playerName.val().playerSubtitle, playerName.val().playerImageURL,
+    //             playerName.val().playerURL);
+    //         db.ref('Players/').off("child_added");
+    //     }
+    // });
 
     // If the player is not in the database, search for him
     setTimeout(() => {
