@@ -412,22 +412,17 @@ function matchLookup(sender_psid, key, status) {
                                     }
 
                                     // For the next coming matches
-                                    for (var j = 6; j < 6 + length; j++) {
-                                        nextMatches += reply[j] + '\n'
+                                    if (length > 5) {
+                                        for (var j = 6; j < (6 + 5); j++) {
+                                            nextMatches += reply[j] + '\n'
+                                        }
+                                    } else if ((length <= 5) && (length != 0)) {
+                                        for (var j = 6; j < (6 + length); j++) {
+                                            nextMatches += reply[j] + '\n'
+                                        }
+                                    } else {
+                                        nextMatches = 'There is no coming match in next few days!.';
                                     }
-                                    // if (length > 5) {
-                                    //     for (var j = 6; j < (6 + 5); j++) {
-                                    //         nextMatches += reply[j] + '\n'
-                                    //     }
-                                    // } else if ((length <= 5) && (length != 0)) {
-                                    //     for (var j = 6; j < (6 + length); j++) {
-                                    //         nextMatches += reply[j] + '\n'
-                                    //     }
-                                    // } else {
-                                    //     for (var j = 6; j < 7; j++) {
-                                    //         nextMatches += reply[j] + '\n'
-                                    //     }
-                                    // }
 
                                     response = {
                                         "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING UP MATCHES:\n${nextMatches}`

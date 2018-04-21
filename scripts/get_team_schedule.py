@@ -104,22 +104,27 @@ def main():
             + league[i])
 
     print(len(nextFewGames))
+
     # For the pass 5 games
     for i, j in enumerate(passFewGames, 1):
         print(str(i) + '.' + j)
 
     # For the next few games
     j = 1
-    if (len(nextFewGames) > 5):
-        for i in range(0, 5):
-            print(str(j) + '.' + nextFewGames[i])
-            j += 1
-    elif ((len(nextFewGames) <= 5) and (len(nextFewGames) != 0)):
-        for i in range(len(nextFewGames)):
-            print(str(j) + '.' + nextFewGames[i])
-            j += 1
-    else:
-        print('There is no coming match in next few days!.')
+    for i in range(0, len(nextFewGames)):
+        print(str(j) + '.' + nextFewGames[i])
+        j += 1
+
+    # if (len(nextFewGames) > 5):
+    #     for i in range(0, 5):
+    #         print(str(j) + '.' + nextFewGames[i])
+    #         j += 1
+    # elif ((len(nextFewGames) <= 5) and (len(nextFewGames) != 0)):
+    #     for i in range(len(nextFewGames)):
+    #         print(str(j) + '.' + nextFewGames[i])
+    #         j += 1
+    # else:
+    #     print('There is no coming match in next few days!.')
 
     browser.quit()
     sys.exit(0)
