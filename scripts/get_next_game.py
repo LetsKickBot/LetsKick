@@ -31,14 +31,21 @@ def main():
 
     browser.implicitly_wait(4)
 
-    try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
-    except TimeoutException:
+    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
+
+    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements(By.XPATH, ".//*")
+    found = False
+
+    for result in search_results:
+        if result.find_element_by_class_name('search_results__cat').text == 'Soccer':
+            result.find_element_by_class_name('search_results__cat').click()
+            found = True
+            break
+
+    if not found:
         print("Cannot find team")
         browser.quit()
         sys.exit(1)
-    else:
-        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     newHtml = browser.page_source
