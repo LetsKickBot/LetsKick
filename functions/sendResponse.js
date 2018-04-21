@@ -282,7 +282,7 @@ function sendReminder(sender_psid, response, payloadCharacteristic, match) {
     });
 }
 
-function mediaPlay(sender_psid, title, currentVideo, url) {
+function mediaPlay(sender_psid, title, currentVideo, urlVi) {
     let request_body = {
         "recipient": {
         "id": sender_psid
@@ -299,8 +299,8 @@ function mediaPlay(sender_psid, title, currentVideo, url) {
                             "buttons" : [
                                 {
                                    "type": 'web_url',
-                                    "url": url,
-                                    "title": 'See More Video',
+                                    "url": urlVi,
+                                    "title": 'See more videos at',
                                 }
                             ]
                         }

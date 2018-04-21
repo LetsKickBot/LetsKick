@@ -28,7 +28,7 @@ def main():
     browser.find_element_by_xpath("//input[@class='site-search__input site-search--inpage__input']").click()
 
     browser.find_element_by_xpath("//input[@class='site-search__input site-search--inpage__input']").send_keys(team_name)
-    
+
     browser.implicitly_wait(3)
 
     try:
@@ -82,7 +82,7 @@ def main():
 
     for i in whoPlay:
         print(i)
-    
+
     browser.quit()
     sys.exit(0)
 

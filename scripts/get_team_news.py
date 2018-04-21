@@ -12,12 +12,13 @@ import os
 def main():
     window_size = "1200,800"
     timeout = 20
-    team_name = sys.argv[1]
+    # team_name = sys.argv[1]
+    team_name = 'Manchester United'
 
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument("no-sandbox")
 
     browser = webdriver.Chrome(chrome_options=chrome_options)
@@ -47,17 +48,24 @@ def main():
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
 
     browser.switch_to_window(browser.window_handles[1])
-    browser.implicitly_wait(1)
+    browser.implicitly_wait(3)
 
-    
-    imageUrl = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
-    newsTitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
-    newsSubtitle = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
 
-    print(url)
-    print(imageUrl)
-    print(newsTitle)
-    print(newsSubtitle)
+    imageUrl1 = newSoup.findAll('article')
+    # imageUrl1 = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+    # imageUrl1 = newSoup.findAll('article', {'class' : 'news-feed-item news-feed-story-package'})[0].find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+    # imageUrl1 = newSoup.findAll('article', {'class' : 'news-feed-item news-feed-story-package'})
+    # newsTitle1 = newSoup.findAll('article')[0].find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('a').text
+    # newsSubtitle1 = newSoup.findAll('article')[0].find('div', {'class': 'text-container no-headlines'}).find('div', {'class': 'item-info-wrap'}).find('p').text
+    # newsLink1 = newSoup.findAll('article')[0].find('a')['data-popup-href']
+
+    # imgageUrl2 = newSoup.find('article', {'class': 'news-feed-item news-feed-story-package'}).find('figure', {'class': 'feed-item-figure '}).find('div', {'class': 'img-wrap'}).find('img')['data-default-src']
+
+    # print(url)
+    print(imageUrl1)
+    # print(newsTitle1)
+    # print(newsSubtitle1)
+    # print(newsLink1)
 
     browser.quit()
     sys.exit(0)

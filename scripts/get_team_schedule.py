@@ -5,10 +5,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 import sys
 import os
-import unicodedata
 
 def main():
     window_size = "1200,800"
@@ -32,14 +32,21 @@ def main():
 
     browser.implicitly_wait(3)
 
-    try:
-        WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]")))
-    except TimeoutException:
+    WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
+
+    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements(By.XPATH, ".//*")
+    found = False
+
+    for result in search_results:
+        if result.find_element_by_class_name('search_results__cat').text == 'Soccer':
+            result.find_element_by_class_name('search_results__cat').click()
+            found = True
+            break
+
+    if not found:
         print("Cannot find team")
         browser.quit()
         sys.exit(1)
-    else:
-        browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul/li/a/div[2]/span[1]").click()
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]")))
     browser.find_element_by_xpath("//*[@id='global-nav-secondary']/div/ul[2]/li[4]/a/span[1]").click()
@@ -61,9 +68,16 @@ def main():
     league = []
     date = []
     nextGames = soup.find_all('a', "score-list upcoming")
+    nextGamesInfo = soup.find_all('a', "score-list upcoming has-info")
     passGames = soup.find_all('a', ["score-list complete", "score-list complete has-info"])
 
-    for i in range(1, len(nextGames)):
+    for i in range(1, len(nextGamesInfo)):
+        nextFewGames.append(nextGamesInfo[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
+            + ' Vs ' + nextGamesInfo[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
+            + ' at ' + nextGamesInfo[i].find('div', {'class' : 'date'}).text + ' ' + nextGamesInfo[i].find('div', {'class' : 'time'}).text + ' in '
+            + nextGamesInfo[i].find('div', {'class' : 'league'}).text)
+
+    for i in range(0, len(nextGames)):
         nextFewGames.append(nextGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
             + ' Vs ' + nextGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
             + ' at ' + nextGames[i].find('div', {'class' : 'date'}).text + ' ' + nextGames[i].find('div', {'class' : 'time'}).text + ' in '
@@ -74,13 +88,13 @@ def main():
             (passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name winner'}) == None)):
             team = passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
             teams = passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
-            awayTeams.append(str(unicodedata.normalize('NFD', team).encode('ascii', 'ignore').decode("utf-8")))
-            homeTeams.append(str(unicodedata.normalize('NFD', teams).encode('ascii', 'ignore').decode("utf-8")))
+            awayTeams.append(unidecode(team))
+            homeTeams.append(unidecode(teams))
         else:
             team = passGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name winner'}).text
             teams = passGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name winner'}).text
-            awayTeams.append(str(unicodedata.normalize('NFD', team).encode('ascii', 'ignore').decode("utf-8")))
-            homeTeams.append(str(unicodedata.normalize('NFD', teams).encode('ascii', 'ignore').decode("utf-8")))
+            awayTeams.append(unidecode(team))
+            homeTeams.append(unidecode(teams))
 
         if((passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'home-score score-value winner'}) == None) or
             (passGames[i].find('div', {'class' : 'score-column score-result'}).find('span', {'class' : 'away-score score-value'}) == None)):
@@ -114,17 +128,6 @@ def main():
     for i in range(0, len(nextFewGames)):
         print(str(j) + '.' + nextFewGames[i])
         j += 1
-
-    # if (len(nextFewGames) > 5):
-    #     for i in range(0, 5):
-    #         print(str(j) + '.' + nextFewGames[i])
-    #         j += 1
-    # elif ((len(nextFewGames) <= 5) and (len(nextFewGames) != 0)):
-    #     for i in range(len(nextFewGames)):
-    #         print(str(j) + '.' + nextFewGames[i])
-    #         j += 1
-    # else:
-    #     print('There is no coming match in next few days!.')
 
     browser.quit()
     sys.exit(0)

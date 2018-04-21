@@ -416,7 +416,7 @@ function matchLookup(sender_psid, key, status) {
                                         for (var j = 6; j < (6 + 5); j++) {
                                             nextMatches += reply[j] + '\n'
                                         }
-                                    } else if ((length < 5) && (length != 0)) {
+                                    } else if ((length < 5) && (length > 0)) {
                                         for (var j = 6; j < (6 + length); j++) {
                                             nextMatches += reply[j] + '\n'
                                         }
@@ -434,52 +434,9 @@ function matchLookup(sender_psid, key, status) {
                         })
                     }
                 })
-            }
-
-            else if (status.includes('Team Coach')) {
-                response = {
-                    "text": `We currently working on this futures for coach`
-                }
-                sendResponse.directMessage(sender_psid, response);
-                console.log("reply");
-            }
-
-            else if (status.includes('Latest Highlight')) {
-                data.get_team_video(key, (err, reply) => {
-                    if (err) {
-                        response = {
-                            "text" : `Cannot find the current Team video: ${key}`
-                        }
-                        sendResponse.directMessage(sender_psid, response);
-                    }
-                    else if (key) {
-                        request({
-                            "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                            "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                            "method": "GET",
-                            "json": true,
-                        }, (err, res, body) => {
-                            if (err) {
-                                console.error("Unable to send message:" + err);
-                            }
-                            else {
-                                request({
-                                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                                    "method": "GET",
-                                    "json": true,
-                                }, (err, res, body) => {
-                                    let url = reply[0];
-                                    let title = reply[1];
-                                    let currentVideo = reply[2];
-
-                                    sendResponse.mediaPlay(sender_psid, title, currentVideo, url);
-                                    console.log("replied");
-                                })
-                            }
-                        })
-                    }
-                })
+                // setTimeout(() => {
+                //     handleCases.getContinue(sender_psid);
+                // }, 1000)
             }
         }
     }, 1200)

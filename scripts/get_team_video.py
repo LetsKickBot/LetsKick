@@ -12,12 +12,13 @@ import os
 def main():
     window_size = "1200,800"
     timeout = 20
-    team_name = sys.argv[1]
-    
+    # team_name = sys.argv[1]
+    team_name = 'Arsenal'
+
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_SHIM', None)
     chrome_options.add_argument("--window-size=%s" % window_size)
-    chrome_options.add_argument("--headless")
+    # chrome_options.add_argument("--headless")
     chrome_options.add_argument("no-sandbox")
 
     browser = webdriver.Chrome(chrome_options=chrome_options)
@@ -29,7 +30,7 @@ def main():
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//input[@id='td-header-search']")))
     browser.find_element_by_xpath("//input[@id='td-header-search']").send_keys(team_name)
 
-    browser.implicitly_wait(4)
+    browser.implicitly_wait(5)
 
     try:
         WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='td-aj-search']/div/div[1]/div[2]/h3/a")))
@@ -40,13 +41,19 @@ def main():
     else:
         browser.find_element_by_xpath("//*[@id='td-aj-search']/div/div[1]/div[2]/h3/a").click()
 
-    browser.implicitly_wait(1)
+    browser.implicitly_wait(3)
     html = browser.page_source
     url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
 
     title = soup.find('div', {'class' : 'td-post-header'}).find('header', {'class' : 'td-post-title'}).find('h1', {'class' : 'entry-title'}).text
-    videoURL = soup.find('div', {'class' : 'td-pb-span8 td-main-content'}).find('div', {'class' : 'td-ss-main-content'}).find('article').find('div', {'class' : 'td-post-content'}).find('div', {'class' : 'acp_wrapper'}).find('div', {'class' : 'acp_content'}).find('div', {'class' : 'brid brid-default-skin brid-playing'}).find('video')['src']
+    # htmlBrow = soup.find('div', {'class' : 'td-theme-wrap'}).find('div', {'class' : 'td-main-content-wrap td-container-wrap'}).find('div', {'class' : 'td-container td-post-template-5 '}).find('div', {'class' : 'td-pb-row'}).find('div', {'class' : 'td-pb-span8 td-main-content'}).find('div', {'class' : 'td-ss-main-content'}).find('article').find('div', {'class' : 'td-post-content'}).find('div', {'class' : 'acp_wrapper'}).find('div', {'class' : 'acp_content'}).find('video', {'class' : 'brid-tech brid-animate'})
+
+    # if (htmlBrow.find('div', {'class' : 'brid brid-default-skin brid-pause'}) == None):
+    videoURL = soup.find('div', {'class' : 'td-pb-span8 td-main-content'}).find('div', {'class' : 'td-ss-main-content'}).find('article').find('div', {'class' : 'td-post-content'}).find('div', {'class' : 'acp_wrapper'}).find('div', {'class' : 'acp_content'}).find('div').find('video')
+    # videoURL = soup.find('body').findAll('div')[6].findAll('div')[2].find('div').findAll('div')[2].find('div').find('div').find('article').findAll('div')[2].find('div').findAll('div')[2].find('div').find('video')
+    # else:
+        # videoURL = soup.find('div', {'class' : 'td-pb-span8 td-main-content'}).find('div', {'class' : 'td-ss-main-content'}).find('article').find('div', {'class' : 'td-post-content'}).find('div', {'class' : 'acp_wrapper'}).find('div', {'class' : 'acp_content'}).find('div', {'class' : 'brid brid-default-skin brid-pause'}).find('video', {'class' : 'brid-tech brid-animate'})['src']
 
     print(url)
     print(title)
