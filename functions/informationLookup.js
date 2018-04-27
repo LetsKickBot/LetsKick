@@ -13,7 +13,7 @@ let onGoing = updateDB.getOnGoing();
 // Looks for the name and logo of the team.
 function teamNameLookup(sender_psid, key) {
     let flag = true;
-    key = key.toUpperCase();
+    key = dataFormat.cleanKeyDB(key).toUpperCase();
 
     // Check if the team name is already in the database or not
     db.ref('Teams/').once("value", (allTeamName) => {
@@ -46,12 +46,12 @@ function teamNameLookup(sender_psid, key) {
                     var teamName = reply[0];
                     var imageURL = reply[1];
                     if (!(reply[0].toUpperCase().includes(key.toUpperCase()))) {
-                        db.ref('Teams/' + key.toUpperCase() + '/').set({
+                        db.ref('Teams/' + dataFormat.cleanKeyDB(key).toUpperCase() + '/').set({
                             'name': teamName,
                             'imageURL': imageURL 
                         });
                     }
-                    db.ref('Teams/' + teamName.toUpperCase() + '/').set({
+                    db.ref('Teams/' + dataFormat.cleanKeyDB(teamName).toUpperCase() + '/').set({
                         'name': teamName,
                         'imageURL': imageURL 
                     });
@@ -65,49 +65,54 @@ function teamNameLookup(sender_psid, key) {
 // Gets match's information
 function matchLookup(sender_psid, key, status) {
     let flag = true;
-    key = key.toUpperCase();
+    key = dataFormat.cleanKeyDB(key).toUpperCase();
 
     // Check if Match has already been in the DataBase
     db.ref('Matches/').orderByChild('time').once("value", (allMatches) => {
-        allMatches.forEach((match) => {
-            if (match.key.includes(key)) {
-                flag = false;
-                var team1 = match.val().team1;
-                var team2 = match.val().team2;
-                var team = dataFormat.teamFormat(team1, team2, key);
-                var league = match.val().league;
+        try {
+            allMatches.forEach((match) => {
+                if (match.key == key) {
+                    flag = false;
+                    var team1 = match.val().team1;
+                    var team2 = match.val().team2;
+                    var team = dataFormat.teamFormat(team1, team2, key);
+                    var league = match.val().league;
 
-                // Creates Team Name.
-                updateDB.dbTeamName(match.val().team1);
-                updateDB.dbTeamName(match.val().team2);
-                updateDB.dbNextGame(match.val().team2);
+                    // Creates Team Name.
+                    updateDB.dbTeamName(match.val().team1);
+                    updateDB.dbTeamName(match.val().team2);
+                    updateDB.dbNextGame(match.val().team2);
 
-                if (!onGoing.includes(team1)) {
-                    updateDB.dbNextGame(team1, (new Date(match.val().time)).getTime());
-                    onGoing.push(team1);
-                }
-
-                request({
-                    "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
-                    "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
-                    "method": "GET",
-                    "json": true,
-                }, (err, res, body) => {
-                    var time = dataFormat.timeFormat(match.val().time, body.timezone);
-                    if (status.includes('Next Match')) {
-                        response = {
-                            "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
-                        };
-                        console.log("replied");
-                        sendResponse.directMessage(sender_psid, response);
+                    if (!onGoing.includes(team1)) {
+                        updateDB.dbNextGame(team1, (new Date(match.val().time)).getTime());
+                        onGoing.push(team1);
                     }
 
-                    setTimeout(() => {
-                        handleCases.askReminder(sender_psid, match.key);
-                    }, 1000);
-                })
-            }
-        })
+                    request({
+                        "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
+                        "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
+                        "method": "GET",
+                        "json": true,
+                    }, (err, res, body) => {
+                        var time = dataFormat.timeFormat(match.val().time, body.timezone);
+                        if (status.includes('Next Match')) {
+                            response = {
+                                "text": `${team[0]}\n${team[1]}\nNext Match: ${time}\nLeague: ${league}`
+                            };
+                            console.log("replied");
+                            sendResponse.directMessage(sender_psid, response);
+                        }
+
+                        setTimeout(() => {
+                            handleCases.askReminder(sender_psid, match.key);
+                        }, 1000);
+                    })
+                    throw BreakException
+                }
+            })
+        } 
+
+        catch (e) {}
     });
 
 
@@ -153,7 +158,7 @@ function matchLookup(sender_psid, key, status) {
                             reply[1] = temp;
                         }
 
-                        db.ref('Matches/' + reply[0].toUpperCase() + '/').set({
+                        db.ref('Matches/' + dataFormat.cleanKeyDB(reply[0]).toUpperCase() + '/').set({
                             'team1': reply[0],
                             'team2': reply[1],
                             'time': reply[2],
@@ -252,7 +257,7 @@ function playerLookup(sender_psid, key) {
 
 
                     if (!(reply[2].toUpperCase().includes(key.toUpperCase()))) {
-                        db.ref('Players/' + key.toUpperCase() + '/').set({
+                        db.ref('Players/' + dataFormat.cleanKeyDB(key).toUpperCase() + '/').set({
                             'playerURL': playerURL,
                             'playerTitle': playerTitle,
                             'playerSubtitle': playerSubtitle,
@@ -260,7 +265,7 @@ function playerLookup(sender_psid, key) {
                         });
                     }
 
-                    db.ref('Players/' + playerName.toUpperCase() + '/').set({
+                    db.ref('Players/' + dataFormat.cleanKeyDB(playerName).toUpperCase() + '/').set({
                         'playerURL': playerURL,
                         'playerTitle': playerTitle,
                         'playerSubtitle': playerSubtitle,

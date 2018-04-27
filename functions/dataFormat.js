@@ -120,6 +120,16 @@ function decodeUnderline(key) {
     return [key.slice(0, startPoint - 1), key.slice(startPoint)];
 }
 
+function cleanKeyDB(key) {
+    const exceptionChar = [".", "#", "$", "[", "]"];
+    for (var index in exceptionChar) {
+        key = key.split('')
+            .filter(eachChar => eachChar != exceptionChar[index])
+            .join('')
+    }
+    return key;
+}
+
 module.exports = {
     checkDuplicate,
     completeName,
@@ -127,5 +137,6 @@ module.exports = {
     teamFormat,
     quickReplyFormat,
     teamOptionFormat,
-    decodeUnderline
+    decodeUnderline,
+    cleanKeyDB
 }

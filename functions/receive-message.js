@@ -10,7 +10,7 @@ const updateDB = require('../functions/updateDB.js');
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
 
-let handleChoice = {};
+let handleChoice = db.ref('HandleChoices/')
 
 // Handle direct Message
 function handleMessage(sender_psid, received_message) {
@@ -34,36 +34,43 @@ function handleMessage(sender_psid, received_message) {
         handleCases.getStart(sender_psid);
     }
 
-    // Look for the Player
-    else if (handleChoice[sender_psid] == 'PLAYER') {
-        delete handleChoice[sender_psid];
-        info.playerLookup(sender_psid, key);
-    }
-
-    // Look for the Team
-    else if (handleChoice[sender_psid] == 'TEAM') {
-        key = dataFormat.checkDuplicate(key);
-        console.log(key);   
-        if (typeof(key) == 'object') {
-            let newKey = dataFormat.completeName(key);
-            response = {
-              "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
-            }
-            sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
-        } 
-        
-        else {
-            delete handleChoice[sender_psid];
-            info.teamNameLookup(sender_psid, key);
-        }
-    }
-
-    // Instruction for user to use the Bot
     else {
-        response = {
-            "text": `Please begin by typing in 'Start'`,
-        };
-        sendResponse.directMessage(sender_psid, response);
+        handleChoice.child(sender_psid).once("value", (snapshot) => {
+            if (snapshot.exists()) {
+
+                // Look for the Player
+                if (snapshot.val().choice == "PLAYER") {
+                    handleChoice.child(sender_psid).set({});
+                    info.playerLookup(sender_psid, key);
+                }
+
+                // Look for the Team
+                else if (snapshot.val().choice == "TEAM") {
+                    key = dataFormat.checkDuplicate(key);
+                    console.log(key);   
+                    if (typeof(key) == 'object') {
+                        let newKey = dataFormat.completeName(key);
+                        response = {
+                          "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
+                        }
+                        sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
+                    } 
+                    
+                    else {
+                        handleChoice.child(sender_psid).set({});
+                        info.teamNameLookup(sender_psid, key);
+                    }
+                }
+
+                // Instruction for user to use the Bot
+                else {
+                    response = {
+                        "text": `Please begin by typing in 'Start'`,
+                    };
+                    sendResponse.directMessage(sender_psid, response);
+                }
+            }
+        })
     }
 }
 
@@ -75,11 +82,15 @@ function handleQuickReply(sender_psid, received_message) {
     // Identify the category user want to search
     if (key.includes('START')) {
         if (key.includes('Team')) {
-            handleChoice[sender_psid] = 'TEAM';
+            handleChoice.child(sender_psid).set({
+                "choice": "TEAM"
+            })
             handleCases.popularTeam(sender_psid);
         }
         else {
-            handleChoice[sender_psid] = 'PLAYER';
+            handleChoice.child(sender_psid).set({
+                "choice": "PLAYER"
+            })
             handleCases.popularPlayer(sender_psid);
         }
     }
@@ -97,7 +108,7 @@ function handleQuickReply(sender_psid, received_message) {
 
         // Get the team name from Payload
         var teamName = (dataFormat.decodeUnderline(key))[1];
-        delete handleChoice[sender_psid];
+        handleChoice.child(sender_psid).set({});
         info.teamNameLookup(sender_psid, teamName);
     }
 
@@ -107,7 +118,7 @@ function handleQuickReply(sender_psid, received_message) {
         // Get the player name from Payload
         var player = (dataFormat.decodeUnderline(key))[1];
         if (key.includes(player)) {
-            delete handleChoice[sender_psid];
+            handleChoice.child(sender_psid).set({});
             info.playerLookup(sender_psid, player);
         }
     }
@@ -143,7 +154,10 @@ function handlePostback(sender_psid, messagePostback) {
 
         // Search for different player name
         if (payload.includes('ANOTHERPLAYER')) {
-            handleChoice[sender_psid] = 'PLAYER';
+            handleChoice.child(sender_psid).set({
+                "choice": "PLAYER"
+            })
+
             response = {
                 'text': 'Please give us the player name'
             };
@@ -152,7 +166,10 @@ function handlePostback(sender_psid, messagePostback) {
 
         // Search for different team name
         else if (payload.includes('Another Team')) {
-            handleChoice[sender_psid] = 'TEAM';
+            handleChoice.child(sender_psid).set({
+                "choice": "TEAM"
+            })
+
             response = {
                 'text': 'Please give us the team name'
             };

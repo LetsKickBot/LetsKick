@@ -71,7 +71,7 @@ function askReminder(sender_psid, match) {
 
 function setReminder(sender_psid, key) {
     var matchInfo = (dataFormat.decodeUnderline(key))[1];
-    db.ref('Matches/' + matchInfo + '/').once('value', (match) => {
+    db.ref('Matches/' + dataFormat.cleanKeyDB(matchInfo) + '/').once('value', (match) => {
         var timeDif = (new Date(match.val().time)) - (new Date());
         if (timeDif > 2147483616) {
             var response = {
@@ -80,6 +80,10 @@ function setReminder(sender_psid, key) {
             sendResponse.directMessage(sender_psid, response);
         }
         else if (timeDif > 0) {
+            db.ref("Reminder/" + sender_psid + "/").push({
+                "team": matchInfo,
+                "time": (new Date(match.val().time)).getTime()
+            })
             setTimeout(() => {
                 var response = {
                     'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
