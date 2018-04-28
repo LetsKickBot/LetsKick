@@ -237,6 +237,7 @@ function playerLookup(sender_psid, key) {
             // Async function to look for the Player.
             data.get_player_info(key, (err, reply) => {
                 if (err) {
+                    console.log("Error occured on Server for PLAYER: " + key)
                     response = {
                         'text' : `Cannot find player: ${key}`
                     };

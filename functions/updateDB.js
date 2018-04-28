@@ -105,6 +105,7 @@ function dbNextGame(key, iniTime) {
             key = dataFormat.cleanKeyDB(key);
             data.get_next_game(key, (err, reply) => {
                 if (err) {
+                    console.log("Error occured on Server for MATCH: " + key);
                     running = false;
                 }
                 else {
