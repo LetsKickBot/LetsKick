@@ -102,7 +102,7 @@ function dbNextGame(key, iniTime) {
                         'league': reply[3],
                         'url': reply[4]
                     })
-                    
+
                     dbTeamName(dataFormat.cleanKeyDB(reply[1]));
 
                     setTimeout(() => {
@@ -161,6 +161,17 @@ function updateMatchesFromTeams() {
     })
 }
 
+function setAllReminders() {
+    db.ref('Reminder/').once("value", (newVal) => {
+        newVal.forEach((newVal1) => {
+            newVal1.forEach((newVal2) => {
+                handleCases.setReminder(newVal1.key, newVal2.val().team);
+            })
+        })
+    });
+    console.log("All remiders have been set.");
+}
+
 function getOnGoing() {
     return onGoing;
 }
@@ -181,5 +192,6 @@ module.exports = {
     updateMatchesFromTeams,
     getOnGoing,
     setRunning,
-    getRunning
+    getRunning,
+    setAllReminders
 }

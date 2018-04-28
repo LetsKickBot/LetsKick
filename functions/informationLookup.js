@@ -208,23 +208,13 @@ function playerLookup(sender_psid, key) {
         allPlayers.forEach((eachPlayer) => {
             if (eachPlayer.key.includes(key)) {
                 flag = false;
-                sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
-                    playerName.val().playerSubtitle, playerName.val().playerImageURL,
-                    playerName.val().playerURL);
+                sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
+                    eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
+                    eachPlayer.val().playerURL);
             }
         })
     })
-
-    // db.ref('Players/').on("child_added", (playerName) => {
-    //     if (flag == true && playerName.key.includes(key)) {
-    //         flag = false;
-    //         sendResponse.playerReply(sender_psid, playerName.val().playerTitle,
-    //             playerName.val().playerSubtitle, playerName.val().playerImageURL,
-    //             playerName.val().playerURL);
-    //         db.ref('Players/').off("child_added");
-    //     }
-    // });
-
+    
     // If the player is not in the database, search for him
     setTimeout(() => {
         if (flag == true) {
@@ -247,7 +237,7 @@ function playerLookup(sender_psid, key) {
                     flag = false;
                     let playerImageURL = reply[0];
                     let playerURL = reply[1];
-                    let playerName = reply[2];
+                    let eachPlayer = reply[2];
                     let playerTitle = reply[2] + ' - ' + reply[3];
                     let playerSubtitle = reply[4];
                     for (var eachData = 5; eachData < 7; eachData++) {
@@ -265,7 +255,7 @@ function playerLookup(sender_psid, key) {
                         });
                     }
 
-                    db.ref('Players/' + dataFormat.cleanKeyDB(playerName).toUpperCase() + '/').set({
+                    db.ref('Players/' + dataFormat.cleanKeyDB(eachPlayer).toUpperCase() + '/').set({
                         'playerURL': playerURL,
                         'playerTitle': playerTitle,
                         'playerSubtitle': playerSubtitle,

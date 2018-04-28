@@ -80,10 +80,6 @@ function setReminder(sender_psid, key) {
             sendResponse.directMessage(sender_psid, response);
         }
         else if (timeDif > 0) {
-            db.ref("Reminder/" + sender_psid + "/").push({
-                "team": matchInfo,
-                "time": (new Date(match.val().time)).getTime()
-            })
             setTimeout(() => {
                 var response = {
                     'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
