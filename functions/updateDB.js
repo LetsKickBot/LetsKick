@@ -10,6 +10,7 @@ let db = bucket.db;
 let onGoing = [];
 let running = false
 
+// Looking for Team Name
 function dbTeamName(key) {
     if (running == false) {
 
@@ -24,23 +25,29 @@ function dbTeamName(key) {
             if (!snapshot.exists()) {
                 running = true
             	console.log('Looking for: ' + key.toUpperCase());
+
+                // Async function helps searching for Team Name
                 data.get_team_name(key, (err, reply) => {
                     if (!err) {
                     	console.log("FOUNDED TEAM: " + key);
                         var teamName = reply[0];
                         var imageURL = reply[1];
 
+                        // Save to database the mistakenly typed Team Name
                         if (!(dataFormat.cleanKeyDB(reply[0]).toUpperCase().includes(key.toUpperCase()))) {
                             db.ref('Teams/' + dataFormat.cleanKeyDB(key).toUpperCase() + '/').set({
                                 'name': teamName,
                                 'imageURL': imageURL 
                             });
                         }
+
+                        // Save new search to the database
                         db.ref('Teams/' + dataFormat.cleanKeyDB(teamName).toUpperCase() + '/').set({
                             'name': teamName,
                             'imageURL': imageURL 
                         });
 
+                        // Automatically get the next game of the team
                         dbNextGame(teamName, -1);
                     }
                     else {
@@ -67,21 +74,34 @@ function dbTeamName(key) {
     }
 }
 
+// Get the next game of the team
 function dbNextGame(key, iniTime) {
+
+    // Check if there is any async process running in the background
     if (running == false) {
+
+        // Notify the machine that there is a function running
         running = true;
+
+        // Time pass in exceed limit for SetTimeout
         if ((iniTime - (new Date()).getTime()) > 2147483646) {
             console.log("Time exceeds Limit for MATCH: " + key);
             running = false
         }
+
+        // Check if the initial time is given or not (in this case, not)
         else if (iniTime != -1) {
             setTimeout(() => {
                 dbNextGame(key, -1)
             }, iniTime - (new Date()).getTime() + 8300000);
             running = false;
         }
+
+        // Get new data and save it to database by crawling ESPN
         else {
             console.log(key);
+
+            // Get rid of all special characters
             key = dataFormat.cleanKeyDB(key);
             data.get_next_game(key, (err, reply) => {
                 if (err) {
@@ -89,12 +109,15 @@ function dbNextGame(key, iniTime) {
                 }
                 else {
                     console.log("Found Match: " + key);
+
+                    // Set the keyword as team1. (To prevent confusion later since there are team1 and team2)
                     if (dataFormat.cleanKeyDB(key).toUpperCase() != dataFormat.cleanKeyDB(reply[0]).toUpperCase()) {
                         var temp = reply[0];
                         reply[0] = reply[1];
                         reply[1] = temp;
                     }
 
+                    // Save match to the database
                     db.ref('Matches/' + dataFormat.cleanKeyDB(key).toUpperCase() + '/').set({
                         'team1': reply[0],
                         'team2': reply[1],
@@ -103,8 +126,10 @@ function dbNextGame(key, iniTime) {
                         'url': reply[4]
                     })
 
+                    // Looking for the name of the opponent team
                     dbTeamName(dataFormat.cleanKeyDB(reply[1]));
 
+                    // Automatically get afterward match after the next one is finished
                     setTimeout(() => {
                         dbNextGame(key, -1)
                     }, (new Date(reply[2])) - (new Date()) + 8300000 )
@@ -148,7 +173,7 @@ function updateAllCurrentMatches() {
     })
 }
 
-// Testing
+// Search for all the matches that are currently in Database/Teams
 function updateMatchesFromTeams() {
     db.ref('Teams/').once('value', (allTeams) => {
         allTeams.forEach((eachTeam) => {
@@ -161,6 +186,7 @@ function updateMatchesFromTeams() {
     })
 }
 
+// Testing
 function setAllReminders() {
     db.ref('Reminder/').once("value", (newVal) => {
         newVal.forEach((newVal1) => {
@@ -172,14 +198,17 @@ function setAllReminders() {
     console.log("All remiders have been set.");
 }
 
+// Give back all the matches that are currently observed and updated
 function getOnGoing() {
     return onGoing;
 }
-
+ 
+// Set the status for running thread 
 function setRunning(running) {
     this.running = running;
 }
 
+// Print out if any thread is running.
 function getRunning() {
     console.log(running);
 }

@@ -59,6 +59,7 @@ function completeName(key) {
     return newKey;
 }
 
+// Format time before send it back to the user
 function timeFormat(inputTime, timezone) {
     let time = new Date(inputTime);
     let minute = time.getMinutes();
@@ -81,6 +82,7 @@ function timeFormat(inputTime, timezone) {
     return answer;
 }
 
+// Format teams before send message back to user
 function teamFormat(team1, team2, key) {
     let check = team1;
     team1 = "Home team: " + team1;
@@ -120,6 +122,7 @@ function decodeUnderline(key) {
     return [key.slice(0, startPoint - 1), key.slice(startPoint)];
 }
 
+// Remove all special character from the key.
 function cleanKeyDB(key) {
     const exceptionChar = [".", "#", "$", "[", "]"];
     for (var index in exceptionChar) {

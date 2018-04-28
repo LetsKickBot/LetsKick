@@ -69,6 +69,8 @@ function matchLookup(sender_psid, key, status) {
 
     // Check if Match has already been in the DataBase
     db.ref('Matches/').orderByChild('time').once("value", (allMatches) => {
+
+        // Try - caught statement is used as a replacement for break
         try {
             allMatches.forEach((match) => {
                 if (match.key == key) {
@@ -88,6 +90,7 @@ function matchLookup(sender_psid, key, status) {
                         onGoing.push(team1);
                     }
 
+                    // Get time zone and send message to user
                     request({
                         "uri": "https://graph.facebook.com/v2.6/" + sender_psid,
                         "qs" : {"access_token": process.env.PAGE_ACCESS_TOKEN, fields: "timezone"},
@@ -103,6 +106,7 @@ function matchLookup(sender_psid, key, status) {
                             sendResponse.directMessage(sender_psid, response);
                         }
 
+                        // Ask for reminder
                         setTimeout(() => {
                             handleCases.askReminder(sender_psid, match.key);
                         }, 1000);
@@ -126,7 +130,9 @@ function matchLookup(sender_psid, key, status) {
             };
             sendResponse.directMessage(sender_psid, response);
 
+            // Notify the compiler that there is a async process running
             updateDB.setRunning(true);
+
             // Async function to look for the Next Match.
             data.get_next_game(key, (err, reply) => {
                 if (err) {
@@ -152,12 +158,14 @@ function matchLookup(sender_psid, key, status) {
                         let newsTitle = reply[6];
                         let newsSubtitle = reply[7];
 
+                        // Make sure that the keyword always in team1 (instead of team2)
                         if (key.toUpperCase() != reply[0].toUpperCase()) {
                             var temp = reply[0];
                             reply[0] = reply[1];
                             reply[1] = temp;
                         }
 
+                        // Save new match to the database
                         db.ref('Matches/' + dataFormat.cleanKeyDB(reply[0]).toUpperCase() + '/').set({
                             'team1': reply[0],
                             'team2': reply[1],
@@ -187,6 +195,7 @@ function matchLookup(sender_psid, key, status) {
                         updateDB.setRunning(false);
                     })
 
+                    // Ask for reminder
                     setTimeout(() => {
                         handleCases.askReminder(sender_psid, reply[0].toUpperCase());
                     }, 1000);
@@ -214,7 +223,7 @@ function playerLookup(sender_psid, key) {
             }
         })
     })
-    
+
     // If the player is not in the database, search for him
     setTimeout(() => {
         if (flag == true) {
@@ -245,7 +254,7 @@ function playerLookup(sender_psid, key) {
                         playerSubtitle += '\n' + reply[eachData];
                     }
 
-
+                    // If user input is not contained in the Team Name but the search bar still gives back result
                     if (!(reply[2].toUpperCase().includes(key.toUpperCase()))) {
                         db.ref('Players/' + dataFormat.cleanKeyDB(key).toUpperCase() + '/').set({
                             'playerURL': playerURL,
@@ -255,6 +264,7 @@ function playerLookup(sender_psid, key) {
                         });
                     }
 
+                    // Save search result to database
                     db.ref('Players/' + dataFormat.cleanKeyDB(eachPlayer).toUpperCase() + '/').set({
                         'playerURL': playerURL,
                         'playerTitle': playerTitle,
@@ -267,7 +277,6 @@ function playerLookup(sender_psid, key) {
                     console.log("replied");
                     sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);
                 }
-                // Check if user want to continue searching
             })
         }
     }, 1200);

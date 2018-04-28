@@ -61,6 +61,7 @@ function getContinue(sender_psid) {
     sendResponse.quickReply(sender_psid, response, 'CONTINUE', key);
 }
 
+// Ask whether the user want to set reminder or not
 function askReminder(sender_psid, match) {
     let key = ['Yes', 'No'];
     let response = {
@@ -69,16 +70,21 @@ function askReminder(sender_psid, match) {
     sendResponse.sendReminder(sender_psid, response, 'REMINDER', match);
 }
 
+// Set reminder
 function setReminder(sender_psid, key) {
     var matchInfo = (dataFormat.decodeUnderline(key))[1];
     db.ref('Matches/' + dataFormat.cleanKeyDB(matchInfo) + '/').once('value', (match) => {
         var timeDif = (new Date(match.val().time)) - (new Date());
+
+        // Cannot set reminder if time is over the limit of setTimeout
         if (timeDif > 2147483616) {
             var response = {
                 'text': "Sorry, We cannot set reminder because the match is too far away."
             };
             sendResponse.directMessage(sender_psid, response);
         }
+
+        // Set reminder using setTimeout
         else if (timeDif > 0) {
             setTimeout(() => {
                 var response = {
@@ -92,6 +98,7 @@ function setReminder(sender_psid, key) {
             };
             sendResponse.directMessage(sender_psid, response);
         }
+
         else if (timeDif < -7200000) {
             var response = {
                 'text': 'This match has been played.'
