@@ -415,12 +415,13 @@ function matchLookup(sender_psid, key, status) {
                                         for (var j = 6; j < (6 + 5); j++) {
                                             nextMatches += reply[j] + '\n'
                                         }
-                                    } else if ((length < 5) && (length > 0)) {
+                                    }
+
+                                    if ((length < 5) && (length > 0)) {
+                                        console.log("length: ", length);
                                         for (var j = 6; j < (6 + length); j++) {
                                             console.log("j: ", j);
-                                            console.log("The reply: ", reply[j])
                                             nextMatches += reply[j] + '\n'
-                                            console.log("nextMatches: ", nextMatches)
                                         }
                                     } else {
                                         nextMatches = 'There is no coming match in next few days!.';
