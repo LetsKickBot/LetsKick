@@ -402,7 +402,7 @@ function matchLookup(sender_psid, key, status) {
                                     "json": true,
                                 }, (err, res, body) => {
                                     let length = reply[0]
-                                    console.log("length: ", length)
+                                    console.log("Total Next coming match: ", length);
                                     let oldMatches = ''
                                     let nextMatches = ''
 
@@ -416,16 +416,18 @@ function matchLookup(sender_psid, key, status) {
                                         for (var j = 6; j < (6 + 5); j++) {
                                             nextMatches += reply[j] + '\n'
                                         }
+                                        break;
                                     } else if ((length < 5) && (length > 0)) {
                                         for (var j = 6; j < (6 + length); j++) {
                                             nextMatches += reply[j] + '\n'
                                         }
+                                        break;
                                     } else if (length == 0) {
                                         nextMatches = 'There is no coming match in next few days!.';
                                     }
 
                                     response = {
-                                        "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING UP MATCHES:\n${nextMatches}`
+                                        "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING MATCHES:\n${nextMatches}`
                                     }
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");

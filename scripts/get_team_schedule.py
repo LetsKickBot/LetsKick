@@ -73,13 +73,13 @@ def main():
 
     for i in range(1, len(nextGamesInfo)):
         nextFewGames.append(nextGamesInfo[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
-            + ' Vs ' + nextGamesInfo[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
+            + ' vs ' + nextGamesInfo[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
             + ' at ' + nextGamesInfo[i].find('div', {'class' : 'date'}).text + ' ' + nextGamesInfo[i].find('div', {'class' : 'time'}).text + ' in '
             + nextGamesInfo[i].find('div', {'class' : 'league'}).text)
 
     for i in range(0, len(nextGames)):
         nextFewGames.append(nextGames[i].find('div', {'class' : 'score-column score-home-team score-team'}).find('div', {'class' : 'team-name'}).text
-            + ' Vs ' + nextGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
+            + ' vs ' + nextGames[i].find('div', {'class' : 'score-column score-away-team score-team'}).find('div', {'class' : 'team-name'}).text
             + ' at ' + nextGames[i].find('div', {'class' : 'date'}).text + ' ' + nextGames[i].find('div', {'class' : 'time'}).text + ' in '
             + nextGames[i].find('div', {'class' : 'league'}).text)
 
@@ -121,12 +121,12 @@ def main():
 
     # For the pass 5 games
     for i, j in enumerate(passFewGames, 1):
-        print(str(i) + '.' + j)
+        print(str(i) + '. ' + j)
 
     # For the next few games
     j = 1
     for i in range(0, len(nextFewGames)):
-        print(str(j) + '.' + nextFewGames[i])
+        print(str(j) + '. ' + nextFewGames[i])
         j += 1
 
     browser.quit()
