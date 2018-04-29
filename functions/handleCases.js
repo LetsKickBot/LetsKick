@@ -34,49 +34,33 @@ function teamOptions(sender_psid, teamName, imageURL) {
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
-// Provides 11 popular team options
+// Provides 6 popular teams options
 function popularTeam(sender_psid) {
-    let key = ['Manchester United', 'Real Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
-    let response = {
-        'text': `Please type a team you want or choose from some quick options below!!!`
-    }
-    sendResponse.quickReply(sender_psid, response, 'POPULART', key);
-}
-
-
-function anotherTeam(sender_psid) {
-    const handleChoice = db.ref("HandleChoices/");
-
-    handleChoice.child(sender_psid).set({
-        "choice": "TEAM"
+    db.ref("PopularTeams/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
+        let teams = []
+        result.forEach((team) => {
+            teams.push(team.key);
+        })
+        let response = {
+            'text': `Please type a team you want or choose from some quick options below!!!`
+        }
+        sendResponse.quickReply(sender_psid, response, 'POPULART', teams);
     })
-
-    let response = {
-        'text': 'Please give us the team name'
-    };
-    sendResponse.directMessage(sender_psid, response); 
 }
 
-// Provides 11 popular players options
+// Provides 6 popular players options
 function popularPlayer(sender_psid) {
-    let key = ['Ronaldo', 'Messi', 'Bale', 'Neymar', 'Hazard', 'Morata', 'Ozil', 'Kroos', 'Isco', 'Alexis', 'Salad'];
-    let response = {
-        'text': `Please type a player you want or choose from some quick options below!!!`
-    }
-    sendResponse.quickReply(sender_psid, response, 'POPULARP', key);
-}
+    db.ref("PopularPlayers/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
+        let playerNames = []
+        result.forEach((playerName) => {
+            playerNames.push(playerName.key);
+        })
 
-function anotherPlayer(sender_psid) {
-    const handleChoice = db.ref("HandleChoices/");
-
-    handleChoice.child(sender_psid).set({
-        "choice": "PLAYER"
+        let response = {
+            'text': `Please type a player you want or choose from some quick options below!!!`
+        }
+        sendResponse.quickReply(sender_psid, response, 'POPULARP', playerNames);
     })
-
-    let response = {
-        'text': 'Please give us the team name'
-    };
-    sendResponse.directMessage(sender_psid, response); 
 }
 
 // Repeats the main bot function.
@@ -152,9 +136,7 @@ module.exports = {
     getStart,
     teamOptions,
     popularTeam,
-    anotherTeam,
     popularPlayer,
-    anotherPlayer,
     getContinue,
     askReminder,
     setReminder

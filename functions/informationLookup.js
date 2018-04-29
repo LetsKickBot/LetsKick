@@ -21,6 +21,9 @@ function teamNameLookup(sender_psid, key) {
             if (teamName.key.includes(key)) {
                 flag = false;
                 handleCases.teamOptions(sender_psid, teamName.val().name, teamName.val().imageURL);
+
+                // Increase the number of search on the match.
+                updateDB.popularTeam(teamName.val().name);
             }
         })
     });
@@ -55,6 +58,10 @@ function teamNameLookup(sender_psid, key) {
                         'name': teamName,
                         'imageURL': imageURL 
                     });
+
+                    // Increase the number of search on the match.
+                    updateDB.popularTeam(teamName);
+
                     handleCases.teamOptions(sender_psid, teamName, imageURL);
                 }
             })
@@ -214,18 +221,29 @@ function playerLookup(sender_psid, key) {
 
     // Checks if the player is already in database
     db.ref('Players/').once("value", (allPlayers) => {
-        allPlayers.forEach((eachPlayer) => {
-            if (eachPlayer.key.includes(key)) {
-                flag = false;
 
-                // Increase the number of search for the player.
-                updateDB.popularPlayer(eachPlayer.key);
-                
-                sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
-                    eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
-                    eachPlayer.val().playerURL);
-            }
-        })
+        // Act as loop's break
+        try {
+            allPlayers.forEach((eachPlayer) => {
+                if (eachPlayer.key.includes(key)) {
+                    flag = false;
+
+                    // Increase the number of search on the player.
+                    var playerName = eachPlayer.val().playerTitle;
+                    playerName = playerName.slice(0, playerName.indexOf("-") - 1);
+
+                    updateDB.popularPlayer(playerName);
+
+                    sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
+                        eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
+                        eachPlayer.val().playerURL);
+
+                    throw BreakException;
+                }
+            })
+        }
+
+        catch (e) {}
     })
 
     // If the player is not in the database, search for him
@@ -277,8 +295,8 @@ function playerLookup(sender_psid, key) {
                         'playerImageURL': playerImageURL
                     });
 
-                    // Increase the number of search for the player.
-                    updateDB.popularPlayer(teamName.toUpperCase());
+                    // Increase the number of search on the player.
+                    updateDB.popularPlayer(playerName);
 
                     console.log("replied");
                     sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);

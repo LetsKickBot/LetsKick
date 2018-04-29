@@ -154,7 +154,10 @@ function handleQuickReply(sender_psid, received_message) {
 
         // Choose another team
         else {
-            handleCases.anotherTeam(sender_psid);
+            handleChoice.child(sender_psid).set({
+                "choice": "TEAM"
+            })
+            handleCases.popularTeam(sender_psid);
         }
     }
 }
@@ -166,12 +169,18 @@ function handlePostback(sender_psid, messagePostback) {
 
         // Search for different player name
         if (payload.includes('ANOTHERPLAYER')) {
-            handleCases.anotherPlayer(sender_psid);
+            handleChoice.child(sender_psid).set({
+                "choice": "PLAYER"
+            })
+            handleCases.popularPlayer(sender_psid);
         }
 
         // Search for different team name
         else if (payload.includes('Another Team')) {
-            handleCases.anotherTeam(sender_psid)
+            handleChoice.child(sender_psid).set({
+                "choice": "TEAM"
+            })
+            handleCases.popularTeam(sender_psid);
         }
 
         // Looking for match's information

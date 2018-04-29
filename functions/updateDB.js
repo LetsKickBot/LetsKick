@@ -219,7 +219,7 @@ function setAllReminders() {
     })
 }
 
-// Save the number of searches have been performed for a player.
+// Save the number of searches have been performed on a player.
 function popularPlayer(playerName) {
     db.ref("PopularPlayers").child(playerName).once("value", (result) => {
         if (!(result.exists())) {
@@ -230,6 +230,23 @@ function popularPlayer(playerName) {
 
         else {
             db.ref("PopularPlayers").child(playerName).set({
+                "searchCount": result.val().searchCount + 1
+            })
+        }
+    })
+}
+
+// Save the number of searches have been performed on a team.
+function popularTeam(teamName) {
+    db.ref("PopularTeams").child(teamName).once("value", (result) => {
+        if (!(result.exists())) {
+            db.ref("PopularTeams/").child(teamName).set({
+                "searchCount": 1
+            })
+        }
+
+        else {
+            db.ref("PopularTeams").child(teamName).set({
                 "searchCount": result.val().searchCount + 1
             })
         }
@@ -258,6 +275,7 @@ module.exports = {
     updateAllCurrentMatches,
     updateMatchesFromTeams,
     popularPlayer,
+    popularTeam,
     getOnGoing,
     setRunning,
     getRunning,
