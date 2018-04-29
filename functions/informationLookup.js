@@ -324,7 +324,6 @@ function matchLookup(sender_psid, key, status) {
                             }
                         })
                     }
-
                 })
             }
 
@@ -372,6 +371,9 @@ function matchLookup(sender_psid, key, status) {
                         })
                     }
                 })
+                setTimeout(() => {
+                    handleCases.getContinue(sender_psid);
+                }, 1000)
             }
 
             else if (status.includes('Team Schedules')) {
@@ -427,6 +429,8 @@ function matchLookup(sender_psid, key, status) {
                                     response = {
                                         "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING MATCHES:\n${nextMatches}`
                                     }
+                                    console.log("next few games: ", nextMatches);
+                                    console.log("Message response: ", response);
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");
                                 })
@@ -434,9 +438,9 @@ function matchLookup(sender_psid, key, status) {
                         })
                     }
                 })
-                // setTimeout(() => {
-                //     handleCases.getContinue(sender_psid);
-                // }, 1000)
+                setTimeout(() => {
+                    handleCases.getContinue(sender_psid);
+                }, 1000)
             }
         }
     }, 1200)
