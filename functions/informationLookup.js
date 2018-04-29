@@ -328,7 +328,7 @@ function matchLookup(sender_psid, key, status) {
             }
 
             else if (status.includes('Team Squad')) {
-                // Async function to look for the Next Match.
+                // Async function to look for the Team Squad
                 console.log("team: ", key);
                 data.get_team_squad(key, (err, reply) => {
                     if (err) {
@@ -371,13 +371,10 @@ function matchLookup(sender_psid, key, status) {
                         })
                     }
                 })
-                setTimeout(() => {
-                    handleCases.getContinue(sender_psid);
-                }, 1000)
             }
 
             else if (status.includes('Team Schedules')) {
-                // Async function to look for the Next Match.
+                // Async function to look for the Team Schedule.
                 console.log("team: ", key);
                 data.get_team_schedule(key, (err, reply) => {
                     if (err) {
@@ -420,7 +417,10 @@ function matchLookup(sender_psid, key, status) {
                                         }
                                     } else if ((length < 5) && (length > 0)) {
                                         for (var j = 6; j < (6 + length); j++) {
+                                            console.log("j: ", j);
+                                            console.log("The reply: ", reply[j])
                                             nextMatches += reply[j] + '\n'
+                                            console.log("nextMatches: ", nextMatches)
                                         }
                                     } else {
                                         nextMatches = 'There is no coming match in next few days!.';
@@ -429,8 +429,6 @@ function matchLookup(sender_psid, key, status) {
                                     response = {
                                         "text" : `SOME RECENTLY MATCHES:\n${oldMatches}\nSOME COMING MATCHES:\n${nextMatches}`
                                     }
-                                    console.log("next few games: ", nextMatches);
-                                    console.log("Message response: ", response);
                                     sendResponse.directMessage(sender_psid, response);
                                     console.log("replied");
                                 })
@@ -438,9 +436,6 @@ function matchLookup(sender_psid, key, status) {
                         })
                     }
                 })
-                setTimeout(() => {
-                    handleCases.getContinue(sender_psid);
-                }, 1000)
             }
         }
     }, 1200)
