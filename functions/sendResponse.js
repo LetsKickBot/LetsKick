@@ -233,6 +233,11 @@ function sendReminder(sender_psid, response, payloadCharacteristic, match) {
                     'content_type': 'text',
                     'title': 'No, thanks',
                     'payload': payloadCharacteristic + 'NO'
+                },
+                {
+                    'content_type': 'text',
+                    'title': 'Another Team',
+                    'payload': payloadCharacteristic + 'ANOTHERTEAM'
                 }
             ]
         }

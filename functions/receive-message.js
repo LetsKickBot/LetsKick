@@ -139,14 +139,23 @@ function handleQuickReply(sender_psid, received_message) {
         }
     }
 
-    // Sets reminder for a match
+    // handle Reminder answer.
     if (key.includes('REMINDER')) {
-        if (key.includes('YES')) {
-            handleCases.setReminder(sender_psid, key);
+
+        // Set reminder for a match
+        if (!(key.includes('ANOTHERTEAM'))) {
+            if (key.includes('YES')) {
+                handleCases.setReminder(sender_psid, key);
+            }
+            setTimeout(() => {
+                handleCases.getContinue(sender_psid);
+            }, 1000)
         }
-        setTimeout(() => {
-            handleCases.getContinue(sender_psid);
-        }, 1000)
+
+        // Choose another team
+        else {
+            handleCases.anotherTeam(sender_psid);
+        }
     }
 }
 
@@ -157,26 +166,12 @@ function handlePostback(sender_psid, messagePostback) {
 
         // Search for different player name
         if (payload.includes('ANOTHERPLAYER')) {
-            handleChoice.child(sender_psid).set({
-                "choice": "PLAYER"
-            })
-
-            response = {
-                'text': 'Please give us the player name'
-            };
-            sendResponse.directMessage(sender_psid, response);
+            handleCases.anotherPlayer(sender_psid);
         }
 
         // Search for different team name
         else if (payload.includes('Another Team')) {
-            handleChoice.child(sender_psid).set({
-                "choice": "TEAM"
-            })
-
-            response = {
-                'text': 'Please give us the team name'
-            };
-            sendResponse.directMessage(sender_psid, response); 
+            handleCases.anotherTeam(sender_psid)
         }
 
         // Looking for match's information

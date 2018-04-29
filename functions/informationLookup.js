@@ -217,6 +217,10 @@ function playerLookup(sender_psid, key) {
         allPlayers.forEach((eachPlayer) => {
             if (eachPlayer.key.includes(key)) {
                 flag = false;
+
+                // Increase the number of search for the player.
+                updateDB.popularPlayer(eachPlayer.key);
+                
                 sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
                     eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
                     eachPlayer.val().playerURL);
@@ -247,7 +251,7 @@ function playerLookup(sender_psid, key) {
                     flag = false;
                     let playerImageURL = reply[0];
                     let playerURL = reply[1];
-                    let eachPlayer = reply[2];
+                    let playerName = reply[2];
                     let playerTitle = reply[2] + ' - ' + reply[3];
                     let playerSubtitle = reply[4];
                     for (var eachData = 5; eachData < 7; eachData++) {
@@ -266,14 +270,15 @@ function playerLookup(sender_psid, key) {
                     }
 
                     // Save search result to database
-                    db.ref('Players/' + dataFormat.cleanKeyDB(eachPlayer).toUpperCase() + '/').set({
+                    db.ref('Players/' + dataFormat.cleanKeyDB(playerName).toUpperCase() + '/').set({
                         'playerURL': playerURL,
                         'playerTitle': playerTitle,
                         'playerSubtitle': playerSubtitle,
                         'playerImageURL': playerImageURL
                     });
 
-
+                    // Increase the number of search for the player.
+                    updateDB.popularPlayer(teamName.toUpperCase());
 
                     console.log("replied");
                     sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);

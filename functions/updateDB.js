@@ -106,6 +106,9 @@ function dbNextGame(key, iniTime) {
             data.get_next_game(key, (err, reply) => {
                 if (err) {
                     console.log("Error occured on Server for MATCH: " + key);
+                    console.error("################################");
+                    console.error(err);
+                    console.error("################################");
                     running = false;
                 }
                 else {
@@ -187,16 +190,50 @@ function updateMatchesFromTeams() {
     })
 }
 
-// Testing
+// Set all Reminders when restart sever.
 function setAllReminders() {
-    db.ref('Reminder/').once("value", (newVal) => {
-        newVal.forEach((newVal1) => {
-            newVal1.forEach((newVal2) => {
-                handleCases.setReminder(newVal1.key, newVal2.val().team);
+    db.ref("Reminders/").once("value", (allSenderPSID) => {
+        allSenderPSID.forEach((eachSenderPSID) => {
+            var sender_psid = eachSenderPSID.key;
+            eachSenderPSID.forEach((matchInfo) => {
+                var timeDif = new Date(matchInfo.val().time) - new Date();
+
+                if (timeDif > 0) {
+                    setTimeout(() => {
+                        var response = {
+                            'text': `In ${new Date(timeDif).getMinutes()} minutes:\n${matchInfo.val().team1} vs ${matchInfo.val().team2}`
+                        };
+                        sendResponse.directMessage(sender_psid, response);
+
+                        db.ref("Reminders/").child(sender_psid).child(matchInfo.key).set({});
+                    }, timeDif - 910000);
+                } 
+
+                else {
+                    db.ref("Reminders/").child(sender_psid).child(matchInfo.key).set({});
+                }
             })
         })
-    });
-    console.log("All remiders have been set.");
+
+        console.log("All reminders have been set");
+    })
+}
+
+// Save the number of searches have been performed for a player.
+function popularPlayer(playerName) {
+    db.ref("PopularPlayers").child(playerName).once("value", (result) => {
+        if (!(result.exists())) {
+            db.ref("PopularPlayers/").child(playerName).set({
+                "searchCount": 1
+            })
+        }
+
+        else {
+            db.ref("PopularPlayers").child(playerName).set({
+                "searchCount": result.val().searchCount + 1
+            })
+        }
+    })
 }
 
 // Give back all the matches that are currently observed and updated
@@ -220,6 +257,7 @@ module.exports = {
     clearOldMatches,
     updateAllCurrentMatches,
     updateMatchesFromTeams,
+    popularPlayer,
     getOnGoing,
     setRunning,
     getRunning,

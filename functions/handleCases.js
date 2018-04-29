@@ -43,6 +43,20 @@ function popularTeam(sender_psid) {
     sendResponse.quickReply(sender_psid, response, 'POPULART', key);
 }
 
+
+function anotherTeam(sender_psid) {
+    const handleChoice = db.ref("HandleChoices/");
+
+    handleChoice.child(sender_psid).set({
+        "choice": "TEAM"
+    })
+
+    let response = {
+        'text': 'Please give us the team name'
+    };
+    sendResponse.directMessage(sender_psid, response); 
+}
+
 // Provides 11 popular players options
 function popularPlayer(sender_psid) {
     let key = ['Ronaldo', 'Messi', 'Bale', 'Neymar', 'Hazard', 'Morata', 'Ozil', 'Kroos', 'Isco', 'Alexis', 'Salad'];
@@ -50,6 +64,19 @@ function popularPlayer(sender_psid) {
         'text': `Please type a player you want or choose from some quick options below!!!`
     }
     sendResponse.quickReply(sender_psid, response, 'POPULARP', key);
+}
+
+function anotherPlayer(sender_psid) {
+    const handleChoice = db.ref("HandleChoices/");
+
+    handleChoice.child(sender_psid).set({
+        "choice": "PLAYER"
+    })
+
+    let response = {
+        'text': 'Please give us the team name'
+    };
+    sendResponse.directMessage(sender_psid, response); 
 }
 
 // Repeats the main bot function.
@@ -63,7 +90,6 @@ function getContinue(sender_psid) {
 
 // Ask whether the user want to set reminder or not
 function askReminder(sender_psid, match) {
-    let key = ['Yes', 'No'];
     let response = {
         'text': 'Do you want to Set Reminder for this match?'
     }
@@ -86,12 +112,17 @@ function setReminder(sender_psid, key) {
 
         // Set reminder using setTimeout
         else if (timeDif > 0) {
+
+            // Save reminders to database
+            db.ref("Reminders/" + sender_psid + "/").push(match.val())
+
             setTimeout(() => {
                 var response = {
-                    'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
+                    'text': `In ${new Date(timeDif).getMinutes()} minutes:\n${match.val().team1} vs ${match.val().team2}`
                 };
                 sendResponse.directMessage(sender_psid, response);
-            }, (new Date(match.val().time)) - (new Date()) - 900000);
+
+            }, timeDif - 910000);
 
             var response = {
                 'text': 'Reminder is set.'
@@ -99,12 +130,15 @@ function setReminder(sender_psid, key) {
             sendResponse.directMessage(sender_psid, response);
         }
 
+        // Match is played
         else if (timeDif < -7200000) {
             var response = {
                 'text': 'This match has been played.'
             };
             sendResponse.directMessage(sender_psid, response);
         }
+
+        // Match is playing
         else {
             var response = {
                 'text': `${match.val().team1} is playing again ${match.val().team2} right now`
@@ -118,7 +152,9 @@ module.exports = {
     getStart,
     teamOptions,
     popularTeam,
+    anotherTeam,
     popularPlayer,
+    anotherPlayer,
     getContinue,
     askReminder,
     setReminder
