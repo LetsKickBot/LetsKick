@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 import sys
 import os
@@ -32,8 +33,8 @@ def main():
     browser.implicitly_wait(4)
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
-
-    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements(By.XPATH, ".//*")
+    
+    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements_by_class_name("search_results__details")
     found = False
 
     for result in search_results:
@@ -69,6 +70,11 @@ def main():
     date = next_game.find('div', {'class': 'game-status'}).find('span', {'data-behavior': 'date_time'})['data-date']
     teamImageUrl = newSoup.find('head').findAll('meta')[11]['content']
 
+    home_team = unidecode(home_team)
+    away_team = unidecode(away_team)
+    date = unidecode(date)
+    game_details = unidecode(game_details)
+    
     print(home_team)
     print(away_team)
     print(date)

@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 import sys
 import os
@@ -54,6 +55,9 @@ def main():
     spec = soup.find('li', {'class': 'tier-3'}).find('img', {'class': 'main imageLoaded'})
     imageURL = spec['src']
     name = soup.find('li', {'class': 'team-name'}).find('a').text
+
+    name = unidecode(name)
+
     print(name)
     print(imageURL)
 

@@ -59,14 +59,15 @@ function completeName(key) {
     return newKey;
 }
 
+// Format time before send it back to the user
 function timeFormat(inputTime, timezone) {
     let time = new Date(inputTime);
     let minute = time.getMinutes();
-    let date = time.getDate();
-    let month = time.getMonth() + 1;
     let noon = " AM";
     time.setHours(time.getHours() + timezone);
     let hour = time.getHours();
+    let date = time.getDate();
+    let month = time.getMonth() + 1;
     if (hour > 12) {
         hour -= 12;
         noon = " PM";
@@ -81,6 +82,7 @@ function timeFormat(inputTime, timezone) {
     return answer;
 }
 
+// Format teams before send message back to user
 function teamFormat(team1, team2, key) {
     let check = team1;
     team1 = "Home team: " + team1;
@@ -117,7 +119,18 @@ function teamOptionFormat(payloadCharacteristic, choices, teamName) {
 
 function decodeUnderline(key) {
     var startPoint = key.indexOf('_') + 1;
-    return key.slice(startPoint);
+    return [key.slice(0, startPoint - 1), key.slice(startPoint)];
+}
+
+// Remove all special character from the key.
+function cleanKeyDB(key) {
+    const exceptionChar = [".", "#", "$", "[", "]"];
+    for (var index in exceptionChar) {
+        key = key.split('')
+            .filter(eachChar => eachChar != exceptionChar[index])
+            .join('')
+    }
+    return key;
 }
 
 module.exports = {
@@ -127,5 +140,6 @@ module.exports = {
     teamFormat,
     quickReplyFormat,
     teamOptionFormat,
-    decodeUnderline
+    decodeUnderline,
+    cleanKeyDB
 }

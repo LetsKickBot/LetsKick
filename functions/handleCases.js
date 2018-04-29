@@ -1,5 +1,9 @@
 const request = require('request');
 const sendResponse = require('./sendResponse.js');
+const dataFormat = require('./dataFormat.js');
+
+let bucket = require('../data/firebase.js');
+let db = bucket.db;
 
 // Provides two options: Player and Team
 function getStart(sender_psid) {
@@ -57,12 +61,57 @@ function getContinue(sender_psid) {
     sendResponse.quickReply(sender_psid, response, 'CONTINUE', key);
 }
 
-function setReminder(sender_psid, match) {
+// Ask whether the user want to set reminder or not
+function askReminder(sender_psid, match) {
     let key = ['Yes', 'No'];
     let response = {
         'text': 'Do you want to Set Reminder for this match?'
     }
     sendResponse.sendReminder(sender_psid, response, 'REMINDER', match);
+}
+
+// Set reminder
+function setReminder(sender_psid, key) {
+    var matchInfo = (dataFormat.decodeUnderline(key))[1];
+    db.ref('Matches/' + dataFormat.cleanKeyDB(matchInfo) + '/').once('value', (match) => {
+        var timeDif = (new Date(match.val().time)) - (new Date());
+
+        // Cannot set reminder if time is over the limit of setTimeout
+        if (timeDif > 2147483616) {
+            var response = {
+                'text': "Sorry, We cannot set reminder because the match is too far away."
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+
+        // Set reminder using setTimeout
+        else if (timeDif > 0) {
+            setTimeout(() => {
+                var response = {
+                    'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
+                };
+                sendResponse.directMessage(sender_psid, response);
+            }, (new Date(match.val().time)) - (new Date()) - 900000);
+
+            var response = {
+                'text': 'Reminder is set.'
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+
+        else if (timeDif < -7200000) {
+            var response = {
+                'text': 'This match has been played.'
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+        else {
+            var response = {
+                'text': `${match.val().team1} is playing again ${match.val().team2} right now`
+            };
+            sendResponse.directMessage(sender_psid, response);
+        }
+    })
 }
 
 module.exports = {
@@ -71,5 +120,6 @@ module.exports = {
     popularTeam,
     popularPlayer,
     getContinue,
+    askReminder,
     setReminder
 }

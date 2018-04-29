@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from bs4 import BeautifulSoup
+from unidecode import unidecode
 
 import sys
 import os
@@ -34,7 +35,7 @@ def main():
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
 
-    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements(By.XPATH, ".//*")
+    search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements_by_class_name("search_results__details")
     found = False
 
     for result in search_results:
@@ -64,14 +65,18 @@ def main():
     name = spec.find('h1').text
     imageHTML = spec.find('img')
     imageURL = imageHTML['src']
+    name = unidecode(name)
+
     print(imageURL)
     print(browser.current_url)
     print(name)
     for i in range(0, len(col1dd)):
-        print(col1dt[i].text + col1dd[i].text)
+        info = col1dt[i].text + col1dd[i].text
+        print(unidecode(info))
 
     for i in range(0, len(col2dd)):
-        print(col2dt[i].text + col2dd[i].text)
+        info = col2dt[i].text + col2dd[i].text
+        print(unidecode(info))
 
     browser.quit()
     sys.exit(0)

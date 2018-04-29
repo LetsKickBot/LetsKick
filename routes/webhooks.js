@@ -17,23 +17,21 @@ router.post('/', (req, res) => {
 
       // Gets the message
       let webhook_event = entry.messaging[0];
-      // console.log(webhook_event);
 
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
 
+      // Handle quick reply buttons
       if (webhook_event.postback) {
         receive.handlePostback(sender_psid, webhook_event.postback);
-      // Handle quick reply buttons
       
+      // Handle quick reply buttons
       } else if (webhook_event.message.quick_reply) {
         receive.handleQuickReply(sender_psid, webhook_event.message);
 
       // Handle Direct Message
       } else if (webhook_event.message) {
         receive.handleMessage(sender_psid, webhook_event.message);
-
-      // Handle Postback
       } 
     });
 
