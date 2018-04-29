@@ -34,7 +34,7 @@ function teamOptions(sender_psid, teamName, imageURL) {
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
-// Provides 6 popular teams options
+// Provides 6 popular teams options - get team name from user.
 function popularTeam(sender_psid) {
     db.ref("PopularTeams/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
         let teams = []
@@ -48,7 +48,7 @@ function popularTeam(sender_psid) {
     })
 }
 
-// Provides 6 popular players options
+// Provides 6 popular players options - get player name from user.
 function popularPlayer(sender_psid) {
     db.ref("PopularPlayers/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
         let playerNames = []

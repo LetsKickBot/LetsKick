@@ -222,12 +222,15 @@ function setAllReminders() {
 // Save the number of searches have been performed on a player.
 function popularPlayer(playerName) {
     db.ref("PopularPlayers").child(playerName).once("value", (result) => {
+
+        // Create new player in the Database if not exist.
         if (!(result.exists())) {
             db.ref("PopularPlayers/").child(playerName).set({
                 "searchCount": 1
             })
         }
 
+        // Increase the number of search on the existing player.
         else {
             db.ref("PopularPlayers").child(playerName).set({
                 "searchCount": result.val().searchCount + 1
@@ -239,12 +242,15 @@ function popularPlayer(playerName) {
 // Save the number of searches have been performed on a team.
 function popularTeam(teamName) {
     db.ref("PopularTeams").child(teamName).once("value", (result) => {
+
+        // Create new team in the Database if not exist.
         if (!(result.exists())) {
             db.ref("PopularTeams/").child(teamName).set({
                 "searchCount": 1
             })
         }
 
+        // Increase the number of search on the existing team.
         else {
             db.ref("PopularTeams").child(teamName).set({
                 "searchCount": result.val().searchCount + 1
