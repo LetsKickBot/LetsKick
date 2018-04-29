@@ -16,12 +16,13 @@ let handleChoice = db.ref('HandleChoices/')
 function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
+    console.log('User Message: ', key);
 
     // Update all the matches of the teams in Database/Teams
     if (key.toUpperCase() == "UPDATEMATCHESFROMTEAMS") {
         updateDB.updateMatchesFromTeams();
     }
-
+  
     // Log out all the onGoing matches (currently observed)
     if (key.toUpperCase() == "ONGOING") {
         info.displayOnGoing();
@@ -125,7 +126,7 @@ function handleQuickReply(sender_psid, received_message) {
             info.playerLookup(sender_psid, player);
         }
     }
-
+    
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
         if (key.includes('Yes')) {
@@ -138,6 +139,7 @@ function handleQuickReply(sender_psid, received_message) {
             sendResponse.directMessage(sender_psid, response);
         }
     }
+}
 
     // Sets reminder for a match
     if (key.includes('REMINDER')) {
@@ -176,7 +178,7 @@ function handlePostback(sender_psid, messagePostback) {
             response = {
                 'text': 'Please give us the team name'
             };
-            sendResponse.directMessage(sender_psid, response); 
+            sendResponse.directMessage(sender_psid, response);
         }
 
         // Looking for match's information

@@ -53,6 +53,7 @@ def main():
     html = browser.page_source
     url = browser.current_url
     soup = BeautifulSoup(html, "html.parser")
+    print(url)
 
     spec = soup.find('div', {'class': 'player-spec'})
     cols = spec.find_all('dl')
