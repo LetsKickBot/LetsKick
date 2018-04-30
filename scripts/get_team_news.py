@@ -30,7 +30,7 @@ def main():
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "search-box")))
     browser.find_element_by_class_name('search-box').send_keys(team_name)
 
-    browser.implicitly_wait(2)
+    browser.implicitly_wait(4)
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
 
