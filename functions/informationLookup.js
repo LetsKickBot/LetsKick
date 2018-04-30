@@ -318,7 +318,7 @@ function matchLookup(sender_psid, key, status) {
                                         array.push(reply[i]);
                                     }
                                     console.log(array);
-                                    sendResponse.teamNewsURL(sender_psid, array);
+                                    sendResponse.teamNewsURL(sender_psid);
                                     console.log("replied");
                                 })
                             }

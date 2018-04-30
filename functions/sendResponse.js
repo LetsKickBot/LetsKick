@@ -122,7 +122,7 @@ function teamOptionChoose(sender_psid, teamName, payloadCharacteristic, choices,
 }
 
 // Post a form of quick reply to the server with teamNews
-function teamNewsURL(sender_psid, array) {
+function teamNewsURL(sender_psid) {
     let request_body = {
         "recipient": {
             "id": sender_psid
