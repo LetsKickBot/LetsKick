@@ -135,22 +135,22 @@ function teamNewsURL(sender_psid, array) {
                     "top_element_style": "large",
                     "elements": [
                       {
-                        "title": array[0],
-                        "subtitle": array[1],
-                        "image_url": array[2],
+                        "title": "sdasdasdsaas",
+                        "subtitle": "sdasdasdsaas",
+                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
                         "default_action": {
                             "type": "web_url",
-                            "url": array[3],
+                            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
                       }, {
-                        "title": array[0],
-                        "subtitle": array[1],
-                        "image_url": array[2],
+                        "title": "asdasdasdas",
+                        "subtitle": "sadasdasdsa",
+                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
                         "default_action": {
                             "type": "web_url",
-                            "url": array[3],
+                            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
