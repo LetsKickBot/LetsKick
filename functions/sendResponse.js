@@ -147,38 +147,6 @@ function teamNewsURL(sender_psid, array) {
                             "webview_height_ratio": "tall"
                         }
                         ]
-                      },
-                      {
-                        "title": array[4],
-                        "subtitle": array[5],
-                        "image_url": array[6],
-                        "default_action": {
-                          "type": "web_url",
-                          "url": array[7],
-                          "messenger_extensions": false,
-                          "webview_height_ratio": "tall"
-                        }
-                      },
-                      {
-                        "title": array[8],
-                        "subtitle": array[9],
-                        "image_url": array[10],
-                        "default_action": {
-                          "type": "web_url",
-                          "url": array[11],
-                          "messenger_extensions": true,
-                          "webview_height_ratio": "tall"
-                        },
-                        // "buttons": [
-                        //   {
-                        //     "title": "Shop Now",
-                        //     "type": "web_url",
-                        //     "url": "https://peterssendreceiveapp.ngrok.io/shop?item=101",
-                        //     "messenger_extensions": true,
-                        //     "webview_height_ratio": "tall",
-                        //     "fallback_url": "https://peterssendreceiveapp.ngrok.io/"
-                        //   }
-                        // ]
                       }
                     ],
                      "buttons": [
