@@ -122,7 +122,7 @@ function teamOptionChoose(sender_psid, teamName, payloadCharacteristic, choices,
 }
 
 // Post a form of quick reply to the server with teamNews
-function teamNewsURL(sender_psid) {
+function teamNewsURL(sender_psid, array) {
     let request_body = {
         "recipient": {
             "id": sender_psid
@@ -135,22 +135,22 @@ function teamNewsURL(sender_psid) {
                     "top_element_style": "large",
                     "elements": [
                       {
-                        "title": "sdasdasdsaas",
-                        "subtitle": "sdasdasdsaas",
-                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
+                        "title": array[0],
+                        "subtitle": array[1],
+                        "image_url": array[2],
                         "default_action": {
                             "type": "web_url",
-                            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
+                            "url": array[3],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
                       }, {
-                        "title": "asdasdasdas",
-                        "subtitle": "sadasdasdsa",
-                        "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
+                        "title": array[4],
+                        "subtitle": array[5],
+                        "image_url": array[6],
                         "default_action": {
                             "type": "web_url",
-                            "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3eN01jWLmU7pWnKeNPn1YSNO4yfurKFnEOs8_lyt4O_cJarC0",
+                            "url": array[7],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
