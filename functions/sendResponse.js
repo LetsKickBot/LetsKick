@@ -138,26 +138,22 @@ function teamNewsURL(sender_psid, array) {
                         "title": array[0],
                         "subtitle": array[1],
                         "image_url": array[2],
-                        "default_action": [
-                        {
+                        "default_action": {
                             "type": "web_url",
                             "url": array[3],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
-                        ]
                       }, {
                         "title": array[0],
                         "subtitle": array[1],
                         "image_url": array[2],
-                        "default_action": [
-                        {
+                        "default_action": {
                             "type": "web_url",
                             "url": array[3],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
-                        ]
                       }
                     ],
                      "buttons": [

@@ -12,7 +12,7 @@ import os
 
 def main():
     window_size = "1200,800"
-    timeout = 20
+    timeout = 25
     team_name = sys.argv[1]
 
     chrome_options = Options()
