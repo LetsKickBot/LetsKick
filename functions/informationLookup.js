@@ -313,12 +313,12 @@ function matchLookup(sender_psid, key, status) {
                                     "method": "GET",
                                     "json": true,
                                 }, (err, res, body) => {
-                                    let url = reply[0];
-                                    let imageUrl = reply[1];
-                                    let newsTitle = reply[2];
-                                    let newsSubtitle = reply[3];
-
-                                    sendResponse.teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle);
+                                    let array = []
+                                    for (var i = 0; i < 16; i++) {
+                                        array.push(reply[i]);
+                                    }
+                                    console.log(array);
+                                    sendResponse.teamNewsURL(sender_psid, array);
                                     console.log("replied");
                                 })
                             }

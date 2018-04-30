@@ -31,15 +31,15 @@ function handleMessage(sender_psid, received_message) {
     else if (handleChoice[sender_psid] == 'TEAM') {
         key = dataFormat.checkDuplicate(key);
         console.log("In team")
-        console.log(key);   
+        console.log(key);
         if (typeof(key) == 'object') {
             let newKey = dataFormat.completeName(key);
             response = {
               "text": `Did you mean:\n${newKey}\nOr please retype the team you want to see!!!`
             }
             sendResponse.quickReply(sender_psid, response, 'TEAMLIST', key);
-        } 
-        
+        }
+
         else {
             delete handleChoice[sender_psid];
             info.teamNameLookup(sender_psid, key);
