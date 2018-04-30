@@ -42,6 +42,9 @@ function teamNameLookup(sender_psid, key) {
                         "text" : `Cannot find the Team: ${key}`
                     }
                     sendResponse.directMessage(sender_psid, response);
+                    setTimeout(() => {
+                        handleCases.popularTeam(sender_psid);
+                    }, 1000)
                 }
                 else {
                     flag = false;
@@ -264,6 +267,9 @@ function playerLookup(sender_psid, key) {
                         'text' : `Cannot find player: ${key}`
                     };
                     sendResponse.directMessage(sender_psid, response);
+                    setTimeout(() => {
+                        handleCases.popularPlayer(sender_psid);
+                    }, 1000)
                 } 
                 else {
                     flag = false;

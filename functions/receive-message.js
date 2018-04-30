@@ -64,14 +64,14 @@ function handleMessage(sender_psid, received_message) {
                         info.teamNameLookup(sender_psid, key);
                     }
                 }
+            }
 
-                // Instruction for user to use the Bot
-                else {
-                    response = {
-                        "text": `Please begin by typing in 'Start'`,
-                    };
-                    sendResponse.directMessage(sender_psid, response);
-                }
+            // Instruction for user to use the Bot
+            else {
+                response = {
+                    "text": `Please begin by typing in 'Start'`,
+                };
+                sendResponse.directMessage(sender_psid, response);
             }
         })
     }

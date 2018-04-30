@@ -102,7 +102,7 @@ function setReminder(sender_psid, key) {
 
             setTimeout(() => {
                 var response = {
-                    'text': `In ${new Date(timeDif).getMinutes()} minutes:\n${match.val().team1} vs ${match.val().team2}`
+                    'text': `In ${new Date(new Date(match.val().time) - new Date()).getMinutes()} minutes:\n${match.val().team1} vs ${match.val().team2}`
                 };
                 sendResponse.directMessage(sender_psid, response);
 
