@@ -137,20 +137,20 @@ function teamNewsURL(sender_psid, array) {
                       {
                         "title": array[0],
                         "subtitle": array[1],
-                        "image_url": array[2],
+                        "image_url": "https://a.espncdn.com/photo/2014/0110/soc_g_villa01jr_1296x729.jpg",
                         "default_action": {
                             "type": "web_url",
-                            "url": array[3],
+                            "url": "https://www.espnfc.com/club/spain/164/blog/post/3437359/david-villa-scores-400th-career-goal-el-guajes-impact-on-spain-mls-and-beyond",
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
                       }, {
                         "title": array[4],
                         "subtitle": array[5],
-                        "image_url": array[6],
+                        "image_url": "https://a.espncdn.com/photo/2014/0110/soc_g_villa01jr_1296x729.jpg",
                         "default_action": {
                             "type": "web_url",
-                            "url": array[7],
+                            "url": "https://www.espnfc.com/club/spain/164/blog/post/3437359/david-villa-scores-400th-career-goal-el-guajes-impact-on-spain-mls-and-beyond",
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
