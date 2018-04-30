@@ -106,14 +106,11 @@ function handleQuickReply(sender_psid, received_message) {
         if (key.includes('Go Back')) {
             handleCases.getStart(sender_psid);
         }
-        if (key.includes('Team News')) {
-            sendResponse.teamNewsURL(sender_psid, array);
-        }
 
-        // else {
-        //     teamName = dataFormat.decodeUnderline(key);
-        //     info.matchLookup(sender_psid, teamName, key);
-        // }
+        else {
+            teamName = dataFormat.decodeUnderline(key);
+            info.matchLookup(sender_psid, teamName, key);
+        }
     }
 
     // Continues the bot by asking the initial question: Team or Player?
