@@ -24,7 +24,7 @@ function dbTeamName(key) {
             // If the team name is not in the database
             if (!snapshot.exists()) {
                 running = true
-            	console.log('Looking for: ' + key.toUpperCase());
+            	console.log('Looking for Team: ' + key.toUpperCase());
 
                 // Async function helps searching for Team Name
                 data.get_team_name(key, (err, reply) => {
@@ -52,6 +52,8 @@ function dbTeamName(key) {
                     }
                     else {
                     	console.log("Error occured on Server for TEAM: " + key);
+                        console.error(err);
+                        console.error("\n\n")
                     }
 
                     // Finish Geting Team Name
@@ -99,16 +101,15 @@ function dbNextGame(key, iniTime) {
 
         // Get new data and save it to database by crawling ESPN
         else {
-            console.log(key);
+            console.log("Looking for Match: " + key);
 
             // Get rid of all special characters
             key = dataFormat.cleanKeyDB(key);
             data.get_next_game(key, (err, reply) => {
                 if (err) {
                     console.log("Error occured on Server for MATCH: " + key);
-                    console.error("################################");
                     console.error(err);
-                    console.error("################################");
+                    console.error("\n\n")
                     running = false;
                 }
                 else {
@@ -179,6 +180,7 @@ function updateAllCurrentMatches() {
 
 // Search for all the matches that are currently in Database/Teams
 function updateMatchesFromTeams() {
+    console.log("Currently Updating Mathces from Teams");
     db.ref('Teams/').once('value', (allTeams) => {
         allTeams.forEach((eachTeam) => {
             db.ref('Matches/').child(dataFormat.cleanKeyDB(eachTeam.key).toUpperCase()).once('value', function(snapshot) {

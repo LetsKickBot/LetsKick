@@ -45,6 +45,9 @@ function teamNameLookup(sender_psid, key) {
                     setTimeout(() => {
                         handleCases.popularTeam(sender_psid);
                     }, 1000)
+                    console.log("Error occured on Server for TEAM: " + key);
+                    console.error(err);
+                    console.error("\n\n")
                 }
                 else {
                     flag = false;
@@ -151,6 +154,9 @@ function matchLookup(sender_psid, key, status) {
                         "text" : `Cannot find the Match for: ${key}`
                     }
                     sendResponse.directMessage(sender_psid, response);
+                    console.log("Error occured on Server for MATCH: " + key);
+                    console.error(err);
+                    console.error("\n\n")
                 }
                 else {
                     request({

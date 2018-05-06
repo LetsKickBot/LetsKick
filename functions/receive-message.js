@@ -18,18 +18,13 @@ function handleMessage(sender_psid, received_message) {
     let key = received_message.text;
 
     // Update all the matches of the teams in Database/Teams
-    if (key.toUpperCase() == "UPDATEMATCHESFROMTEAMS") {
+    if (key == process.env.MATCHES_FORM_TEAMS) {
         updateDB.updateMatchesFromTeams();
     }
 
-    // Log out all the onGoing matches (currently observed)
-    if (key.toUpperCase() == "ONGOING") {
-        info.displayOnGoing();
-    }
-
-    // Log out status for running thread
-    if (key.toUpperCase() == "RUNNING") {
-        updateDB.getRunning();
+    // Clearr outdated matches in the database
+    if (key == process.env.CLEAR_MATCHES) {
+        updateDB.clearOldMatches();
     }
 
     // Users begin the search
