@@ -16,13 +16,14 @@ let handleChoice = db.ref('HandleChoices/')
 function handleMessage(sender_psid, received_message) {
     let response;
     let key = received_message.text;
+    console.log('User Message: ', key);
 
     // Update all the matches of the teams in Database/Teams
     if (key == process.env.MATCHES_FORM_TEAMS) {
         updateDB.updateMatchesFromTeams();
     }
 
-    // Clearr outdated matches in the database
+    // Clear outdated matches in the database
     if (key == process.env.CLEAR_MATCHES) {
         updateDB.clearOldMatches();
     }
@@ -120,7 +121,7 @@ function handleQuickReply(sender_psid, received_message) {
             info.playerLookup(sender_psid, player);
         }
     }
-
+    
     // Continues the bot by asking the initial question: Team or Player?
     if (key.includes('CONTINUE')) {
         if (key.includes('Yes')) {
@@ -133,6 +134,7 @@ function handleQuickReply(sender_psid, received_message) {
             sendResponse.directMessage(sender_psid, response);
         }
     }
+}
 
     // handle Reminder answer.
     if (key.includes('REMINDER')) {

@@ -33,7 +33,7 @@ def main():
     browser.implicitly_wait(4)
 
     WebDriverWait(browser, timeout).until(EC.visibility_of_element_located((By.XPATH, "//*[@id='global-search']/div/div/div[1]/ul")))
-
+    
     search_results = browser.find_element_by_xpath("//*[@id='global-search']/div/div/div[1]/ul").find_elements_by_class_name("search_results__details")
     found = False
 

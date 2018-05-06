@@ -3,7 +3,6 @@ const data = require('../data/get_data.js');
 const sendResponse = require('./sendResponse.js');
 const dataFormat = require('./dataFormat.js');
 const handleCases = require('./handleCases.js');
-const updateDB = require('./updateDB.js');
 
 let bucket = require('../data/firebase.js');
 let db = bucket.db;
@@ -32,8 +31,8 @@ function teamNameLookup(sender_psid, key) {
     setTimeout(() => {
         if (flag == true) {
             response = {
-                'text': 'Please wait, we are retrieving information...'
-            };
+                "text" : `Cannot find the Team: ${key}`
+            }
             sendResponse.directMessage(sender_psid, response);
 
             data.get_team_name(key, (err, reply) => {
@@ -262,9 +261,9 @@ function playerLookup(sender_psid, key) {
             let response = {
                 "text": `Please wait, we are retrieving player information...`
             };
-            console.log("waiting...");
+            console.log("replied");
             sendResponse.directMessage(sender_psid, response);
-
+          
             // Async function to look for the Player.
             data.get_player_info(key, (err, reply) => {
                 if (err) {
@@ -315,7 +314,12 @@ function playerLookup(sender_psid, key) {
                 }
             })
         }
-    }, 1200);
+
+        // Check if user want to continue searching
+        setTimeout(() => {
+            handleCases.getContinue(sender_psid);
+        }, 1500)
+    })
 }
 
 function displayOnGoing() {
@@ -323,7 +327,6 @@ function displayOnGoing() {
 }
 
 module.exports = {
-    teamNameLookup,
     matchLookup,
     playerLookup,
     displayOnGoing
