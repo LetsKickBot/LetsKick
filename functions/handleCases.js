@@ -34,22 +34,33 @@ function teamOptions(sender_psid, teamName, imageURL) {
     sendResponse.teamOptionChoose(sender_psid, teamName, 'OPTION', choices, imageURL);
 }
 
-// Provides 11 popular team options
+// Provides 6 popular teams options - get team name from user.
 function popularTeam(sender_psid) {
-    let key = ['Manchester United', 'Real Madrid', 'Barcelona', 'Chelsea', 'Manchester City', 'Paris Saint Germain', 'Arsenal', 'Liverpool', 'Germany', 'Brazil', 'Spain'];
-    let response = {
-        'text': `Please type a team you want or choose from some quick options below!!!`
-    }
-    sendResponse.quickReply(sender_psid, response, 'POPULART', key);
+    db.ref("PopularTeams/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
+        let teams = []
+        result.forEach((team) => {
+            teams.push(team.key);
+        })
+        let response = {
+            'text': `Please type a team you want or choose from some quick options below!!!`
+        }
+        sendResponse.quickReply(sender_psid, response, 'POPULART', teams);
+    })
 }
 
-// Provides 11 popular players options
+// Provides 6 popular players options - get player name from user.
 function popularPlayer(sender_psid) {
-    let key = ['Ronaldo', 'Messi', 'Bale', 'Neymar', 'Hazard', 'Morata', 'Ozil', 'Kroos', 'Isco', 'Alexis', 'Salad'];
-    let response = {
-        'text': `Please type a player you want or choose from some quick options below!!!`
-    }
-    sendResponse.quickReply(sender_psid, response, 'POPULARP', key);
+    db.ref("PopularPlayers/").orderByChild("searchCount").limitToLast(6).once("value", (result) => {
+        let playerNames = []
+        result.forEach((playerName) => {
+            playerNames.push(playerName.key);
+        })
+
+        let response = {
+            'text': `Please type a player you want or choose from some quick options below!!!`
+        }
+        sendResponse.quickReply(sender_psid, response, 'POPULARP', playerNames);
+    })
 }
 
 // Repeats the main bot function.
@@ -63,7 +74,6 @@ function getContinue(sender_psid) {
 
 // Ask whether the user want to set reminder or not
 function askReminder(sender_psid, match) {
-    let key = ['Yes', 'No'];
     let response = {
         'text': 'Do you want to Set Reminder for this match?'
     }
@@ -86,12 +96,17 @@ function setReminder(sender_psid, key) {
 
         // Set reminder using setTimeout
         else if (timeDif > 0) {
+
+            // Save reminders to database
+            db.ref("Reminders/" + sender_psid + "/").push(match.val())
+
             setTimeout(() => {
                 var response = {
-                    'text': `In 15 minutes:\n${match.val().team1} vs ${match.val().team2}`
+                    'text': `In ${new Date(new Date(match.val().time) - new Date()).getMinutes()} minutes:\n${match.val().team1} vs ${match.val().team2}`
                 };
                 sendResponse.directMessage(sender_psid, response);
-            }, (new Date(match.val().time)) - (new Date()) - 900000);
+
+            }, timeDif - 910000);
 
             var response = {
                 'text': 'Reminder is set.'
@@ -99,12 +114,15 @@ function setReminder(sender_psid, key) {
             sendResponse.directMessage(sender_psid, response);
         }
 
+        // Match is played
         else if (timeDif < -7200000) {
             var response = {
                 'text': 'This match has been played.'
             };
             sendResponse.directMessage(sender_psid, response);
         }
+
+        // Match is playing
         else {
             var response = {
                 'text': `${match.val().team1} is playing again ${match.val().team2} right now`

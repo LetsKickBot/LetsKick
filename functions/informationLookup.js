@@ -20,6 +20,9 @@ function teamNameLookup(sender_psid, key) {
             if (teamName.key.includes(key)) {
                 flag = false;
                 handleCases.teamOptions(sender_psid, teamName.val().name, teamName.val().imageURL);
+
+                // Increase the number of search on the match.
+                updateDB.popularTeam(teamName.val().name);
             }
         })
     });
@@ -38,6 +41,12 @@ function teamNameLookup(sender_psid, key) {
                         "text" : `Cannot find the Team: ${key}`
                     }
                     sendResponse.directMessage(sender_psid, response);
+                    setTimeout(() => {
+                        handleCases.popularTeam(sender_psid);
+                    }, 1000)
+                    console.log("Error occured on Server for TEAM: " + key);
+                    console.error(err);
+                    console.error("\n\n")
                 }
                 else {
                     flag = false;
@@ -54,6 +63,10 @@ function teamNameLookup(sender_psid, key) {
                         'name': teamName,
                         'imageURL': imageURL 
                     });
+
+                    // Increase the number of search on the match.
+                    updateDB.popularTeam(teamName);
+
                     handleCases.teamOptions(sender_psid, teamName, imageURL);
                 }
             })
@@ -140,6 +153,9 @@ function matchLookup(sender_psid, key, status) {
                         "text" : `Cannot find the Match for: ${key}`
                     }
                     sendResponse.directMessage(sender_psid, response);
+                    console.log("Error occured on Server for MATCH: " + key);
+                    console.error(err);
+                    console.error("\n\n")
                 }
                 else {
                     request({
@@ -213,14 +229,29 @@ function playerLookup(sender_psid, key) {
 
     // Checks if the player is already in database
     db.ref('Players/').once("value", (allPlayers) => {
-        allPlayers.forEach((eachPlayer) => {
-            if (eachPlayer.key.includes(key)) {
-                flag = false;
-                sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
-                    eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
-                    eachPlayer.val().playerURL);
-            }
-        })
+
+        // Act as loop's break
+        try {
+            allPlayers.forEach((eachPlayer) => {
+                if (eachPlayer.key.includes(key)) {
+                    flag = false;
+
+                    // Increase the number of search on the player.
+                    var playerName = eachPlayer.val().playerTitle;
+                    playerName = playerName.slice(0, playerName.indexOf("-") - 1);
+
+                    updateDB.popularPlayer(playerName);
+
+                    sendResponse.playerReply(sender_psid, eachPlayer.val().playerTitle,
+                        eachPlayer.val().playerSubtitle, eachPlayer.val().playerImageURL,
+                        eachPlayer.val().playerURL);
+
+                    throw BreakException;
+                }
+            })
+        }
+
+        catch (e) {}
     })
 
     // If the player is not in the database, search for him
@@ -241,12 +272,15 @@ function playerLookup(sender_psid, key) {
                         'text' : `Cannot find player: ${key}`
                     };
                     sendResponse.directMessage(sender_psid, response);
+                    setTimeout(() => {
+                        handleCases.popularPlayer(sender_psid);
+                    }, 1000)
                 } 
                 else {
                     flag = false;
                     let playerImageURL = reply[0];
                     let playerURL = reply[1];
-                    let eachPlayer = reply[2];
+                    let playerName = reply[2];
                     let playerTitle = reply[2] + ' - ' + reply[3];
                     let playerSubtitle = reply[4];
                     for (var eachData = 5; eachData < 7; eachData++) {
@@ -265,14 +299,15 @@ function playerLookup(sender_psid, key) {
                     }
 
                     // Save search result to database
-                    db.ref('Players/' + dataFormat.cleanKeyDB(eachPlayer).toUpperCase() + '/').set({
+                    db.ref('Players/' + dataFormat.cleanKeyDB(playerName).toUpperCase() + '/').set({
                         'playerURL': playerURL,
                         'playerTitle': playerTitle,
                         'playerSubtitle': playerSubtitle,
                         'playerImageURL': playerImageURL
                     });
 
-
+                    // Increase the number of search on the player.
+                    updateDB.popularPlayer(playerName);
 
                     console.log("replied");
                     sendResponse.playerReply(sender_psid, playerTitle, playerSubtitle, playerImageURL, playerURL);

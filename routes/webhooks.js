@@ -29,6 +29,10 @@ router.post('/', (req, res) => {
       } else if (webhook_event.message.quick_reply) {
         receive.handleQuickReply(sender_psid, webhook_event.message);
 
+      // Handle Sticker
+      } else if (webhook_event.message.sticker_id) {
+        console.log("User send a sticker");
+
       // Handle Direct Message
       } else if (webhook_event.message) {
         receive.handleMessage(sender_psid, webhook_event.message);

@@ -23,6 +23,9 @@ app.listen(process.env.PORT || 1337, () => {
   // Update all the matches that are stored in the database.
   updateDB.updateAllCurrentMatches();
 
+  // Set up all previous Reminders
+  updateDB.setAllReminders();
+
 });
 
 app.use(bodyParser.json());

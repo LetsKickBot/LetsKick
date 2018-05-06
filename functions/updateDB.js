@@ -24,7 +24,7 @@ function dbTeamName(key) {
             // If the team name is not in the database
             if (!snapshot.exists()) {
                 running = true
-            	console.log('Looking for: ' + key.toUpperCase());
+            	console.log('Looking for Team: ' + key.toUpperCase());
 
                 // Async function helps searching for Team Name
                 data.get_team_name(key, (err, reply) => {
@@ -52,6 +52,8 @@ function dbTeamName(key) {
                     }
                     else {
                     	console.log("Error occured on Server for TEAM: " + key);
+                        console.error(err);
+                        console.error("\n\n")
                     }
 
                     // Finish Geting Team Name
@@ -99,13 +101,15 @@ function dbNextGame(key, iniTime) {
 
         // Get new data and save it to database by crawling ESPN
         else {
-            console.log(key);
+            console.log("Looking for Match: " + key);
 
             // Get rid of all special characters
             key = dataFormat.cleanKeyDB(key);
             data.get_next_game(key, (err, reply) => {
                 if (err) {
                     console.log("Error occured on Server for MATCH: " + key);
+                    console.error(err);
+                    console.error("\n\n")
                     running = false;
                 }
                 else {
@@ -176,6 +180,7 @@ function updateAllCurrentMatches() {
 
 // Search for all the matches that are currently in Database/Teams
 function updateMatchesFromTeams() {
+    console.log("Currently Updating Mathces from Teams");
     db.ref('Teams/').once('value', (allTeams) => {
         allTeams.forEach((eachTeam) => {
             db.ref('Matches/').child(dataFormat.cleanKeyDB(eachTeam.key).toUpperCase()).once('value', function(snapshot) {
@@ -187,16 +192,73 @@ function updateMatchesFromTeams() {
     })
 }
 
-// Testing
+// Set all Reminders when restart sever.
 function setAllReminders() {
-    db.ref('Reminder/').once("value", (newVal) => {
-        newVal.forEach((newVal1) => {
-            newVal1.forEach((newVal2) => {
-                handleCases.setReminder(newVal1.key, newVal2.val().team);
+    db.ref("Reminders/").once("value", (allSenderPSID) => {
+        allSenderPSID.forEach((eachSenderPSID) => {
+            var sender_psid = eachSenderPSID.key;
+            eachSenderPSID.forEach((matchInfo) => {
+                var timeDif = new Date(matchInfo.val().time) - new Date();
+
+                if (timeDif > 0) {
+                    setTimeout(() => {
+                        var response = {
+                            'text': `In ${new Date(timeDif).getMinutes()} minutes:\n${matchInfo.val().team1} vs ${matchInfo.val().team2}`
+                        };
+                        sendResponse.directMessage(sender_psid, response);
+
+                        db.ref("Reminders/").child(sender_psid).child(matchInfo.key).set({});
+                    }, timeDif - 910000);
+                } 
+
+                else {
+                    db.ref("Reminders/").child(sender_psid).child(matchInfo.key).set({});
+                }
             })
         })
-    });
-    console.log("All remiders have been set.");
+
+        console.log("All reminders have been set");
+    })
+}
+
+// Save the number of searches have been performed on a player.
+function popularPlayer(playerName) {
+    db.ref("PopularPlayers").child(playerName).once("value", (result) => {
+
+        // Create new player in the Database if not exist.
+        if (!(result.exists())) {
+            db.ref("PopularPlayers/").child(playerName).set({
+                "searchCount": 1
+            })
+        }
+
+        // Increase the number of search on the existing player.
+        else {
+            db.ref("PopularPlayers").child(playerName).set({
+                "searchCount": result.val().searchCount + 1
+            })
+        }
+    })
+}
+
+// Save the number of searches have been performed on a team.
+function popularTeam(teamName) {
+    db.ref("PopularTeams").child(teamName).once("value", (result) => {
+
+        // Create new team in the Database if not exist.
+        if (!(result.exists())) {
+            db.ref("PopularTeams/").child(teamName).set({
+                "searchCount": 1
+            })
+        }
+
+        // Increase the number of search on the existing team.
+        else {
+            db.ref("PopularTeams").child(teamName).set({
+                "searchCount": result.val().searchCount + 1
+            })
+        }
+    })
 }
 
 // Give back all the matches that are currently observed and updated
@@ -220,6 +282,8 @@ module.exports = {
     clearOldMatches,
     updateAllCurrentMatches,
     updateMatchesFromTeams,
+    popularPlayer,
+    popularTeam,
     getOnGoing,
     setRunning,
     getRunning,

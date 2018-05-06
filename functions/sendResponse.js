@@ -121,6 +121,45 @@ function teamNewsURL(sender_psid, key, url, imageUrl, newsTitle, newsSubtitle) {
                 }
             }
         }
+    }
+    request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN},
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        if (err) {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
+
+function sendReminder(sender_psid, response, payloadCharacteristic, match) {
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "message": {
+            "text": response["text"],
+            "quick_replies": 
+            [  
+                {
+                    'content_type': 'text',
+                    'title': 'Yes',
+                    'payload': payloadCharacteristic + 'YES_' + match  
+                },
+                {
+                    'content_type': 'text',
+                    'title': 'No, thanks',
+                    'payload': payloadCharacteristic + 'NO'
+                },
+                {
+                    'content_type': 'text',
+                    'title': 'Another Team',
+                    'payload': payloadCharacteristic + 'ANOTHERTEAM'
+                }
+            ]
+        }
     };
 
     // Send the HTTP request to the Messenger Platform

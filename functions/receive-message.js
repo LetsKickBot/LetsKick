@@ -19,18 +19,13 @@ function handleMessage(sender_psid, received_message) {
     console.log('User Message: ', key);
 
     // Update all the matches of the teams in Database/Teams
-    if (key.toUpperCase() == "UPDATEMATCHESFROMTEAMS") {
+    if (key == process.env.MATCHES_FORM_TEAMS) {
         updateDB.updateMatchesFromTeams();
     }
-  
-    // Log out all the onGoing matches (currently observed)
-    if (key.toUpperCase() == "ONGOING") {
-        info.displayOnGoing();
-    }
 
-    // Log out status for running thread
-    if (key.toUpperCase() == "RUNNING") {
-        updateDB.getRunning();
+    // Clear outdated matches in the database
+    if (key == process.env.CLEAR_MATCHES) {
+        updateDB.clearOldMatches();
     }
 
     // Users begin the search
@@ -65,14 +60,14 @@ function handleMessage(sender_psid, received_message) {
                         info.teamNameLookup(sender_psid, key);
                     }
                 }
+            }
 
-                // Instruction for user to use the Bot
-                else {
-                    response = {
-                        "text": `Please begin by typing in 'Start'`,
-                    };
-                    sendResponse.directMessage(sender_psid, response);
-                }
+            // Instruction for user to use the Bot
+            else {
+                response = {
+                    "text": `Please begin by typing in 'Start'`,
+                };
+                sendResponse.directMessage(sender_psid, response);
             }
         })
     }
@@ -141,14 +136,26 @@ function handleQuickReply(sender_psid, received_message) {
     }
 }
 
-    // Sets reminder for a match
+    // handle Reminder answer.
     if (key.includes('REMINDER')) {
-        if (key.includes('YES')) {
-            handleCases.setReminder(sender_psid, key);
+
+        // Set reminder for a match
+        if (!(key.includes('ANOTHERTEAM'))) {
+            if (key.includes('YES')) {
+                handleCases.setReminder(sender_psid, key);
+            }
+            setTimeout(() => {
+                handleCases.getContinue(sender_psid);
+            }, 1000)
         }
-        setTimeout(() => {
-            handleCases.getContinue(sender_psid);
-        }, 1000)
+
+        // Choose another team
+        else {
+            handleChoice.child(sender_psid).set({
+                "choice": "TEAM"
+            })
+            handleCases.popularTeam(sender_psid);
+        }
     }
 }
 
@@ -162,11 +169,7 @@ function handlePostback(sender_psid, messagePostback) {
             handleChoice.child(sender_psid).set({
                 "choice": "PLAYER"
             })
-
-            response = {
-                'text': 'Please give us the player name'
-            };
-            sendResponse.directMessage(sender_psid, response);
+            handleCases.popularPlayer(sender_psid);
         }
 
         // Search for different team name
@@ -174,11 +177,7 @@ function handlePostback(sender_psid, messagePostback) {
             handleChoice.child(sender_psid).set({
                 "choice": "TEAM"
             })
-
-            response = {
-                'text': 'Please give us the team name'
-            };
-            sendResponse.directMessage(sender_psid, response);
+            handleCases.popularTeam(sender_psid);
         }
 
         // Looking for match's information
