@@ -17,19 +17,19 @@ app.listen(process.env.PORT || 1337, () => {
 
   console.log('webhook is listening on port ', process.env.PORT || 1337);
 
-  // Clearr outdated matches in the database
-  updateDB.clearOldMatches();
-
-  // Update all the matches that are stored in the database.
-  updateDB.updateAllCurrentMatches();
-
-  // Set up all previous Reminders
-  updateDB.setAllReminders();
-
 });
 
 app.use(bodyParser.json());
 
 app.use('/webhook', webhooks);
+
+// Clearr outdated matches in the database
+updateDB.clearOldMatches();
+
+// Update all the matches that are stored in the database.
+updateDB.updateAllCurrentMatches();
+
+// Set up all previous Reminders
+updateDB.setAllReminders();
 
 module.exports = app;
