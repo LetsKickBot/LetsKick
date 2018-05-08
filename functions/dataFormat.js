@@ -140,6 +140,5 @@ module.exports = {
     quickReplyFormat,
     teamDataQuick,
     teamOptionFormat,
-    listViewFormat,
     decodeUnderline
 }
