@@ -95,7 +95,7 @@ function teamOptionChoose(sender_psid, teamName, payloadCharacteristic, choices,
                 "payload": {
                     "template_type": 'generic',
                     "image_aspect_ratio": 'square',
-                    "elements": 
+                    "elements":
                     [
                         {
                             "title": teamName.toUpperCase(),
@@ -132,25 +132,45 @@ function teamNewsURL(sender_psid, array) {
                 "type": "template",
                 "payload": {
                     "template_type": "list",
-                    "top_element_style": "compact",
+                    "top_element_style": "large",
                     "elements": [
                       {
                         "title": array[0],
                         "subtitle": array[1],
-                        "image_url": "http://a.espncdn.com/photo/2014/0110/soc_g_villa01jr_1296x729.jpg",
+                        "image_url": array[2],
                         "default_action": {
                             "type": "web_url",
-                            "url": "https://www.espnfc.com/club/spain/164/blog/post/3437359/david-villa-scores-400th-career-goal-el-guajes-impact-on-spain-mls-and-beyond",
+                            "url": array[3],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }
                       }, {
                         "title": array[4],
                         "subtitle": array[5],
-                        "image_url": "http://a.espncdn.com/photo/2014/0110/soc_g_villa01jr_1296x729.jpg",
+                        "image_url": array[6],
                         "default_action": {
                             "type": "web_url",
-                            "url": "https://www.espnfc.com/club/spain/164/blog/post/3437359/david-villa-scores-400th-career-goal-el-guajes-impact-on-spain-mls-and-beyond",
+                            "url": array[7],
+                            "messenger_extensions": true,
+                            "webview_height_ratio": "tall"
+                        }
+                      }, {
+                        "title": array[8],
+                        "subtitle": array[9],
+                        "image_url": array[10],
+                        "default_action": {
+                            "type": "web_url",
+                            "url": array[11],
+                            "messenger_extensions": true,
+                            "webview_height_ratio": "tall"
+                        }
+                      }, {
+                        "title": array[12],
+                        "subtitle": array[13],
+                        "image_url": array[14],
+                        "default_action": {
+                            "type": "web_url",
+                            "url": array[15],
                             "messenger_extensions": true,
                             "webview_height_ratio": "tall"
                         }

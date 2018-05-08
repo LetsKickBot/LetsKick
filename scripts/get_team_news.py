@@ -9,6 +9,7 @@ from unidecode import unidecode
 
 import sys
 import os
+import time
 
 def main():
     window_size = "1200,800"
@@ -48,17 +49,18 @@ def main():
         browser.quit()
         sys.exit(1)
 
+    time.sleep(2)
     newHtml = browser.page_source
     url = browser.current_url
     newSoup = BeautifulSoup(newHtml, "html.parser")
 
-    mainPart = newSoup.findAll('article', {'class' : 'news-feed-item news-feed-story-package'})
-
+    mainPart = newSoup.findAll('article', {'class': 'news-feed-item news-feed-story-package'})
     for i in range(0, 4):
-        print(mainPart[i].find('a', {'class' : ' realStory'}).text)
+        print(mainPart[i].find('div', {'class' : 'item-info-wrap'}).find('h1').find('a', {'class' : ' realStory'}).text)
         print(mainPart[i].find('p').text)
         print(mainPart[i].find('img')['data-default-src'])
-        print(mainPart[i].find('a', {'class' : 'story-link'})['data-popup-href'])
+        newsUrl = mainPart[i].find('a', {'class' : 'story-link'})['data-popup-href']
+        print(newsUrl[:4] + 's' + newsUrl[4:])
 
     browser.quit()
     sys.exit(0)

@@ -476,7 +476,7 @@ function playerLookup(sender_psid, key) {
                         'text' : `Cannot find player: ${key}`
                     };
                     sendResponse.directMessage(sender_psid, response);
-                } 
+                }
                 else {
                     flag = false;
                     let playerImageURL = reply[0];

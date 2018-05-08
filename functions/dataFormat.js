@@ -127,47 +127,6 @@ function teamOptionFormat(payloadCharacteristic, choices, teamName) {
     return finalArr;
 }
 
-function listViewFormat(arr) {
-    let newArr = [];
-    let array = [];
-    for (var i = 0; i < 4; i++) {
-        for (var j = 0; j < 4; j++) {
-            array.push(arr.shift());
-        }
-        newArr.push(array);
-        array = []
-    }
-
-    let finalArr = [];
-    for (var i = 0; i < 4; i++) {
-        var buttons = {};
-        var button = {};
-        var map = {};
-        buttons['title'] = "View"
-        button['title'] = "View",
-        buttons['type'] = "web_url"
-        buttons['url'] = newArr[i][3]
-        buttons['messenger_extensions'] = true
-        buttons['webview_height_ratio'] = "tall"
-        map['title'] = newArr[i][0]
-        map['subtitle'] = newArr[i][1]
-        map['image_url'] = newArr[i][2]
-        if (i == 0) {
-            map['buttons'] = [{
-                buttons
-            }]
-        } else {
-            map['default_action'] = [{
-
-            }]
-        }
-        finalArr.push(map);
-    }
-    console.log(finalArr);
-}
-
-// listViewFormat(['a', 'b', 'c', 'd', '2', '3', '4', '5', 'g', 'h', 'j' ,'k' ,'b' ,'b', 'b', 'a']);
-
 function decodeUnderline(key) {
     var startPoint = key.indexOf('_') + 1;
     return key.slice(startPoint);
